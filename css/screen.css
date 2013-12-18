@@ -408,6 +408,7 @@ article .entry-content .video-container embed {
 }
 .meta {
     margin-left: 4px;
+	margin-top: 20px;
     color: #999;
 }
 .meta a {
