@@ -1,10 +1,5 @@
-/*
-
-Visual Studio-like style based on original C# coloring by Jason Diamond <jason@diamond.name>
-
-*/
 pre code {
-  font-family: Consolas,Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  font-family: Consolas, Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
   font-size: 0.85em;
   line-height: 1.5;
   display: block;
@@ -16,16 +11,29 @@ pre code {
   padding: 5px 15px;
   overflow-x: auto;
 }
-
+pre .vhdl .typename {
+  font-weight: bold;
+}
+pre .vhdl .string {
+  color: #666666;
+}
+pre .vhdl .literal {
+  color: #a31515;
+}
+pre .vhdl .attribute {
+  color: #00B0E8;
+}
+pre .xml .attribute {
+  color: #ff0000;
+}
 pre .comment,
 pre .annotation,
 pre .template_comment,
 pre .diff .header,
 pre .chunk,
 pre .apache .cbracket {
-  color: rgb(0, 128, 0);
+  color: #008000;
 }
-
 pre .keyword,
 pre .id,
 pre .built_in,
@@ -38,9 +46,8 @@ pre .status,
 pre .nginx .title,
 pre .xml .tag,
 pre .xml .tag .value {
-  color: rgb(0, 0, 255);
+  color: #0000ff;
 }
-
 pre .string,
 pre .title,
 pre .parent,
@@ -61,7 +68,6 @@ pre .tex .formula,
 pre .coffeescript .attribute {
   color: #006080;
 }
-
 pre .ruby .string,
 pre .decorator,
 pre .filter .argument,
@@ -81,18 +87,11 @@ pre .apache .sqbracket,
 pre .nginx .built_in,
 pre .tex .special,
 pre .prompt {
-  color: rgb(43, 145, 175);
+  color: #2b91af;
 }
-
 pre .phpdoc,
 pre .javadoc,
 pre .xmlDocTag {
-  color: rgb(128, 128, 128);
+  color: #808080;
 }
-
-pre .vhdl .typename { font-weight: bold; }
-pre .vhdl .string { color: #666666; }
-pre .vhdl .literal { color: rgb(163, 21, 21); }
-pre .vhdl .attribute { color: #00B0E8; }
-
-pre .xml .attribute { color: rgb(255, 0, 0); }
+/*# sourceMappingURL=code.css.map */

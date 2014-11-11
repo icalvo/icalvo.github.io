@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskFactory="PowershellTaskFactory" TaskName="AddBinPathToEnvironment" AssemblyFile="$(SolutionDir)\packages\MSBuild.Extension.Pack.1.4.0\tools\net40\MSBuild.ExtensionPack.TaskFactory.PowerShell.dll">
+    <Task><![CDATA[
+	$log.LogMessage([Microsoft.Build.Framework.MessageImportance]"High", "Adding .bin to Environment Path.")
+	Try
+	{
+		$bin_name = ".bin"
+		$path = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::User)
+
+		if ($path -notmatch ";$bin_name") {
+			[Environment]::SetEnvironmentVariable('Path', "$path;$bin_name", [EnvironmentVariableTarget]::User)
+		}
+	}
+	Catch
+	{
+		$log.LogError("Failed to add .bin to Environment Path.")
+	}
+]]></Task>
+  </UsingTask>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF1B6833-04FA-4C3E-BBC1-B131AD48B17D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>icalvo.github.io</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".gitattributes" />
+    <Content Include=".gitignore" />
+    <Content Include="404.html" />
+    <Content Include="archive\index.html" />
+    <Content Include="atom.xml" />
+    <Content Include="css\code.css" />
+    <Content Include="css\screen.css">
+      <DependentUpon>screen.less</DependentUpon>
+    </Content>
+    <Content Include="css\screen.min.css">
+      <DependentUpon>screen.css</DependentUpon>
+    </Content>
+    <None Include="css\screen.css.map">
+      <DependentUpon>screen.css</DependentUpon>
+    </None>
+    <None Include="css\screen.less" />
+    <Content Include="favicon.ico" />
+    <Content Include="font\fontawesome-webfont.svg" />
+    <Content Include="images\bg_hr.png" />
+    <Content Include="images\blacktocat.png" />
+    <Content Include="images\icon_download.png" />
+    <Content Include="images\social\coderwall.png" />
+    <Content Include="images\social\delicious.png" />
+    <Content Include="images\social\douban.png" />
+    <Content Include="images\social\email.png" />
+    <Content Include="images\social\facebook.png" />
+    <Content Include="images\social\github.png" />
+    <Content Include="images\social\google.png" />
+    <Content Include="images\social\linkedin.png" />
+    <Content Include="images\social\pinboard.png" />
+    <Content Include="images\social\pinterest.png" />
+    <Content Include="images\social\rss.png" />
+    <Content Include="images\social\stackoverflow.png" />
+    <Content Include="images\social\twitter.png" />
+    <Content Include="images\sprite_download.png" />
+    <Content Include="index.html" />
+    <Content Include="js\highlight.pack.js" />
+    <Content Include="js\libs\jquery.min.js" />
+    <Content Include="js\libs\jXHR.js" />
+    <Content Include="js\libs\swfobject-dynamic.js" />
+    <Content Include="js\slash.js" />
+    <Content Include="js\twitter.js" />
+    <Content Include="robots.txt" />
+    <Content Include="sitemap.xml" />
+    <Content Include="_includes\archive_post.html" />
+    <Content Include="_includes\article.html" />
+    <Content Include="_includes\banner.html" />
+    <Content Include="_includes\custom\category_feed.xml" />
+    <Content Include="_includes\disqus.html" />
+    <Content Include="_includes\footer.html" />
+    <Content Include="_includes\google_analytics.html" />
+    <Content Include="_includes\head.html" />
+    <Content Include="_includes\header.html" />
+    <Content Include="_includes\navigation.html" />
+    <Content Include="_includes\post\categories.html" />
+    <Content Include="_includes\post\comments_link.html" />
+    <Content Include="_includes\post\date.html" />
+    <Content Include="_includes\post\disqus_thread.html" />
+    <Content Include="_includes\post\edit.html" />
+    <Content Include="_includes\post\meta.html" />
+    <Content Include="_includes\post\sharing.html" />
+    <Content Include="_includes\twitter_sharing.html" />
+    <Content Include="_layouts\category_index.html" />
+    <Content Include="_layouts\default.html" />
+    <Content Include="_layouts\page.html" />
+    <Content Include="_layouts\post.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="font\fontawesome-webfont.eot" />
+    <None Include="font\fontawesome-webfont.svgz" />
+    <None Include="font\fontawesome-webfont.ttf" />
+    <None Include="font\fontawesome-webfont.woff" />
+    <None Include="Gemfile" />
+    <None Include="icm.commandline\index.markdown" />
+    <None Include="params.json" />
+    <None Include="_config.yml" />
+    <None Include="_posts\2013-12-05-testing-web-api-mvc-routes.markdown" />
+    <None Include="_posts\2014-11-11-new-work-at-frontiers.markdown" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build">
+    <!-- Ensure .bin exists in Environment Path -->
+    <AddBinPathToEnvironment />
+    <Exec Command=".bin\npm install" ContinueOnError="ErrorAndContinue" />
+    <Exec Command=".bin\bower install" ContinueOnError="ErrorAndContinue" />
+    <Exec Command=".bin\grunt" ContinueOnError="ErrorAndContinue" />
+    <!-- Remove node_modules folder after a Release build because it tends to cause path length issues -->
+    <Exec Command="rd /s /q  node_modules" Condition=" '$(Configuration)' == 'Release' And Exists('node_modules') " />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="rd /s /q $(OutputPath)" Condition="Exists($(OutputPath))" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="Clean;Build">
+  </Target>
+</Project>
