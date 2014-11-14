@@ -53,16 +53,13 @@
     <Content Include="404.html" />
     <Content Include="archive\index.html" />
     <Content Include="atom.xml" />
-    <Content Include="css\code.css" />
     <Content Include="css\screen.css">
       <DependentUpon>screen.less</DependentUpon>
     </Content>
     <Content Include="css\screen.min.css">
       <DependentUpon>screen.css</DependentUpon>
     </Content>
-    <None Include="css\screen.css.map">
-      <DependentUpon>screen.css</DependentUpon>
-    </None>
+    <None Include="css\code.less" />
     <None Include="css\screen.less" />
     <Content Include="favicon.ico" />
     <Content Include="font\fontawesome-webfont.svg" />

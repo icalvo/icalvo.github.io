@@ -1,6 +1,6 @@
 (function($) {
 	// Append caption after pictures
-	$('.entry-content img').each(function(i) {
+	$('.entry-content img').each(function() {
 		var alt = this.alt;
 		var parent = $(this).parent();
 
