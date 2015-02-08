@@ -1,23 +1,29 @@
 ---
 layout: post
-title: "Test Ninject instantiation"
-date: 2015-02-06
+title: "Testing dependency resolution"
+date: 2015-02-08
 comments: true
-categories: [tfs,git]
+categories: [ninject,mstest,mvc,controller,dependency,injection]
 ---
+Here's a version of [Rob Moore's class](http://robdmoore.id.au/blog/2012/05/29/controller-instantiation-testing/) for testing dependency resolution for MVC controllers.
+
+In our team at [Frontiers](http://frontiersin.org), we have an Application [Service Layer](http://martinfowler.com/eaaCatalog/serviceLayer.html) that is partially shared between a console application and a REST API built with ASP.NET MVC. So for us (and I think it's a common need) it is important also to test that the dependencies of the application layer itself are correctly resolved.
+
+Since we didn't have any common ancestor for our Application Services, we created an empty interface; but then the Code Analysis complained that [empty interfaces are not a good thing][CA1040], so we ended up using an attribute.
+
+[CA1040]: https://msdn.microsoft.com/en-us/library/ms182128(v=VS.100).aspx
+
+We also use MsTest (business rule, alleviated with [Fluent Assertions](http://www.fluentassertions.com/)), and [Ninject](http://www.ninject.org/). And this is the result:
+
+```csharp
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Impact.Application.Contracts.Services;
-using Impact.API;
-using Impact.API.Controllers;
-using Impact.IoC;
-using Impact.Utils.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ninject;
 
-namespace Impact.Ioc.Tests
+namespace Frontiers.Ioc.Tests
 {
     /// <summary>
     /// This tests try to instantiate all available controllers and application services using Ninject.
@@ -35,8 +41,7 @@ namespace Impact.Ioc.Tests
         [TestMethod]
         public void MvcControllerTest()
         {
-            IKernel kernel = new NinjectKernelBuilder(new FakeConfigurationManager()).BuildKernel();
-            kernel.Load<MvcNinjectModule>();
+            IKernel kernel = BuildKernel();
 
             IEnumerable<Type> controllerTypes = 
                 typeof(BaseController)
@@ -44,8 +49,7 @@ namespace Impact.Ioc.Tests
                 .GetTypes()
                 .Where(t => 
                     typeof(BaseController).IsAssignableFrom(t) && 
-                    !t.IsAbstract && 
-                    t != typeof(ErrorController));
+                    !t.IsAbstract);
 
             foreach (Type controllerType in controllerTypes)
             {
@@ -56,7 +60,7 @@ namespace Impact.Ioc.Tests
         [TestMethod]
         public void ApplicationServiceTest()
         {
-            IKernel kernel = new NinjectKernelBuilder(new FakeConfigurationManager()).BuildKernel();
+            IKernel kernel = BuildKernel();
 
             var controllerTypes = typeof(ApplicationServiceAttribute).Assembly.GetTypes()
                 .Where(t => 
@@ -76,23 +80,10 @@ namespace Impact.Ioc.Tests
                 typeof(T)) != null;
         }
 
-        private class FakeConfigurationManager : IConfigurationManager
-        {
-            public string GetAppSetting(string key)
-            {
-                switch (key)
-                {
-                    case "ExternalServicesPitsBasePath":
-                        return "http://example.com";
-                    default:
-                        return "fakesetting";
-                }
-            }
-
-            public ConnectionStringSettings GetConnectionString(string key)
-            {
-                return new ConnectionStringSettings(key, "fakeconnectionstring");
-            }
-        }
+		private IKernel BuildKernel()
+		{
+			// Here you must build your kernel and load any necessary modules.
+		}
     }
 }
+```
