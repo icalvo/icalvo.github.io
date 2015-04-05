@@ -1,0 +1,26 @@
+{
+	"folders":
+	[
+		{
+			"path": "_posts"
+		},
+		{
+			"path": "css"
+		},
+		{
+			"path": "icm.commandline"
+		},
+		{
+			"path": "_includes"
+		},
+		{
+			"path": "js"
+		},
+		{
+			"path": "_layouts"
+		},
+		{
+			"path": "_site"
+		}
+	]
+}

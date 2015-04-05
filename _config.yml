@@ -29,7 +29,7 @@ disqus_show_comment_count: true
 # Jekyll Settings
 #
 markdown: rdiscount
-pygments: true
+highlighter: pygments
 permalink: /archive/:year/:month/:day/:title/
 rdiscount:
   extensions: [smart]
