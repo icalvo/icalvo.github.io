@@ -1,6 +1,7 @@
-#
+# USER SETTINGS
+# ------------------------------------
+
 # Blog Settings
-#
 author: Ignacio Calvo
 description: Ignacio Calvo Blog
 url: http://icalvo.github.io
@@ -25,14 +26,65 @@ disqus_show_comment_count: true
 # google_analytics_tracking_id: UA-177588-1
 
 
-#
-# Jekyll Settings
-#
-markdown: rdiscount
+# JEKYLL SETTINGS
+# ------------------------------------
+
+# # Where things are
+# source:       .
+# destination:  ./_site
+# plugins_dir:  _plugins
+# layouts_dir:  _layouts
+# data_dir:     _data
+# includes_dir: _includes
+# collections:
+#   posts:
+#     output:   true
+
+# # Handling Reading
+# safe:         false
+# include:      [".htaccess"]
+# exclude:      ["node_modules", "vendor/bundle/", "vendor/cache/", "vendor/gems/", "vendor/ruby/"]
+# keep_files:   [".git", ".svn"]
+# encoding:     "utf-8"
+# markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+
+# # Filtering Content
+# show_drafts: null
+# limit_posts: 0
+# future:      false
+# unpublished: false
+
+# Plugins
+# whitelist: []
+gems: [jekyll-paginate]
+
+# Conversion
+markdown: kramdown
 highlighter: pygments
+# lsi:         false
+# excerpt_separator: "\n\n"
+# incremental: false
+
+# Outputting
 permalink: /archive/:year/:month/:day/:title/
-rdiscount:
-  extensions: [smart]
 paginate: 5
-paginate_path: "page/:num"
+paginate_path: /page:num
 category_dir: categories
+# timezone:      null
+
+# quiet:    false
+# verbose:  false
+# defaults: []
+# liquid:
+#   error_mode: warn
+
+# Markdown processors
+kramdown:
+  auto_ids:       true
+  footnote_nr:    1
+  entity_output:  as_char
+  toc_levels:     1..6
+  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+  input:          GFM
+  hard_wrap:      false
+  footnote_nr:    1
