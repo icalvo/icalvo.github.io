@@ -56,19 +56,18 @@ disqus_show_comment_count: true
 
 # Plugins
 # whitelist: []
-gems: [jekyll-paginate]
+gems: [jekyll-paginate-v2]
 
 # Conversion
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 # lsi:         false
 # excerpt_separator: "\n\n"
 # incremental: false
 
 # Outputting
 permalink: /archive/:year/:month/:day/:title/
-paginate: 5
-paginate_path: /page:num
+
 category_dir: categories
 # timezone:      null
 
@@ -88,3 +87,10 @@ kramdown:
   input:          GFM
   hard_wrap:      false
   footnote_nr:    1
+
+# Pagination
+pagination:
+  enabled: true
+  per_page: 3
+  paginate_path: /page:num
+  sort_reverse: true

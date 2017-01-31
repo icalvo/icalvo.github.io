@@ -80,3 +80,5 @@ packages/
 #Test files
 *.testsettings
 
+# Jekyll
+.jekyll-metadata
