@@ -4,7 +4,6 @@ title: "My new home studio has started"
 date: 2019-02-27
 comments: true
 categories: [audio,home,studio,recording]
-background: '/PATH_TO_IMAGE'
 ---
 
 This Monday I received the first items of my new home studio. Next Friday I will get the microphone with all the extras, and my studio will have the gear specified below.
