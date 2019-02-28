@@ -6,30 +6,18 @@ comments: true
 categories: [jekyll,ruby]
 ---
 
-The best least failure-prone way I've found is by using RubyInstaller builds. Go to http://rubyinstaller.org/downloads/ to get the latest Ruby (be careful to choose well your architecture) and Ruby DevKit.
-
-Ruby installs itself, but the DevKit just uncompresses to some folder and you have to manually install it.
-
-Go to the uncompressed DevKit folder and type:
-
-    ruby dk.rb init
-
-This generates a config.yml file, in which you will put the directory of your ruby installation in this way:
-
-```yaml
----
-- C:/tools/ruby23
-```
-
-Then execute:
-
-    ruby dk.rb install
-
-That will install the DevKit, which will in turn enable the installation of the wdm gem later on.
+The best least failure-prone way I've found is by using RubyInstaller builds. Go to http://rubyinstaller.org/downloads/ to get the latest Ruby+Devkit (be careful to choose well your architecture).
 
     gem install jekyll bundler
+
+If you have to create a new Jekyll app:
+
     jekyll new appdir
     cd appdir
+
+If you already got one:
+
+
 
 Now we will edit the Gemfile to include wdm. Add this:
 

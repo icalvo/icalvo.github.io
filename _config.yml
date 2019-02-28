@@ -1,96 +1,45 @@
-# USER SETTINGS
-# ------------------------------------
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
-# Blog Settings
-author: Ignacio Calvo
-description: Ignacio Calvo Blog
-url: http://icalvo.github.io
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
 title: Ignacio Calvo Blog
-subtitle: A developer's musings
-gravatar_url: https://s.gravatar.com/avatar/2a43aa43ba910dd1cd7620b8f4e57290
-subscribe_rss: http://icalvo.github.com/tal
+email: ignacio.calvo@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Professional developer and amateur musician.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://ignaciocalvo.com" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: ignaciocalvo
+github_username:  icalvo
+linkedin_username: ignaciocalvomartinez
+youtube_username: icalvo
+instagram_username: ignaciocalvo2
+facebook_username: ignacio.calvomartinez
 
-# Github repositories
-github_user: icalvo
-github_repo_url: https://github.com/icalvo/icalvo.github.io/
-
-# Twitter
-twitter_user: icalvo
-twitter_tweet_button: true
-
-# Disqus Comments
-disqus_short_name: icalvo
-disqus_show_comment_count: true
-
-# Google Analytics
-# google_analytics_tracking_id: UA-177588-1
-
-
-# JEKYLL SETTINGS
-# ------------------------------------
-
-# # Where things are
-# source:       .
-# destination:  ./_site
-# plugins_dir:  _plugins
-# layouts_dir:  _layouts
-# data_dir:     _data
-# includes_dir: _includes
-# collections:
-#   posts:
-#     output:   true
-
-# # Handling Reading
-# safe:         false
-# include:      [".htaccess"]
-# exclude:      ["node_modules", "vendor/bundle/", "vendor/cache/", "vendor/gems/", "vendor/ruby/"]
-# keep_files:   [".git", ".svn"]
-# encoding:     "utf-8"
-# markdown_ext: "markdown,mkdown,mkdn,mkd,md"
-
-# # Filtering Content
-# show_drafts: null
-# limit_posts: 0
-# future:      false
-# unpublished: false
-
-# Plugins
-# whitelist: []
-gems: [jekyll-paginate-v2]
-
-# Conversion
+# Build settings
 markdown: kramdown
-highlighter: rouge
-# lsi:         false
-# excerpt_separator: "\n\n"
-# incremental: false
+plugins:
+  - jekyll-feed
 
-# Outputting
-permalink: /archive/:year/:month/:day/:title/
-
-category_dir: categories
-# timezone:      null
-
-# quiet:    false
-# verbose:  false
-# defaults: []
-# liquid:
-#   error_mode: warn
-
-# Markdown processors
-kramdown:
-  auto_ids:       true
-  footnote_nr:    1
-  entity_output:  as_char
-  toc_levels:     1..6
-  smart_quotes:   lsquo,rsquo,ldquo,rdquo
-  input:          GFM
-  hard_wrap:      false
-  footnote_nr:    1
-
-# Pagination
-pagination:
-  enabled: true
-  per_page: 3
-  paginate_path: /page:num
-  sort_reverse: true
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+  - .vscode/
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/

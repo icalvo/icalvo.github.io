@@ -1,37 +1,12 @@
-<!DOCTYPE HTML>
-{% if site.lang %}
-<html lang="{{ site.lang }}">
-{% else %}
-<html>
-{% endif %}
 <head>
-	<meta charset="utf-8">
-	<title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
-	<meta name="author" content="{{ site.author }}">
-
-	{% capture description %}
-		{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}
-	{% endcapture %}
-	<meta name="description" content="{{ description }}">
-	{% if page.keywords %}<meta name="keywords" content="{{ page.keywords }}">{% endif %}
-
-	<!-- http://t.co/dKP3o1e -->
-	<meta name="HandheldFriendly" content="True">
-	<meta name="MobileOptimized" content="320">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link href="{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
-	{% capture canonical %}{{ site.url }}{% if site.permalink contains '.html' %}{{ page.url }}{% else %}{{ page.url | remove:'index.html' }}{% endif %}{% endcapture %}
-	<link rel="canonical" href="{{ canonical }}">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
-	<link href="/favicon.ico" rel="shortcut icon">
-	<link rel="stylesheet" type="text/css" href="/css/screen.css" media="screen, projection">
-	<link rel="stylesheet" type="text/css" href="/css/code.css">
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script src="/js/slash.js" async></script>
-	<script src="/js/highlight.pack.js"></script>
-	
-  	{% include google_analytics.html %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- seo -%}
+  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  {%- feed_meta -%}
+  {%- if jekyll.environment == 'production' and site.google_analytics -%}
+    {%- include google-analytics.html -%}
+  {%- endif -%}
 </head>
