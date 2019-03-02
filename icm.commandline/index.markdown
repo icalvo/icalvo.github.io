@@ -9,7 +9,7 @@ sharing: false
 
 # Icm.CommandLine
 
-##Introduction
+## Introduction
 
 This library allows to easily analyze a command line with a syntax similar to [getopt][getopt]. Unlike most other .NET alternatives, like [Plossum.CommandLine][plossum], [gsscoder's][gsscoder] or [Ooki.CommandLine][ooki], Icm.CommandLine doesn't use attributes but a [fluent interface][fluent]. This makes it easier (or even possible) to implement localization or plugin schemas in which a 3rd party could add new options to your command line.
 
