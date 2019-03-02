@@ -18,8 +18,6 @@ There are many attribute-based .NET command line parsers, like [Plossum.CommandL
 
 As far as I know, there is only other .NET project that uses a fluent interface, [Fluent Command Line Parser][fclp]. The approach is slightly different: it simplifies the syntax by allowing at most one subargument per parameter. This enables the parser to type the values (since there is only one), and to map them to a class.
 
-
-
 [plossum]: http://www.codeproject.com/Articles/19869/Powerful-and-simple-command-line-parsing-in-C
 [gsscoder]: https://github.com/gsscoder/commandline
 [ooki]: http://ookiicommandline.codeplex.com/
@@ -27,10 +25,12 @@ As far as I know, there is only other .NET project that uses a fluent interface,
 [getopt]: http://www.gnu.org/software/libc/manual/html_node/Getopt.html
 [fluent]: http://en.wikipedia.org/wiki/Fluent_interface
 
+## Command line syntax
+
 It assumes the following general syntax:
 
     program -namedparam1 subarg1a subarg1b -namedparam2 subarg2a subarg2b [--] unnamedparam1 unnamedparam2
-	
+
 To use it, you must create an instance of `CommandLine` and follow the next steps:
 
 * Configure named and unnamed parameters
@@ -44,7 +44,11 @@ This is a typical example you can use to get an idea of how can you use the libr
 
     CommandLine cmdline = new CommandLine();
 
-    cmdline.Required("b", "base", "Base of the logarithm", SubArgument.Required("base")).Optional("e", "exponent", "Exponent of the logarithm", SubArgument.Required("exponent")).Optional("x", "extensions", "Extensions", SubArgument.List("extensions")).MainParametersExactly({ new UnnamedParameter("number", "Number which logarithm is extracted") });
+    cmdline
+        .Required("b", "base", "Base of the logarithm", SubArgument.Required("base"))
+        .Optional("e", "exponent", "Exponent of the logarithm", SubArgument.Required("exponent"))
+        .Optional("x", "extensions", "Extensions", SubArgument.List("extensions"))
+        .MainParametersExactly({ new UnnamedParameter("number", "Number which logarithm is extracted") });
 
     if (cmdline.HasErrors()) {
 	    ColorConsole.Instructions(cmdline);
@@ -74,7 +78,7 @@ Using fluent syntax you can configure the named parameters and the unnamed param
 
 ### Named parameters
 
-Each named parameter can be optional or required. For more complex relationships about conditionally required parameters, the client must do their own work.
+Each named parameter can be optional or required. For more complex relationships about conditionally required parameters, the developer must do their own work.
 
 To create an optional parameter use `Optional` and to create a required one use `Required`.
 
