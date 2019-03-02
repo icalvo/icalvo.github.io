@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "My new home studio has started"
-date: 2019-02-27
+date: 2019-03-04
 comments: true
 categories: [audio,home,studio,recording]
 ---
 
-This Monday I received the first items of my new home studio. Next Friday I will get the microphone with all the extras, and my studio will have the gear specified below.
+This Monday I received the last item of my new home studio!
 
 ## Computer
 + **HP Compaq 8300 MT**
