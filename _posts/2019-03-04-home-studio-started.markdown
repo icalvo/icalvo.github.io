@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "My new home studio has started"
+title: "My new home studio is ready"
 date: 2019-03-04
 comments: true
 categories: [audio,home,studio,recording]
 ---
 
-This Monday I received the last item of my new home studio!
+This Monday I received the last item of my new home studio! I can't wait to start playing with it!
 
 ## Computer
 + **HP Compaq 8300 MT**
@@ -14,10 +14,10 @@ This Monday I received the last item of my new home studio!
 + **Memory:** [Kingston 4x HyperX Fury Blue HX316C10F/8](https://www.kingston.com/en/hyperx/memory/fury) (32GB, 1600Mhz)
 + **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (250GB SSD)
 + **Disk 2:** [Seagate Barracuda ST1000DM003](https://www.seagate.com/es/es/internal-hard-drives/hdd/barracuda/) (1TB, 7200rpm)
-+ **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363)
++ **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363) (1GB)
 + **External backup disk:** Samsung D3 Station (3TB)
-+ **Display monitor 1:** BENQ 1 (24'')
-+ **Display monitor 2:** BENQ 2 (22'')
++ **Display monitor 1:** BenQ G2400W (24'', 1920x1200)
++ **Display monitor 2:** Acer P244W (24'', 1920x1080)
 
 ## Software
 + **OS:** Microsoft Windows 10
