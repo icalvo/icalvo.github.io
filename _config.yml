@@ -24,18 +24,20 @@ twitter:
   card: summary
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://ignaciocalvo.com" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: ignaciocalvo
-github_username:  icalvo
-linkedin_username: ignaciocalvomartinez
-youtube_username: icalvo
-instagram_username: ignaciocalvo2
-facebook_username: ignacio.calvomartinez
 
 show_excerpts: true
 
 # Theme
 minima:
   date_format: "%F"
+  social_links:
+    twitter: ignaciocalvo
+    github:  icalvo
+    linkedin: ignaciocalvomartinez
+    youtube: icalvo
+    instagram: ignaciocalvo2
+    facebook: ignacio.calvomartinez
+    rss: "RSS feed"
 
 # Disqus Comments
 disqus_short_name: icalvo
