@@ -5,7 +5,13 @@
 .site-header {
     border-bottom: 1px solid $grey-color-light;
     min-height: $spacing-unit * 1.865;
-    background-color: #c00;
+    background: $brand-color;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, $brand-color 0%, darken($brand-color, 10%) 50%, $brand-color 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, $brand-color 0%, darken($brand-color, 10%) 50%, $brand-color 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, $brand-color 0%, darken($brand-color, 10%) 50%, $brand-color 100%);
     // Positioning context for the mobile navigation icon
     position: relative;
     color: white;
