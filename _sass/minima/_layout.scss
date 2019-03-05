@@ -192,6 +192,11 @@
 .post-meta {
     font-size: $small-font-size;
     color: $grey-color;
+
+    .dt-published {
+        font-family: $monospace-font-family;
+        font-weight: 700;
+    }
 }
 
 .post-link {
