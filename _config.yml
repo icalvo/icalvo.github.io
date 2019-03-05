@@ -14,9 +14,13 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Ignacio Calvo Blog
+author: Ignacio Calvo
 email: ignacio.calvo@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Professional developer and amateur musician.
+description: Professional developer and amateur musician.
+google_site_verification: lYI_fzae0p3Hx_Ta5lkgLAztpNDFaWHb39crE9KBYjA
+twitter:
+  username: ignaciocalvo
+  card: summary
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://ignaciocalvo.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: ignaciocalvo
@@ -26,6 +30,12 @@ youtube_username: icalvo
 instagram_username: ignaciocalvo2
 facebook_username: ignacio.calvomartinez
 
+show_excerpts: true
+
+pagination:
+  enabled: true
+  per_page: 4
+
 # Disqus Comments
 disqus_short_name: icalvo
 disqus_show_comment_count: true
@@ -34,6 +44,7 @@ disqus_show_comment_count: true
 markdown: kramdown
 plugins:
   - jekyll-feed
+  - jekyll-paginate-v2
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
