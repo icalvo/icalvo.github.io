@@ -33,6 +33,10 @@ facebook_username: ignacio.calvomartinez
 
 show_excerpts: true
 
+# Theme
+minima:
+  date_format: "%F"
+
 # Disqus Comments
 disqus_short_name: icalvo
 disqus_show_comment_count: true
