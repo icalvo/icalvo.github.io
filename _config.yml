@@ -26,6 +26,10 @@ youtube_username: icalvo
 instagram_username: ignaciocalvo2
 facebook_username: ignacio.calvomartinez
 
+# Disqus Comments
+disqus_short_name: icalvo
+disqus_show_comment_count: true
+
 # Build settings
 markdown: kramdown
 plugins:
