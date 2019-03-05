@@ -33,10 +33,6 @@ facebook_username: ignacio.calvomartinez
 
 show_excerpts: true
 
-pagination:
-  enabled: true
-  per_page: 4
-
 # Disqus Comments
 disqus_short_name: icalvo
 disqus_show_comment_count: true
@@ -45,7 +41,6 @@ disqus_show_comment_count: true
 markdown: kramdown
 plugins:
   - jekyll-feed
-  - jekyll-paginate-v2
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
