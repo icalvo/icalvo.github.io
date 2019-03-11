@@ -1,0 +1,13 @@
+---
+layout: post
+title: "Recording studio journal #1"
+date: 2019-03-11
+comments: true
+categories: [audio,home,studio,recording]
+---
+
+Just a quick note on the studio: I've been busy setting up the wires so that the room is not a complete mess.
+
+I've purchased a couple of [SIGNUM](https://www.ikea.com/es/en/products/small-storage-organisers/cable-management-accessories/signum-cable-trunking-horizontal-silver-colour-art-30200253/) to tidy up my wires and powerstrips.
+
+I've also did a couple of tests with the microphone and the flute. The mic is EXTREMELY sensitive, I can see the slightest sound in the VU meter, between -40dB and -60dB. I assume that this is normal and that by using gates, expanders or other filters in the DAW I will be able to clean up the signal.
