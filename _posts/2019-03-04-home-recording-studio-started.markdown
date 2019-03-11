@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "My new home studio is ready"
+title: "My new home recording studio is ready"
 date: 2019-03-04
 comments: true
 categories: [audio,home,studio,recording]
 ---
 
-This Monday I received the last item of my new home studio! I can't wait to start playing with it!
+This Monday I received the last item of my new home recording studio! I can't wait to start playing with it!
 
 ## Computer
 + **HP Compaq 8300 MT**
