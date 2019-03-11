@@ -41,7 +41,7 @@ minima:
 
 # Disqus Comments
 disqus:
-  shortname: icalvo
+  shortname: ignaciocalvo
 
 # Build settings
 markdown: kramdown
