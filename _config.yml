@@ -40,8 +40,8 @@ minima:
     rss: "RSS feed"
 
 # Disqus Comments
-disqus_short_name: icalvo
-disqus_show_comment_count: true
+disqus:
+  shortname: icalvo
 
 # Build settings
 markdown: kramdown
