@@ -29,9 +29,14 @@ code {
     background: -webkit-linear-gradient(top, $brand-color 0%, darken($brand-color, 10%) 50%, $brand-color 100%);
     /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, $brand-color 0%, darken($brand-color, 10%) 50%, $brand-color 100%);
-    color: white;
-    a:visited {
+    .site-title {
         color: white;
+    }
+    .site-nav {
+        .page-link,
+        .page-link:visited {
+            color: white;
+        }
     }
 }
 
