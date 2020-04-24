@@ -9,6 +9,7 @@ title: "My home recording studio"
 + **Memory:** [Kingston 4x HyperX Fury Blue HX316C10F/8](https://www.kingston.com/en/hyperx/memory/fury) (32GB, 1600Mhz)
 + **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (250GB SSD)
 + **Disk 2:** [Seagate Barracuda ST1000DM003](https://www.seagate.com/es/es/internal-hard-drives/hdd/barracuda/) (1TB, 7200rpm)
++ **Disk 3:** [Crucial BX500 CT1000BX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (1TB SSD)
 + **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363) (1GB)
 + **External backup disk:** Samsung D3 Station (3TB)
 + **Display monitor 1:** BenQ G2400W (24'', 1920x1200)
@@ -28,7 +29,7 @@ title: "My home recording studio"
   + Shock mount
   + Articulated arm
 + **Workstation:** Korg M50-61
-+ **MIDI controller:** Evolution MK-425C
++ **MIDI controller:** [Novation Impulse 61](https://novationmusic.com/en/keys/impulse)
 + **DAW remote controller:**[ Asus Nexus 7 (2013)](https://www.asus.com/es/Tablets/Nexus_7_2013/) with [TouchDAW](https://play.google.com/store/apps/details?id=de.humatic.tdf) app.
 
 ## Acoustic instruments
