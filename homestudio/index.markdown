@@ -7,9 +7,9 @@ title: "My home recording studio"
 + **HP Compaq 8300 MT**
 + **Processor:** Intel Core i7-3770 3.40Ghz
 + **Memory:** [Kingston 4x HyperX Fury Blue HX316C10F/8](https://www.kingston.com/en/hyperx/memory/fury) (32GB, 1600Mhz)
-+ **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (250GB SSD)
++ **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/products/ssd/crucial-mx500-ssd) (250GB SSD)
 + **Disk 2:** [Seagate Barracuda ST1000DM003](https://www.seagate.com/es/es/internal-hard-drives/hdd/barracuda/) (1TB, 7200rpm)
-+ **Disk 3:** [Crucial BX500 CT1000BX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (1TB SSD)
++ **Disk 3:** [Crucial BX500 CT1000BX500SSD1](https://www.crucial.com/products/ssd/bx500-ssd) (1TB SSD)
 + **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363) (1GB)
 + **External backup disk:** Samsung D3 Station (3TB)
 + **Display monitor 1:** BenQ G2400W (24'', 1920x1200)
