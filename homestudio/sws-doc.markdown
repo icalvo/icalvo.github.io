@@ -1,10 +1,9 @@
 ---
-layout: post
-title: "Recording studio diary #3"
-date: 2019-04-02
+layout: page
+title: "SWS/S&M Actions documentation"
 comments: true
-categories: [audio,home,studio,recording]
-tags: [studiodiary]
+categories: [reaper,novation,impulse,windows,automap,tutorial]
+sharing: true
 ---
 
 I am going to try and document the great [SWS/S&M](https://www.sws-extension.org/).

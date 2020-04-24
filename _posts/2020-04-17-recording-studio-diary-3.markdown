@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Recording studio diary #4"
-date: 2019-04-02
+date: 2019-04-17
 comments: true
 categories: [audio,home,studio,recording]
 tags: [studiodiary]
