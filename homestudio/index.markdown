@@ -17,7 +17,7 @@ title: "My home recording studio"
 
 ## Software
 + **OS:** Microsoft Windows 10
-+ **DAW:** [Bandlab Cakewalk](https://www.bandlab.com/products/cakewalk)
++ **DAW:** [Reaper](https://reaper.fm)
 + **Score editor:** [Musescore](https://musescore.com/)
 
 ## Audio gear
@@ -28,8 +28,11 @@ title: "My home recording studio"
   + Pop filter
   + Shock mount
   + Articulated arm
-+ **Workstation:** Korg M50-61
++ **Workstation:** Korg M50 61 keys
+  + Expression pedal: [Korg EXP-2](https://www.korg.com/es/products/accessories/exp_2/)
 + **MIDI controller:** [Novation Impulse 61](https://novationmusic.com/en/keys/impulse)
+  + Expression pedal: [M-Audio EX-P](https://m-audio.com/products/view/ex-p)
+  + Sustain pedal: [Proel GF01](https://www.proel.com/index.php?route=product/product&product_id=5374)
 + **DAW remote controller:**[ Asus Nexus 7 (2013)](https://www.asus.com/es/Tablets/Nexus_7_2013/) with [TouchDAW](https://play.google.com/store/apps/details?id=de.humatic.tdf) app.
 
 ## Acoustic instruments
