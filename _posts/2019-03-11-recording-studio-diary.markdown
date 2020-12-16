@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Recording studio diary #1"
+title: "Recording studio diary"
 date: 2019-03-11
 comments: true
 categories: [audio,home,studio,recording]

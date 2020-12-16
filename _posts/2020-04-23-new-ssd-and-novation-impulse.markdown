@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Recording studio diary #3"
+title: "Purchased SSD and Novation Impulse 61"
 date: 2020-04-23
 comments: true
 categories: [audio,home,studio,recording]

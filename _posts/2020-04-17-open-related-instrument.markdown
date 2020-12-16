@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Recording studio diary #4"
+title: "Open related virtual instrument (REAPER)"
 date: 2019-04-17
 comments: true
-categories: [audio,home,studio,recording]
+categories: [audio,home,studio,recording,reaper]
 tags: [studiodiary]
 ---
 

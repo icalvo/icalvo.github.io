@@ -21,6 +21,9 @@ layout: default
             <time class="dt-published" datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: date_format }}</time></span>
         <h3>
           <a class="post-link" href="{{ post.url | relative_url }}">
+            {%if post.tags contains "studiodiary" %}
+            Studio diary:
+            {%endif%}
             {{ post.title | escape }}
           </a>
         </h3>

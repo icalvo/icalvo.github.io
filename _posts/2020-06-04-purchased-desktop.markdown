@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Recording studio diary #3"
+title: "Purchased new Desktop"
 date: 2020-06-04
 comments: true
 categories: [audio,home,studio,recording]
