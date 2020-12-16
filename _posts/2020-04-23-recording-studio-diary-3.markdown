@@ -1,0 +1,10 @@
+---
+layout: post
+title: "Recording studio diary #3"
+date: 2020-04-23
+comments: true
+categories: [audio,home,studio,recording]
+tags: [studiodiary]
+---
+
+Two new additions for my home studio: a much needed 1TB SDD, specifically a [Crucial BX500](https://www.crucial.com/products/ssd/bx500-ssd), and a pretty decent 61 key MIDI controller, a [Novation Impulse 61](https://novationmusic.com/es/node/22). The Korg M50 is still there but I have lent it to my son for his piano practices.

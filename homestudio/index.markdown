@@ -9,15 +9,18 @@ title: "My home recording studio"
 + **Memory:** [Kingston 4x HyperX Fury Blue HX316C10F/8](https://www.kingston.com/en/hyperx/memory/fury) (32GB, 1600Mhz)
 + **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (250GB SSD)
 + **Disk 2:** [Seagate Barracuda ST1000DM003](https://www.seagate.com/es/es/internal-hard-drives/hdd/barracuda/) (1TB, 7200rpm)
++ **Disk 3:** [Crucial BX500 CT1000BX500SSD1](https://www.crucial.com/products/ssd/bx500-ssd) (1TB SSD)
 + **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363) (1GB)
 + **External backup disk:** Samsung D3 Station (3TB)
-+ **Display monitor 1:** BenQ G2400W (24'', 1920x1200)
-+ **Display monitor 2:** Acer P244W (24'', 1920x1080)
++ **Display monitor 1:** Acer P244W (24'', 1920x1080)
++ **Display monitor 2:** DELL ST2320L (23'', 1920x1080)
 
 ## Software
 + **OS:** Microsoft Windows 10
 + **DAW:** [Bandlab Cakewalk](https://www.bandlab.com/products/cakewalk)
-+ **Score editor:** [Musescore](https://musescore.com/)
++ **Score editor 1:** [Avid Sibelius](https://www.avid.com/sibelius)
++ **Score editor 2:** [Musescore](https://musescore.com/)
++ **Playback software**: [NotePerformer 3](https://www.noteperformer.com/)
 
 ## Audio gear
 + **Audio interface:** [Behringer U-Phoria UMC204HD](https://www.musictribe.com/Categories/Behringer/Computer-Audio/Interfaces/UMC204HD/p/P0BK0)
@@ -28,8 +31,8 @@ title: "My home recording studio"
   + Shock mount
   + Articulated arm
 + **Workstation:** Korg M50-61
-+ **MIDI controller:** Evolution MK-425C
-+ **DAW remote controller:**[ Asus Nexus 7 (2013)](https://www.asus.com/es/Tablets/Nexus_7_2013/) with [TouchDAW](https://play.google.com/store/apps/details?id=de.humatic.tdf) app.
++ **MIDI controller:** [Novation Impulse 61](https://novationmusic.com/es/node/22)
++ **Desktop:** [Glorious Sound Desk Pro Black](https://www.glorious.de/glorious-sound-desk-pro-black)
 
 ## Acoustic instruments
 + Flute: [Yamaha YFL-272ID](https://es.yamaha.com/es/products/musical_instruments/winds/flutes/400_300_200_series/lineup.html#product-tabs)
