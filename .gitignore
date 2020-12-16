@@ -82,3 +82,4 @@ packages/
 
 # Jekyll
 .jekyll-metadata
+.jekyll-cache

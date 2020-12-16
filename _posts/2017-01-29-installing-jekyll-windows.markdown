@@ -15,15 +15,10 @@ If you have to create a new Jekyll app:
     jekyll new appdir
     cd appdir
 
-If you already got one:
-
-
-
-Now we will edit the Gemfile to include wdm. Add this:
-
-    gem 'wdm', '>= 0.1.0' if Gem.win_platform?
-
 Finally:
 
     bundle install
     bundle exec jekyll serve
+
+
+2020-04-24: Removed update of `Gemfile` to add `wdm`, `jekyll new` adds that already.
