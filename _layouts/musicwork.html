@@ -1,0 +1,32 @@
+---
+layout: default
+---
+<article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title | escape }}, Op. {{ page.opus }}</h1>
+  </header>
+
+  <div class="post-content">
+    {%- if page.audio -%}
+    <div>
+    <audio src="{{ page.audio }}" controls>
+      <p>Your browser does not implement the audio element.</p>
+    </audio>
+    </div>
+    {%- endif -%}
+
+    {{ content }}
+
+      {%- if page.score_source -%}
+      <div class="card"><a href="{{ page.score_source }}"><img src="/assets/img/sibelius.jfif" /><br />Source file (Sibelius)</a></div>
+      {%- endif -%}
+      {%- if page.score_full -%}
+      <div class="card"><a href="{{ page.score_full }}"><img src="/assets/img/pdf.jfif" /><br />Full score (PDF)</a></div>
+      {%- endif -%}
+      {%- if page.score_parts -%}
+      <div class="card"><a href="{{ page.score_parts }}"><img src="/assets/img/pdf.jfif" /><br />Parts (PDF)</a></div>
+      {%- endif -%}
+
+  </div>
+</article>

@@ -1,3 +1,8 @@
 @charset "utf-8";
 $monospace-font-family: "Cousine";
 $brand-color: #f70709 !default;
+
+.card {
+    float: left;
+    text-align: center;
+}
