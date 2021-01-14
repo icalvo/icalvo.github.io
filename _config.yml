@@ -30,6 +30,7 @@ show_excerpts: true
 header_pages:
 - homestudio/index.markdown
 - icm.commandline/index.markdown
+- music/index.markdown
 
 # Theme
 minima:
