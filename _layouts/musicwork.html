@@ -18,15 +18,32 @@ layout: default
 
     {{ content }}
 
-      {%- if page.score_source -%}
-      <div class="card"><a href="{{ page.score_source }}"><img src="/assets/img/sibelius.jfif" /><br />Source file (Sibelius)</a></div>
-      {%- endif -%}
-      {%- if page.score_full -%}
-      <div class="card"><a href="{{ page.score_full }}"><img src="/assets/img/pdf.jfif" /><br />Full score (PDF)</a></div>
-      {%- endif -%}
-      {%- if page.score_parts -%}
-      <div class="card"><a href="{{ page.score_parts }}"><img src="/assets/img/pdf.jfif" /><br />Parts (PDF)</a></div>
-      {%- endif -%}
+    {%- for audio in page.additional_audio -%}
+    <div>
+    <audio src="{{audio}}" controls>
+        <p>Your browser does not implement the audio element.</p>
+    </audio>
+    </div>
+    {%- endfor -%}
+
+    {%- if page.instrumentation -%}
+    <h2>Instrumentation</h2>
+    <ul class="instrumentation">
+    {%- for instrument in page.instrumentation -%}
+        <li>{{instrument}}</li>
+    {%- endfor -%}
+    </ul>
+    {%- endif -%}
+
+    {%- if page.score_source -%}
+    <div class="card"><a href="{{ page.score_source }}"><img src="/assets/img/sibelius.jfif" /><br />Source file (Sibelius)</a></div>
+    {%- endif -%}
+    {%- if page.score_full -%}
+    <div class="card"><a href="{{ page.score_full }}"><img src="/assets/img/pdf.jfif" /><br />Full score (PDF)</a></div>
+    {%- endif -%}
+    {%- if page.score_parts -%}
+    <div class="card"><a href="{{ page.score_parts }}"><img src="/assets/img/pdf.jfif" /><br />Parts (PDF)</a></div>
+    {%- endif -%}
 
   </div>
 </article>
