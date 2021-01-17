@@ -41,6 +41,9 @@ layout: default
     {%- if page.score_full -%}
     <div class="card"><a href="{{ page.score_full }}"><img src="/assets/img/pdf.jfif" /><br />Full score (PDF)</a></div>
     {%- endif -%}
+    {%- if page.score_full_parts -%}
+    <div class="card"><a href="{{ page.score_full }}"><img src="/assets/img/pdf.jfif" /><br />Full score with parts (PDF)</a></div>
+    {%- endif -%}
     {%- if page.score_parts -%}
     <div class="card"><a href="{{ page.score_parts }}"><img src="/assets/img/pdf.jfif" /><br />Parts (PDF)</a></div>
     {%- endif -%}
