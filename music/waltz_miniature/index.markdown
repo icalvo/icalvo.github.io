@@ -9,7 +9,7 @@ opus: 1
 audio: waltz_miniature.mp3
 additional_audio: [waltz_miniature_original.mp3]
 score_source: waltz_miniature.sib
-score_full: waltz_miniature_full.pdf
+score_full_parts: waltz_miniature_full_parts.pdf
 instrumentation:
 - Flute 1
 - Flute 2
