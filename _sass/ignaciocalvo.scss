@@ -16,3 +16,12 @@ $brand-color: #f70709 !default;
     text-transform: uppercase;
     list-style: none;
 }
+
+audio {
+    width: 70%;
+    padding-bottom: 10px;
+}
+
+audio:focus {
+    outline: none;
+}
