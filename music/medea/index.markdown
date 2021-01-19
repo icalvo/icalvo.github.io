@@ -6,10 +6,14 @@ comments: true
 categories: [musicworks]
 sharing: true
 opus: 30
+composition_date: 1998-05
 # audio: waltz_miniature.mp3
-# additional_audio: [waltz_miniature_original.mp3]
+# additional_audio:
+#     - source: waltz_miniature_original.mp3
+#       description: Original Visual Composer piece
 # score_source: waltz_miniature.sib
 # score_full: waltz_miniature_full.pdf
+# score_full_parts: waltz_miniature_full_parts.pdf
 instrumentation:
 - Flute 1
 - Flute 2
@@ -39,4 +43,4 @@ instrumentation:
 ---
 In 1998 we enroled in what probably was the most ambitious project of Barbara Otto Schneider as stage director of the theatrical group (Grupo Pentagrama) of Ramiro de Maeztu Secondary School: Seneca's Medea. She did previously work on an innovative translation to Spanish of the original Latin work and she wanted to bring it to the stage.
 
-After my past collaborations with Bodas de Sangre and [Octavia](../octavia/), Barbara wanted to count on me again for the incidental music of this play.
+After my past collaborations with [Bodas de Sangre](../bodas_de_sangre/) and [Octavia](../octavia/), Barbara wanted to count on me again for the incidental music of this play.
