@@ -9,8 +9,8 @@ layout: default
 
   <div class="post-content">
     {%- if page.audio -%}
-    <div>
-    <audio src="{{ page.audio }}" controls>
+    <div class="audio-container">
+    <audio src="{{ page.audio }}" preload="auto" controls>
       <p>Your browser does not implement the audio element.</p>
     </audio>
     </div>
@@ -19,8 +19,9 @@ layout: default
     {{ content }}
 
     {%- for audio in page.additional_audio -%}
-    <div>
-    <audio src="{{audio}}" controls>
+    <div class="audio-container">
+    <small>{{ audio.description }}</small><br />
+    <audio src="{{ audio.source }}" preload="auto" controls>
         <p>Your browser does not implement the audio element.</p>
     </audio>
     </div>
