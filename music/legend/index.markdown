@@ -1,17 +1,13 @@
 ---
 layout: musicwork
-title: "Andean"
-date: 2021-01-14
+title: "Legend"
 categories: [musicworks]
 sharing: true
-opus: 16
+opus: 17
 composition_date: 1996-02
 instrumentation:
-- Siringa
-- Charango
-- Guitar
-- Harp
-- Bass drum
+- String orchestra
+- Bb Clarinet 1
+- Bb Clarinet 2
 
 ---
-

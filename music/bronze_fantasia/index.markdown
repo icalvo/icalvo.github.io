@@ -1,15 +1,12 @@
 ---
 layout: musicwork
-title: "Celtic cross"
+title: "Bronze Fantasia"
 date: 2021-01-14
-comments: true
 categories: [musicworks]
 sharing: true
-opus: 9
-composition_date: 1995-09
+opus: 34
+composition_date: 2009-09
 instrumentation:
-- Oboe
-- English Horn
-- Harp
+- Full orchestra
 
 ---

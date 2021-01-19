@@ -10,9 +10,12 @@ layout: default
   <div class="post-content">
 
     <ul>
-    {%- assign works = site.pages | where: "layout", "musicwork" | sort: "opus" -%}
-    {%- for work in works -%}
-      <li><a class="page-link" href="{{ work.url | relative_url }}">{{ work.title | escape }}, Op. {{ work.opus }}</a></li>
+    {%- assign worksGroupByDate = site.pages | where: "layout", "musicwork" | group_by: "composition_date" | sort: "name" | reverse -%}
+    {%- for dateGroup in worksGroupByDate -%}
+      {%- assign worksByOpus = dateGroup.items | sort: "opus" | reverse -%}
+      {%- for work in worksByOpus -%}
+        <li><a class="page-link" href="{{ work.url | relative_url }}">{{ work.title | escape }}, Op. {{ work.opus }}{{ work.opus_letter }} ({{ work.composition_date }})</a></li>
+      {%- endfor -%}
     {%- endfor -%}
     </ul>
 

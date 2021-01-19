@@ -1,11 +1,10 @@
 ---
 layout: musicwork
-title: "Symphonic dances"
-date: 2021-01-14
+title: "The march begins"
 categories: [musicworks]
 sharing: true
-opus: 26
-composition_date: 1997-06
+opus: 12
+composition_date: 1996-01
 instrumentation:
 - Full orchestra
 

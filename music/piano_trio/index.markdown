@@ -1,15 +1,14 @@
 ---
 layout: musicwork
-title: "Celtic cross"
+title: "Piano trio"
 date: 2021-01-14
-comments: true
 categories: [musicworks]
 sharing: true
-opus: 9
-composition_date: 1995-09
+opus: 28
+composition_date: 1997-09
 instrumentation:
-- Oboe
-- English Horn
-- Harp
+- Violin
+- Violoncello
+- Piano
 
 ---

@@ -1,11 +1,10 @@
 ---
 layout: musicwork
-title: "Symphonic dances"
-date: 2021-01-14
+title: "Spring"
 categories: [musicworks]
 sharing: true
-opus: 26
-composition_date: 1997-06
+opus: 21
+composition_date: 1996-05
 instrumentation:
 - Full orchestra
 

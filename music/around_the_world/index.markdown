@@ -1,11 +1,10 @@
 ---
 layout: musicwork
-title: "Symphonic dances"
-date: 2021-01-14
+title: "Around the world"
 categories: [musicworks]
 sharing: true
-opus: 26
-composition_date: 1997-06
+opus: 11
+composition_date: 1995-12
 instrumentation:
 - Full orchestra
 

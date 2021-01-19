@@ -1,15 +1,12 @@
 ---
 layout: musicwork
-title: "Celtic cross"
+title: "Sunset"
 date: 2021-01-14
-comments: true
 categories: [musicworks]
 sharing: true
-opus: 9
-composition_date: 1995-09
+opus: 18
+composition_date: 1996-03
 instrumentation:
-- Oboe
-- English Horn
-- Harp
+- Full orchestra
 
 ---

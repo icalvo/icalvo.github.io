@@ -1,17 +1,14 @@
 ---
 layout: musicwork
-title: "Andean"
-date: 2021-01-14
+title: "Manhattan"
 categories: [musicworks]
 sharing: true
-opus: 16
+opus: 14
 composition_date: 1996-02
 instrumentation:
-- Siringa
-- Charango
-- Guitar
-- Harp
-- Bass drum
+- String orchestra
+- Eb tenor sax
+- Electric bass
+- Drumkit
 
 ---
-

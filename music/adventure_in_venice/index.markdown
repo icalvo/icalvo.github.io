@@ -1,15 +1,11 @@
 ---
 layout: musicwork
-title: "Celtic cross"
-date: 2021-01-14
-comments: true
+title: "Adventure in Venice"
 categories: [musicworks]
 sharing: true
-opus: 9
+opus: 4
 composition_date: 1995-09
 instrumentation:
-- Oboe
-- English Horn
-- Harp
+- Full orchestra
 
 ---

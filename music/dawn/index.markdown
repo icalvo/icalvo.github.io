@@ -1,15 +1,14 @@
 ---
 layout: musicwork
-title: "Celtic cross"
-date: 2021-01-14
-comments: true
+title: "Dawn"
 categories: [musicworks]
 sharing: true
-opus: 9
+opus: 2
 composition_date: 1995-09
 instrumentation:
+- Flute
 - Oboe
-- English Horn
-- Harp
+- Bb clarinet
+- Bassoon
 
 ---

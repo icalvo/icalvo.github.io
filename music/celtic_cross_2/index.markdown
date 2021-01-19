@@ -1,15 +1,15 @@
 ---
 layout: musicwork
-title: "Celtic cross"
+title: "Celtic cross 2"
 date: 2021-01-14
-comments: true
 categories: [musicworks]
 sharing: true
-opus: 9
-composition_date: 1995-09
+opus: 27
+composition_date: 1997-08
 instrumentation:
 - Oboe
 - English Horn
-- Harp
+- Harp 1
+- Harp 2
 
 ---

@@ -2,18 +2,10 @@
 layout: musicwork
 title: "Octavia"
 date: 2021-01-14
-comments: true
 categories: [musicworks]
 sharing: true
-opus: 28
-composition_date: 1996-12
-# audio: waltz_miniature.mp3
-# additional_audio:
-#     - source: waltz_miniature_original.mp3
-#       description: Original Visual Composer piece
-# score_source: waltz_miniature.sib
-# score_full: waltz_miniature_full.pdf
-# score_full_parts: waltz_miniature_full_parts.pdf
+opus: 25
+composition_date: 1997-05
 instrumentation:
 - Full orchestra, choir, and contralto
 
