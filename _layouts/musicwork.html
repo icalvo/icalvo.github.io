@@ -16,6 +16,10 @@ layout: default
     </div>
     {%- endif -%}
 
+
+    {%- if page.composition_date -%}
+      <p><b>Composition date:</b> {{ page.composition_date }}</p>
+    {%- endif -%}
     {{ content }}
 
     {%- for audio in page.additional_audio -%}
