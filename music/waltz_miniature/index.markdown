@@ -6,12 +6,9 @@ comments: true
 categories: [musicworks]
 sharing: true
 opus: 1
-audio: waltz_miniature.mp3
 additional_audio:
     - source: waltz_miniature_original.mp3
       description: Original Visual Composer piece
-score_source: waltz_miniature.sib
-score_full_parts: waltz_miniature_full_parts.pdf
 composition_date: 1994
 instrumentation:
 - Flute 1
@@ -23,10 +20,10 @@ instrumentation:
 - Bassoon 1
 - Bassoon 2
 - --
-- French Horn 1
-- French Horn 2
-- Trumpet 1
-- Trumpet 2
+- F French Horn 1
+- F French Horn 2
+- C Trumpet 1
+- C Trumpet 2
 - Tuba
 - --
 - Timpani
