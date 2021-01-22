@@ -19,11 +19,10 @@ movements:
   description: This lullaby is sung by the Maid. This is the character that senses the tragic events that are to come, so all her songs contain several elements that anticipate the tragic events to come.
 - name: "'Despierte la novia' (Let the bride wake up)"
   key: despierte_la_novia
-  description: This song goes along the wedding of the Bride.
+  description: This song goes along the wedding of the Bride. It's mostly happy but it has a darker ending because the latest verse mentions the moon, which is a symbol of death.
 - name: "'Agua de molino' (Water of the mill)"
   key: agua_de_molino
-  description: This is a suppossedly happy song, but it is sung by the Maid, so it is also 
-- name: "'La oscura raíz del grito' (The dark root of the scream)"
+  description: This is a happy song, sung by the Maid, that celebrates the recent union of the Bride and the Groom.
   key: la_oscura_raiz_del_grito
   description: This song is based on the closing verses of the play, which are recited by the Mother and the Bride of the (now deceased) Groom.
 ---
@@ -31,4 +30,4 @@ This is an arrangement for voice and piano of the 4 songs that featured in the [
 
 In addition to that, it features a new fifth song, _"La oscura raíz del grito"_ ("The dark root of the scream"), with the latest verses of the play.
 
-This piece was a Christmas gift for my mother-in-law, [Maristela Gruber](https://maristelagruber.com/). The downside is that it was 2015 when I gifted it to her, meaning that it took me 3 years to finish the job! Bad performance, no question. But 
+This piece was a Christmas gift for my mother-in-law, [Maristela Gruber](https://maristelagruber.com/). The downside is that it was 2015 when I gifted it to her, meaning that it took me 3 years to finish the job! Bad performance, no question... but here it is, at last!
