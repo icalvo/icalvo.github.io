@@ -1,10 +1,6 @@
 ---
-layout: post
 title: "Open related virtual instrument (REAPER)"
 date: 2019-04-17
-comments: true
-categories: [audio,home,studio,recording,reaper]
-tags: [studiodiary]
 ---
 
 If you are like me, you have your MIDI tracks separated from your Kontakt instruments. This way you don't waste Konkakt instances.

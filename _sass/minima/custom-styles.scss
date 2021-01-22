@@ -1,4 +1,33 @@
-@charset "utf-8";
+// Placeholder to allow defining custom styles that override everything else.
+// (Use `_sass/minima/custom-variables.scss` to override variable defaults)
+.card {
+    float: left;
+    text-align: center;
+    padding-left: 10px;
+    img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.instrumentation {
+    text-transform: uppercase;
+    list-style: none;
+}
+
+.audio-container {
+    text-align: center;
+}
+
+audio {
+    width: 70%;
+    padding-bottom: 10px;
+}
+
+audio:focus {
+    outline: none;
+}
+
 .site-title {
     //    @include relative-font-size(1.625);
     font-family: 'Saira Extra Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -17,6 +46,7 @@ code {
         font-family: $monospace-font-family;
         font-weight: 700;
     }
+    color: $brand-secondary-color;
 }
 
 .site-header {
@@ -40,6 +70,8 @@ code {
     }
 }
 
-.feed-subscribe {
-    display: none;
+
+.footer-col-wrapper {
+    color: $brand-secondary-color;
 }
+
