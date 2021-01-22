@@ -11,43 +11,43 @@ instrumentation:
 - full choir
 movements:
 - name: Wedding - Introduction
-  key: wedding_introduction
+  key: introduction
   description: Song.
 - name: Wedding - Priests
-  key: wedding_priests
+  key: priests
   description: Song.
-- name: Wedding - Chorus of Corynthians
-  key: wedding_corynthians
+- name: Wedding - The Corynthians
+  key: the_corynthians
   description: Song.
 - name: Wedding - Dance of the witches
-  key: wedding_dance
+  key: dance_of_the_witches
   description: A sinister dance offered as a sardonic wedding gift.
-- name: Wedding - Baccus
-  key: wedding_baccus
+- name: Wedding - Baccus party
+  key: baccus_party
   description: Song.
 - name: Voyage
-  key: voyage
+  key: the_voyage_of_the_argo
   description: Jason and his Argonauts travel to Colchis in search of the mythical Golden Fleece.
 - name: Spell - Chorus of Corynthians
-  key: spell_chorus_corynthians
+  key: chorus_corynthians
   description: Song.
 - name: Spell - Evohe
-  key: spell_evohe
+  key: evohe
   description: Song.
 - name: Spell - Chorus of Hecate
-  key: spell_hecate
+  key: hecate
   description: Song.
-- name: Spell - Invocation
-  key: spell_invocation
+- name: Spell - The Spell
+  key: the_spell
   description: Song.
-- name: Finale - Spell
-  key: finale_spell
+- name: Revenge - Spell
+  key: bewitched
   description: Song.
-- name: Finale - Monologue
-  key: finale_monologue
+- name: Revenge - Monologue
+  key: monologue
   description: Song.
-- name: Finale - Argo
-  key: finale_argo
+- name: Revenge - Finale
+  key: finale
   description: Song.
 ---
 In 1998 we enroled in what probably was the most ambitious project of Barbara Otto Schneider as stage director of the theatrical group (Grupo Pentagrama) of Ramiro de Maeztu Secondary School: Seneca's Medea. She did previously work on an innovative translation to Spanish of the original Latin work and she wanted to bring it to the stage.
