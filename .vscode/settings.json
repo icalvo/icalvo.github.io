@@ -19,5 +19,6 @@
         "titleBar.inactiveBackground": "#7fe82c99",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#7fe82c"
+    "peacock.color": "#7fe82c",
+    "jekyll-run.commandLineArguments": "-V"
 }

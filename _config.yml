@@ -14,8 +14,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Ignacio Calvo Blog
-author: Ignacio Calvo
-email: ignacio.calvo@gmail.com
+author:
+  name: Ignacio Calvo Martínez
+  email: ignacio.calvo@gmail.com
 description: Professional developer and amateur musician.
 google_site_verification: lYI_fzae0p3Hx_Ta5lkgLAztpNDFaWHb39crE9KBYjA
 google_analytics: UA-1520724-2
@@ -32,8 +33,19 @@ header_pages:
 - icm.commandline/index.markdown
 - music/index.markdown
 
+defaults:
+  -
+    scope:
+      path: "_posts/studiodiary"
+    values:
+      layout: "post"
+      categories: [music,studiodiary]
+      tags: [audio,home,studio,recording]
+      comments: true
+
 # Theme
 minima:
+  skin: ignaciocalvo
   date_format: "%F"
   social_links:
     twitter: ignaciocalvo
@@ -52,16 +64,20 @@ disqus:
 markdown: kramdown
 plugins:
   - jekyll-feed
+  - jekyll-paginate
+  - jekyll-seo-tag
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
 exclude:
   - .vscode/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+paginate: 5
