@@ -1,6 +1,6 @@
 ---
 layout: musicwork
-title: "Study"
+title: "Etude"
 categories: [musicworks]
 sharing: true
 opus: 19
