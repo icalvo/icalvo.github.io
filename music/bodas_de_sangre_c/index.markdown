@@ -12,7 +12,7 @@ instrumentation:
 - Piano
 movements:
 - name: Overture and brawl
-  key: obertura_y_reyerta
+  key: overture_and_brawl
   description: This is a small instrumental section introducing the driving theme and then a song based on "Reyerta" (Brawl), the third poem of "Romancero gitano", one of Lorca's most recognized works.
 - name: Lullaby of the Horse
   key: lullaby_horse
@@ -23,9 +23,6 @@ movements:
 - name: "'Agua de molino' (Water of the mill)"
   key: agua_de_molino
   description: This is a suppossedly happy song, but it is sung by the Maid, so it is also 
-- name: Dance of the knives
-  key: dance_knives
-  description: Dance.
 - name: "'La oscura raíz del grito' (The dark root of the scream)"
   key: la_oscura_raiz_del_grito
   description: This song is based on the closing verses of the play, which are recited by the Mother and the Bride of the (now deceased) Groom.
