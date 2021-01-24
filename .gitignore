@@ -7,9 +7,6 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Ruby Gemfiles
-Gemfile*
-
 #OS junk files
 [Tt]humbs.db
 ehthumbs.db
