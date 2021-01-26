@@ -18,31 +18,15 @@ layout: default
   </header>
 
   <div class="post-content">
-
-    {% assign file_path = work_folder | append: '.mp3' | prepend: page.dir %}
-    {% assign found = site.static_files | where: "path", file_path | first %}
-    {%- if found -%}
-    <div class="audio-container">
-    <audio src="{{ file_path }}" preload="auto" controls>
-      <p>Your browser does not implement the audio element.</p>
-    </audio>
-    </div>
-    {%- endif -%}
+    {%- unless page.movements -%}
+      {% include file_exists.html template='audio.html' suffix='.mp3' %}
+    {%- endunless -%}
 
     {%- if page.composition_date -%}
       <p><b>Composition date:</b> {{ page.composition_date }}</p>
     {%- endif -%}
 
     {{ content }}
-
-    {%- for audio in page.additional_audio -%}
-    <div class="audio-container">
-    <small>{{ audio.description }}</small><br />
-    <audio src="{{ audio.source }}" preload="auto" controls>
-        <p>Your browser does not implement the audio element.</p>
-    </audio>
-    </div>
-    {%- endfor -%}
 
     {%- if page.instrumentation -%}
     <h2>Instrumentation</h2>
@@ -53,78 +37,22 @@ layout: default
     </ul>
     {%- endif -%}
 {%- if page.movements -%}
+    <h2>Movements</h2>
     {%- for movement in page.movements -%}
-      <h2>{{ forloop.index }}. {{ movement.name }}</h2>
+      <h3>{{ forloop.index }}. {{ movement.name }}</h3>
 
-    {% assign file_path = movement.key | append: '.mp3' | prepend: page.dir %}
-    {% assign found = site.static_files | where: "path", file_path | first %}
-    {%- if found -%}
-    <div class="audio-container">
-    <audio src="{{ file_path }}" preload="auto" controls>
-      <p>Your browser does not implement the audio element.</p>
-    </audio>
-    </div>
-    {%- endif -%}
-
+      {% include file_exists.html key=movement.key template='audio.html' suffix='.mp3' %}
 
       <p>{{ movement.description }}</p>
 
-      <h3>Downloads</h3>
-
-      {% assign file_path = movement.key | append: '.sib' | prepend: page.dir %}
-      {% assign found = site.static_files | where: "path", file_path | first %}
-      {%- if found -%}
-      <div class="card"><a href="{{ file_path }}"><img src="/assets/img/sibelius.jfif" /><br />Source file (Sibelius)</a></div>
-      {%- endif -%}
-
-      {% assign file_path = movement.key | append: '_full.pdf' | prepend: page.dir %}
-      {% assign found = site.static_files | where: "path", file_path | first %}
-      {%- if found -%}
-      <div class="card"><a href="{{ file_path }}"><img src="/assets/img/pdf.jfif" /><br />Full score (PDF)</a></div>
-      {%- endif -%}
-
-      {% assign file_path = movement.key | append: '_full_parts.pdf' | prepend: page.dir %}
-      {% assign found = site.static_files | where: "path", file_path | first %}
-      {%- if found -%}
-      <div class="card"><a href="{{ file_path }}"><img src="/assets/img/pdf.jfif" /><br />Full score with parts (PDF)</a></div>
-      {%- endif -%}
-
-      {% assign file_path = movement.key | append: '_parts.pdf' | prepend: page.dir %}
-      {% assign found = site.static_files | where: "path", file_path | first %}
-      {%- if found -%}
-      <div class="card"><a href="{{ file_path }}"><img src="/assets/img/pdf.jfif" /><br />Parts (PDF)</a></div>
-      {%- endif -%}
+      {% include downloads.html tag='h4' key=movement.key %}
 
       <div style="clear: both"></div>
     {%- endfor -%}
 
 {%- else -%}
 
-    <h2>Downloads</h2>
-
-    {% assign file_path = work_folder | append: '.sib' | prepend: page.dir %}
-    {% assign found = site.static_files | where: "path", file_path | first %}
-    {%- if found -%}
-    <div class="card"><a href="{{ file_path }}"><img src="/assets/img/sibelius.jfif" /><br />Source file (Sibelius)</a></div>
-    {%- endif -%}
-
-    {% assign file_path = work_folder | append: '_full.pdf' | prepend: page.dir %}
-    {% assign found = site.static_files | where: "path", file_path | first %}
-    {%- if found -%}
-    <div class="card"><a href="{{ file_path }}"><img src="/assets/img/pdf.jfif" /><br />Full score (PDF)</a></div>
-    {%- endif -%}
-
-    {% assign file_path = work_folder | append: '_full_parts.pdf' | prepend: page.dir %}
-    {% assign found = site.static_files | where: "path", file_path | first %}
-    {%- if found -%}
-    <div class="card"><a href="{{ file_path }}"><img src="/assets/img/pdf.jfif" /><br />Full score with parts (PDF)</a></div>
-    {%- endif -%}
-
-    {% assign file_path = work_folder | append: '_parts.pdf' | prepend: page.dir %}
-    {% assign found = site.static_files | where: "path", file_path | first %}
-    {%- if found -%}
-    <div class="card"><a href="{{ file_path }}"><img src="/assets/img/pdf.jfif" /><br />Parts (PDF)</a></div>
-    {%- endif -%}
+    {% include downloads.html  tag='h2' %}
 
 {%- endif -%}
 

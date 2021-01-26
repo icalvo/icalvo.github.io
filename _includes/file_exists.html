@@ -1,0 +1,23 @@
+{%- if include.dir -%}
+    {%- assign page_dir = include.dir -%}
+{%- else -%}
+    {%- assign page_dir = page.dir -%}
+{%- endif -%}
+
+{%- if include.key -%}
+    {% assign work_key = include.key %}
+{%- else -%}
+
+    {% assign page_dir_split = page_dir | split: '/' %}
+    {% assign folder_idx = page_dir_split.size | minus: 1 %}
+    {% assign work_key = page_dir_split[folder_idx] %}
+
+{%- endif -%}
+
+{% assign file_path = work_key | append: include.suffix | prepend: page_dir %}
+{% assign found = site.static_files | where: "path", file_path | first %}
+{%- if found -%}
+{% include {{ include.template }} file=file_path description=include.description %}
+{%- else -%}
+    <!-- Not found: {{ file_path }} -->
+{%- endif -%}

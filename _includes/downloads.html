@@ -1,0 +1,13 @@
+
+{%- capture downloads_content -%}
+      {% include file_exists.html template='download_icon.html' key=include.key suffix='.sib' description='Source (Sibelius)' %}
+      {% include file_exists.html template='download_icon.html' key=include.key suffix='_full.pdf' description='Full score' %}
+      {% include file_exists.html template='download_icon.html' key=include.key suffix='_full_parts.pdf' description='Full score with parts' %}
+      {% include file_exists.html template='download_icon.html' key=include.key suffix='_parts.pdf' description='Parts' %}
+{%- endcapture -%}
+{%- assign downloads_content_strip = downloads_content | strip -%}
+{%- if downloads_content_strip != '' -%}
+      <{{include.tag}}>Downloads</{{include.tag}}>
+
+      {{ downloads_content | strip }}
+{%- endif -%}

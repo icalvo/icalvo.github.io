@@ -1,0 +1,12 @@
+<div class="card">
+    {%- assign extension = include.file | split: '.' | last -%}
+    {%- case extension -%}
+    {%- when 'sib' -%}
+        {%- assign icon = '/assets/img/sibelius.jfif' -%}
+    {%- when 'pdf' -%}
+        {%- assign icon = '/assets/img/pdf.jfif' -%}
+    {%- endcase -%}
+    
+    <a href="{{ include.file }}">
+        <img src="{{ icon }}" /><br />{{ include.description }}
+    </a></div>
