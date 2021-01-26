@@ -14,7 +14,30 @@ layout: default
     {%- for dateGroup in worksGroupByDate -%}
       {%- assign worksByOpus = dateGroup.items | sort: "opus" | reverse -%}
       {%- for work in worksByOpus -%}
-        <li><a class="page-link" href="{{ work.url | relative_url }}">{{ work.title | escape }}, Op. {{ work.opus }}{{ work.opus_letter }} ({{ work.composition_date }})</a></li>
+        <li>
+          <a class="page-link" href="{{ work.url | relative_url }}">{{ work.title | escape }}, Op. {{ work.opus }}{{ work.opus_letter }} ({{ work.composition_date }})</a>
+          {%- if work.movements -%}
+            {%- for movement in work.movements -%}
+              {%- assign desc = movement.name | append: ' - Audio' -%}
+              {% include file_exists.html template='small_download_icon.html' dir=work.url key=movement.key suffix='.mp3' description=desc %}
+              {%- assign desc = movement.name | append: ' - Source (Sibelius)' -%}
+              {% include file_exists.html template='small_download_icon.html' dir=work.url key=movement.key suffix='.sib' description=desc %}
+              {%- assign desc = movement.name | append: ' - Full score' -%}
+              {% include file_exists.html template='small_download_icon.html' dir=work.url key=movement.key suffix='_full.pdf' description=desc %}
+              {%- assign desc = movement.name | append: ' - Full score with parts' -%}
+              {% include file_exists.html template='small_download_icon.html' dir=work.url key=movement.key suffix='_full_parts.pdf' description=desc %}
+              {%- assign desc = movement.name | append: ' - Parts' -%}
+              {% include file_exists.html template='small_download_icon.html' dir=work.url key=movement.key suffix='_parts.pdf' description=desc %}
+            {%- endfor -%}
+            
+          {%- else -%}
+            {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='.mp3' description='Audio' %}
+            {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='.sib' description='Source (Sibelius)' %}
+            {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='_full.pdf' description='Full score' %}
+            {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='_full_parts.pdf' description='Full score with parts' %}
+            {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='_parts.pdf' description='Parts' %}
+          {%- endif -%}
+        </li>
       {%- endfor -%}
     {%- endfor -%}
     </ul>
