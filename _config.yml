@@ -79,5 +79,7 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - '*.cwp'
+  - '*.wrk'
 
 paginate: 5
