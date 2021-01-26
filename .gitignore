@@ -80,3 +80,8 @@ packages/
 # Jekyll
 .jekyll-metadata
 .jekyll-cache
+
+# Heavy Media
+*.mp4
+*.wav
+*.omf
