@@ -6,9 +6,6 @@ comments: true
 categories: [musicworks]
 sharing: true
 opus: 1
-additional_audio:
-    - source: waltz_miniature_original.mp3
-      description: Original Visual Composer piece
 composition_date: 1994
 instrumentation:
 - Flute 1
@@ -40,3 +37,5 @@ instrumentation:
 This is a piece I composed when I was 16, with an ancient software called [Adlib Visual Composer](https://archive.org/details/AdLibVisualComposerV1.51). On January 2021 I reviewed some of these old works. They were all very basic, but I thought this one deserved to be resurrected, so I decided to arrange it for orchestra.
 
 For archaeological purposes, you can listen the original piece, which was recorded in a cassette and converted later to a digital format (so the quality is very low).
+
+{% include file_exists.html template='audio.html' suffix='_original.mp3' description='Original Visual Composer piece' %}
