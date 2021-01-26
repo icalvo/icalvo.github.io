@@ -1,0 +1,40 @@
+De cada melodía se hacen varias versiones. Para esta prueba os
+enviamos 4 mp3 de los que necesitáis generar 4 versiones de cada uno
+que son:
+
+- _vacía: esta versión tiene únicamente la melodía de la cancion
+original, la voz del que canta. Es monofónica de una sola pista. Solo
+se pueden utilizar 2 octavas que son C3 y C4.
+- _pulida: esta versión tiene principalmente la melodía pero en los
+espacios largos o en las notas largas, éstos/as se pueden cortar para
+poner algún tipo de arreglo que haga que, aún siendo monofónica,
+resulte más rica y animada que una VACIA. Es monofónica de una sola
+pista. Se pueden utilizar 3 octabas que son C3, C4, C5.
+- _poli_4p: esta versión es una polifónica de 4 polifonías de las
+cuales una tiene la melodía (que sería la VACIA) y las otras 3, todas
+monofónicas, se utilizan para adornar la melodía con los instrumentos
+o recursos más interesantes. En el ejemplo adjunto os enviamos una de
+3 pistas pero no te fijes en eso sino en las restricciones que te
+comento.
+- _poli_16p: esta versión es un polifónica de hasta 16 polifonías de
+las cuales una tiene la melódía (que sería la VACIA y es monofónica) y
+las otras se utilizan para adornar la melodía con los instrumentos o
+recursos más interesantes (el resto, aparte de la melodía, no tiene
+que ser monofónica).
+
+Los midis en general han de cumplir estas condiciones:
+
+- Todas las notas han de estar quantizados, todo el midi ha de estarlo.
+- Los pentagramas son en clave de sol y cuatro por cuatro.
+- En las monofónicas, solo valen los valores de la nota y la nota con
+punto (por ejemplo, no se puede utilizar una negra ligada a una
+semicorchea).
+- en las monos, los valores que se puede utilizar van de redonda a
+fusa (desde 1 hasta 1/32). Esto tanto para silencios como para nota.
+- Al final del midi ha de dejarse de tal forma terminado que el final
+quede preparado para que se haga un loop y quede bien, es decir, que
+el final haga la introducción del principio.
+- Cada midi lleva asociado un archivo audio con el mismo nombre. En
+las monofónicas el audio es .wav y en las polis el audio es .mp3. Por
+favor utiliza para sacar los audios el mismo sonido que tienen los que
+te enviamos.
