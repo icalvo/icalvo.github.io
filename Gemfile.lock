@@ -253,18 +253,19 @@ GEM
       unf_ext
     unf_ext (0.0.7.7-x64-mingw32)
     unicode-display_width (1.7.0)
+    wdm (0.1.1)
     zeitwerk (2.4.2)
 
 PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  activesupport (>= 4.1.11)
   github-pages (= 210)
   jekyll-feed
   jekyll-paginate
   jekyll-seo-tag
   tzinfo-data
+  wdm
 
 BUNDLED WITH
    2.1.4
