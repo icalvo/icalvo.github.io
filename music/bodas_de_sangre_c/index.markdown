@@ -30,4 +30,4 @@ This is an arrangement for voice and piano of the 4 songs that featured in the [
 
 In addition to that, it features a new fifth song, _"La oscura raíz del grito"_ ("The dark root of the scream"), with the latest verses of the play.
 
-This piece was a Christmas gift for my mother-in-law, [Maristela Gruber](https://maristelagruber.com/). The downside is that it was 2015 when I gifted it to her, meaning that it took me 3 years to finish the job! Bad performance, no question... but here it is, at last!
+This piece was a Christmas gift for my stepmother, [Maristela Gruber](https://maristelagruber.com/). The downside is that it was 2015 when I gifted it to her, meaning that it took me 3 years to finish the job! Bad performance, no question... but here it is, at last!
