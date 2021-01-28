@@ -34,7 +34,7 @@ instrumentation:
 - Contrabass
 
 ---
-This is a piece I composed when I was 16, with an ancient software called [Adlib Visual Composer](https://archive.org/details/AdLibVisualComposerV1.51). On January 2021 I reviewed some of these old works. They were all very basic, but I thought this one deserved to be resurrected, so I decided to arrange it for orchestra.
+This is a piece I composed when I was 16, with an ancient software called [Adlib Visual Composer](https://archive.org/details/AdLibVisualComposerV1.51). On January 2021 I reviewed some of these old works. They were all pretty disposable, but I thought this one deserved to be resurrected, so I decided to arrange it for orchestra.
 
 For archaeological purposes, you can listen the original piece, which was recorded in a cassette and converted later to a digital format (so the quality is very low).
 
