@@ -6,7 +6,7 @@ comments: true
 categories: [musicworks]
 sharing: true
 opus: 1
-composition_date: 1994
+composition_date: 1993
 instrumentation:
 - Flute 1
 - Flute 2
