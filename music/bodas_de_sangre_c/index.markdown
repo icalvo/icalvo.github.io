@@ -23,7 +23,7 @@ movements:
 - name: "'Agua de molino' (Water of the mill)"
   key: agua_de_molino
   description: This is a happy song, sung by the Maid, that celebrates the recent union of the Bride and the Groom.
-- name: "'La oscura raíz del grito' (Dark root of the scream)
+- name: "'La oscura raíz del grito' (Dark root of the scream)"
   key: la_oscura_raiz_del_grito
   description: This song is based on the closing verses of the play, which are recited by the Mother and the Bride of the (now deceased) Groom.
 ---
