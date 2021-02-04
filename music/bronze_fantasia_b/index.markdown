@@ -8,11 +8,11 @@ opus: 34
 opus_letter: b
 composition_date: 2018-05
 instrumentation:
-- Bb Clarinet
-- Eb Alto Saxophone 1
-- Eb Alto Saxophone 2
-- Eb Alto Saxophone 3
-- Bb Bass Clarinet
+- B♭ Clarinet
+- E♭ Alto Saxophone 1
+- E♭ Alto Saxophone 2
+- E♭ Alto Saxophone 3
+- B♭ Bass Clarinet
 
 ---
 I started studying alto saxophone in 2016. After two years, I proposed my teachers to play an arrangement of ["Bronze Fantasia"]({% link music/bronze_fantasia/index.markdown %}). We managed to gather 5 instruments and I arranged the piece for them.

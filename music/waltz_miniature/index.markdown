@@ -12,8 +12,8 @@ instrumentation:
 - Flute 2
 - Oboe 1
 - Oboe 2
-- Bb Clarinet 1
-- Bb Clarinet 2
+- B♭ Clarinet 1
+- B♭ Clarinet 2
 - Bassoon 1
 - Bassoon 2
 - --
