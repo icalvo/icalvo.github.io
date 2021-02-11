@@ -3,6 +3,8 @@
     {%- case extension -%}
     {%- when 'pdf' -%}
         {%- assign icon = '/assets/img/pdf.jfif' -%}
+    {%- when 'mid' -%}
+        {%- assign icon = '/assets/img/midi.jfif' -%}
     {%- endcase -%}
     
     <a href="{{ include.file }}">

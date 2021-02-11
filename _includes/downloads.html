@@ -3,6 +3,7 @@
       {% include file_exists.html template='download_icon.html' key=include.key suffix='_full.pdf' description='Full score' %}
       {% include file_exists.html template='download_icon.html' key=include.key suffix='_full_parts.pdf' description='Full score with parts' %}
       {% include file_exists.html template='download_icon.html' key=include.key suffix='_parts.pdf' description='Parts' %}
+      {% include file_exists.html template='download_icon.html' key=include.key suffix='.mid' description='MIDI' %}
 {%- endcapture -%}
 {%- assign downloads_content_strip = downloads_content | strip -%}
 {%- if downloads_content_strip != '' -%}

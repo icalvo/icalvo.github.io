@@ -35,6 +35,7 @@ layout: default
             {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='_full.pdf' description='Full score' %}
             {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='_full_parts.pdf' description='Full score with parts' %}
             {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='_parts.pdf' description='Parts' %}
+            {% include file_exists.html template='small_download_icon.html' dir=work.url suffix='.mid' description='MIDI' %}
           {%- endif -%}
         </li>
       {%- endfor -%}
