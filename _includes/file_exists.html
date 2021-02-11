@@ -5,19 +5,25 @@
 {%- endif -%}
 
 {%- if include.key -%}
-    {% assign work_key = include.key %}
+    {% assign file_key = include.key %}
 {%- else -%}
 
     {% assign page_dir_split = page_dir | split: '/' %}
     {% assign folder_idx = page_dir_split.size | minus: 1 %}
-    {% assign work_key = page_dir_split[folder_idx] %}
+    {% assign file_key = page_dir_split[folder_idx] %}
 
 {%- endif -%}
 
-{% assign file_path = work_key | append: include.suffix | prepend: page_dir %}
-{% assign found = site.static_files | where: "path", file_path | first %}
+{% assign file_path = file_key | append: include.suffix %}
+{%- assign found = false -%}
+{%- for static_file in site.static_files -%}
+    {%- if static_file.name == file_path -%}
+        {%- assign found = static_file.path -%}
+        {%- break -%}
+    {%- endif -%}
+{%- endfor -%}
 {%- if found -%}
-{% include {{ include.template }} file=file_path description=include.description %}
-{%- else -%}
+{% include {{ include.template }} key=file_key file=found description=include.description %}
+{%- elsif include.hide_not_found_comment != true -%}
     <!-- Not found: {{ file_path }} -->
 {%- endif -%}

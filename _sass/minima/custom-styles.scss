@@ -30,7 +30,8 @@ audio:focus {
 
 .site-title {
     //    @include relative-font-size(1.625);
-    font-family: 'Saira Extra Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-family: "Saira Extra Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-weight: 400;
     font-size: 40px;
     line-height: $base-line-height * $base-font-size * 2.25;
@@ -70,8 +71,34 @@ code {
     }
 }
 
-
 .footer-col-wrapper {
     color: $brand-secondary-color;
+}
+
+.music-works {
+    ul {
+        margin: 0;
+    }
+    li {
+        display: block;
+        list-style: none;
+        background-color:rgba(0, 0, 0, 0.1);
+        background-image: url(/assets/img/score_background.png);
+        margin: 10px;
+        padding: 10px;
+        min-height: 100px;
+        border-radius: 10px;
+        text-align: center;
+
+        .work-title {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+        
+        .player {
+            margin: 0 auto;
+        }
+    }
+    
 }
 

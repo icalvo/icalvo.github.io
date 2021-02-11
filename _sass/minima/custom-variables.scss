@@ -1,6 +1,9 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Cousine|Saira+Extra+Condensed:500,700);
+
 // Placeholder to allow overriding predefined variables smoothly.
 $monospace-font-family: "Cousine";
-
+$base-font-family: "Roboto", sans-serif;
 $brand-secondary-color:         #828282 !default;
 $brand-secondary-color-light:     lighten($brand-color, 40%) !default;
 $brand-secondary-color-dark:      darken($brand-color, 25%) !default;

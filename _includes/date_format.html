@@ -1,0 +1,10 @@
+{%- assign split = include.date | split: '-' -%}
+{%- case split.size -%}
+    {%- when 1 -%}
+        {{ split[0] }}
+    {%- when 2 -%}
+        {%- assign complete_date = include.date | append: '-01' -%}
+        {{ complete_date | date: "%B %Y" }}
+    {%- else -%}
+        {{ include.date | date: "%B %Y" }}
+{%- endcase -%}

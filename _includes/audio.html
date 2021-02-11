@@ -1,6 +1,5 @@
-<div class="audio-container">
-<small>{{ include.description }}</small><br />
-<audio src="{{ include.file }}" preload="auto" controls>
-    <p>Your browser does not implement the audio element.</p>
-</audio>
+<div class="player">
+    <audio>
+        <source src="{{ include.file }}" type="audio/mpeg">
+    </audio>
 </div>

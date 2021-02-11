@@ -9,6 +9,7 @@ composition_date: 1998-05
 instrumentation:
 - Full orchestra
 - full choir
+default_audio_movement: dance_of_the_witches
 movements:
 - name: Wedding - Introduction
   key: introduction
