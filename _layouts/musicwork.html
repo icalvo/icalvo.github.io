@@ -22,7 +22,7 @@ layout: default
     {%- endunless -%}
 
     {%- if page.composition_date -%}
-      <p><b>Composition date:</b> {{ page.composition_date }}</p>
+      <p><b>Composition date:</b> {%- include date_format.html date=page.composition_date -%}</p>
     {%- endif -%}
 
     {{ content }}
