@@ -82,5 +82,6 @@ exclude:
   - '*.cwp'
   - '*.wrk'
   - '*.sib'
+  - tools/
 
 paginate: 5
