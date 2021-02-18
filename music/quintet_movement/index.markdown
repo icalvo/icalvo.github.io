@@ -9,6 +9,7 @@ instrumentation:
 - Violin 1 (solo)
 - Violin 2 (solo)
 - Viola (solo)
-- Violoncello (solo)
+- Violoncello 1 (solo)
+- Violoncello 2 (solo)
 
 ---
