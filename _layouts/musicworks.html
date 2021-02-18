@@ -14,11 +14,12 @@ layout: default
     {%- for dateGroup in worksGroupByDate -%}
       {%- assign worksByOpus = dateGroup.items | sort: "opus" | reverse -%}
       {%- for work in worksByOpus -%}
-        <li>
+        <li style="background-image:url({{ work.url }}background.png)">
           <div class="work-title">
           {%- capture completeTitle -%}{{ work.title | escape }}, Op. {{ work.opus }}{{ work.opus_letter }} ({%- include date_format.html date=work.composition_date -%}){%- endcapture -%}
 
           <a class="page-link" href="{{ work.url | relative_url }}">{{ completeTitle }}</a>
+          <br />
           {%- assign availableTypes = "" | split: ',' -%}
           {%- for movement in work.movements -%}
             {%- capture icon -%}{% include file_exists.html template='small_download_icon.html' dir=work.url key=movement.key suffix='.mp3' description='Audio available' %}{%- endcapture -%}
@@ -88,3 +89,11 @@ layout: default
 
   </div>
 </article>
+<script>
+    GreenAudioPlayer.init({
+        selector: '.player', // inits Green Audio Player on each audio container that has class "player"
+        stopOthersOnPlay: true,
+        showDownloadButton: false
+    });
+</script>
+

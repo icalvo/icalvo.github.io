@@ -86,10 +86,11 @@ code {
         background-image: url(/assets/img/score_background.png);
         margin: 10px;
         padding: 10px;
-        min-height: 100px;
+        height: 330px;
         border-radius: 10px;
         text-align: center;
-
+        width: 330px;
+        float: left;
         .work-title {
             font-weight: bold;
             margin-bottom: 7px;
