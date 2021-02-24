@@ -18,8 +18,8 @@ layout: default
       {%- for work in worksByOpus -%}
         <li style="background-image:url({{ work.url }}background.png)">
           <div class="work-title">
-          {%- capture completeTitle -%}{{ work.title | escape }}, Op. {{ work.opus }}{{ work.opus_letter }} ({%- include date_format.html date=work.composition_date -%}){%- endcapture -%}
-
+          {%- capture completeTitle -%}{{ work.title | escape }}, Op.&nbsp;{{ work.opus }}{{ work.opus_letter }}{%- endcapture -%}
+          <small>{%- include date_format.html date=work.composition_date -%}</small><br />
           <a class="page-link" href="{{ work.url | relative_url }}">{{ completeTitle }}</a>
           <br />
           {%- assign availableTypes = "" | split: ',' -%}
