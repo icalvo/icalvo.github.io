@@ -4,7 +4,7 @@
         {{ split[0] }}
     {%- when 2 -%}
         {%- assign complete_date = include.date | append: '-01' -%}
-        {{ complete_date | date: "%B %Y" }}
+        {{ complete_date | date: "%B&nbsp;%Y" }}
     {%- else -%}
-        {{ include.date | date: "%B %Y" }}
+        {{ include.date | date: "%B&nbsp;%Y" }}
 {%- endcase -%}

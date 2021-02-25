@@ -8,6 +8,7 @@
 {%- assign downloads_content_strip = downloads_content | strip -%}
 {%- if downloads_content_strip != '' -%}
       <{{include.tag}}>Downloads</{{include.tag}}>
-
+      <div class="download-list">
       {{ downloads_content | strip }}
+      </div>
 {%- endif -%}
