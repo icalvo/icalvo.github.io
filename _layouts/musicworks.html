@@ -58,7 +58,7 @@ layout: default
           {%- assign availableTypes = availableTypes | uniq -%}
 
           {% for member in availableTypes %}
-            {{ member }}
+            <a class="page-link" href="{{ work.url | relative_url }}">{{ member }}</a>
           {% endfor %}
           </div>
 
