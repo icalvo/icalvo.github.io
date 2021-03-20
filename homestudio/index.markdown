@@ -12,8 +12,8 @@ title: "My home recording studio"
 + **Disk 3:** [Crucial BX500 CT1000BX500SSD1](https://www.crucial.com/products/ssd/bx500-ssd) (1TB SSD)
 + **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363) (1GB)
 + **External backup disk:** Samsung D3 Station (3TB)
-+ **Display monitor 1:** Acer P244W (24'', 1920x1080)
-+ **Display monitor 2:** DELL ST2320L (23'', 1920x1080)
++ **Display monitor:** `[Samsung Oddysey G5](https://www.samsung.com/ca/monitors/gaming/odyssey-g5-34-inch-165hz-curved-ultra-wqhd-lc34g55twwnxza/) (34'' ultrawide curve, 3440x1440)
++ **UPS**: [Salicru SPS One](https://www.salicru.com/sps-one.html)
 
 ## Software
 + **OS:** Microsoft Windows 10
