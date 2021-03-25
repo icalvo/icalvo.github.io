@@ -3,7 +3,8 @@ layout: post
 title: "Installing Jekyll in Windows"
 date: 2017-01-29
 comments: true
-categories: [jekyll,ruby]
+categories: [software]
+tags: [jekyll,ruby]
 ---
 
 The best least failure-prone way I've found is by using RubyInstaller builds. Go to http://rubyinstaller.org/downloads/ to get the latest Ruby+Devkit (be careful to choose well your architecture).

@@ -3,7 +3,8 @@ layout: post
 title: "Testing dependency resolution"
 date: 2015-02-08
 comments: true
-categories: [ninject,mstest,mvc,controller,dependency,injection]
+categories: [software]
+tags: [ninject,mstest,mvc,controller,dependency,injection]
 ---
 Here's a version of [Rob Moore's class](http://robdmoore.id.au/blog/2012/05/29/controller-instantiation-testing/) for testing dependency resolution for MVC controllers.
 

@@ -3,7 +3,7 @@ layout: post
 title: "MIDI Recorder"
 date: 2021-03-20
 comments: true
-categories: [music]
+categories: [music,software]
 tags: [composition,music,midi,recorder]
 ---
 

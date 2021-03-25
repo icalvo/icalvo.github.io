@@ -1,6 +1,7 @@
 ---
 title: "Recording studio diary"
 date: 2019-03-11
+categories: [music]
 ---
 
 Just a quick note on the studio: I've been busy setting up the wires so that the room is not a complete mess.

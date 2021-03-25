@@ -1,6 +1,7 @@
 ---
 title: "Purchased NotePerformer"
 date: 2020-11-01
+categories: [music]
 ---
 
 I've purchased [NotePerfomer 3](https://www.noteperformer.com/), which is a playback engine for notation software (Sibelius, Finale and Dorico). I think it's an absolutely extraordinary product.
