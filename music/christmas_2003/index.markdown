@@ -3,7 +3,7 @@ layout: musicwork
 title: "Christmas 2003"
 categories: [musicworks]
 sharing: true
-opus: 33
+opus: 34
 composition_date: 2003-12
 instrumentation:
 - Oboe
