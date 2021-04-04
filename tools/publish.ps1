@@ -31,7 +31,8 @@ if ($gitStatusOutput[-1] -like "*nothing to commit*") {
 $answer = Read-Host "Want to go ahead an commit/push everything?"
 
 if ($answer -eq 'y') {
-    git add *
+    $filesToAdd = Join-Path $target "*"
+    git add $filesToAdd
     $message = Read-Host "Commit message"
     git commit -m "$message"
     git push
