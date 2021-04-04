@@ -1,13 +1,11 @@
 Param(
-    [Parameter(Mandatory=$true)][string]$sourceDirectory,
     [Parameter(Mandatory=$true)][string]$work,
     [Parameter(Mandatory=$false)][Switch]$notCheckPendingCommits
 )
 
 Push-Location $PSScriptRoot
 
-$source = Join-Path $sourceDirectory $work
-$target = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
+.\config.ps1
 
 if (-not $notCheckPendingCommits)
 {
@@ -19,22 +17,21 @@ if (-not $notCheckPendingCommits)
     }
 }
 
-robocopy $source $target /MIR /XF *.wav /XF *.sib /XF *.xml
-.\generate_background.ps1 $target.ToString()
+.\copyWork.ps1 $work
 
-git status | Tee-Object -Variable gitStatusOutput
+git status | Tee-Object -Variable gitStatusOutput > $null
 
 if ($gitStatusOutput[-1] -like "*nothing to commit*") {
+    Write-Host "No differences detected, nothing to do."
     exit
 }
+.\generate_background.ps1 $work
 
 $answer = Read-Host "Want to go ahead an commit/push everything?"
 
 if ($answer -eq 'y') {
-    $filesToAdd = Join-Path $target "*"
-    git add $filesToAdd
-    $message = Read-Host "Commit message"
-    git commit -m "$message"
+    .\commitWork.ps1 $work
+
     git push
 }
 

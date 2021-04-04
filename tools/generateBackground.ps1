@@ -1,9 +1,11 @@
 [CmdletBinding()]
 param (
     [Parameter(Mandatory=$true)]
-    [System.IO.DirectoryInfo]
-    $workDirectory
+    [String]
+    $work
 )
+
+$workDirectory = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
 
 Push-Location $workDirectory
 $pdf = "$($workDirectory.Name)_full_parts.pdf"

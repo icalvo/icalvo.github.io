@@ -85,4 +85,4 @@ packages/
 *.mp4
 *.wav
 *.omf
-tools/publish_local.ps1
+tools/config.ps1
