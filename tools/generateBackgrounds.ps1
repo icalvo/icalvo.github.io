@@ -1,4 +1,4 @@
 Get-ChildItem ..\music -Directory `
 | ForEach-Object {
-    .\generate_background.ps1 $_
+    .\generateBackground.ps1 $_
 }
