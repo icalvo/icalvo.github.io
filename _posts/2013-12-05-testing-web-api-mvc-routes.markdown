@@ -3,7 +3,8 @@ layout: post
 title: "Testing Web API and MVC routes altogether"
 date: 2013-12-05
 comments: true
-categories: [code,csharp,testing,webapi,mvc]
+categories: [software]
+tags: [code,csharp,testing,webapi,mvc]
 ---
 In my new job at Electronic Arts we are fortunate enough to work with Microsoft's latest technologies. We are developing web applications and, as every good developer out there I like to test as many things as it is possible and practical.
 

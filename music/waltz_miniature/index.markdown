@@ -39,3 +39,7 @@ This is a piece I composed when I was 16, with an ancient software called [Adlib
 For archaeological purposes, you can listen the original piece, which was recorded in a cassette and converted later to a digital format (so the quality is very low).
 
 {% include file_exists.html template='audio.html' suffix='_original.mp3' description='Original Visual Composer piece' %}
+
+## History
+- _circa_ 1993: First composition
+- 2021: Orchestration and score edition

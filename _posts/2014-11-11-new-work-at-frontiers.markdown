@@ -3,6 +3,7 @@ layout: post
 title: "My new work at Frontiers"
 date: 2014-11-11
 comments: true
-categories: [csharp,mvc,rabbitmq]
+categories: [software]
+tags: [csharp,mvc,rabbitmq]
 ---
 I just wanted to write a quick note about my new job at [Frontiers](http://frontiersin.org). We are working on a new feature for the social network of Frontiers; I cannot talk much about it because it is not already live, but I can tell you that I am very excited about the challenges we are facing. Among other things we got some communication using RabbitMQ, API crawling & digestion processes that must be very scalable (because Frontiers has been recently acquired by Nature and we are going to inherit all its users!), a brand new bounded context that we have the opportunity of managing in a DDD way... I will try to be a little more talkative about this project than I were while at Electronic Arts.

@@ -1,6 +1,7 @@
 ---
 title: "My new home recording studio is ready"
 date: 2019-03-04
+categories: [music]
 ---
 
 This Monday I received the last item of my new home recording studio! I can't wait to start playing with it!

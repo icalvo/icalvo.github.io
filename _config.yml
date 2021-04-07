@@ -30,7 +30,9 @@ show_excerpts: true
 
 header_pages:
 - homestudio/index.markdown
-- icm.commandline/index.markdown
+-
+  url: https://github.com/MidiRecorder/MidiRecorder
+  title: MIDI Recorder
 - music/index.markdown
 
 defaults:

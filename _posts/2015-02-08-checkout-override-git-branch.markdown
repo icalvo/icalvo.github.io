@@ -3,7 +3,8 @@ layout: post
 title: "TFS 2013 Checkout override with a git branch"
 date: 2015-02-06
 comments: true
-categories: [tfs,git]
+categories: [software]
+tags: [tfs,git]
 ---
 Another quick note, this time on TFS + git. When you queue a manual build you can specify what commit you want in a number of ways, using the "Checkout override" option. You can specify either a commit ID, a tag or a branch.
 

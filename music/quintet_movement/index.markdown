@@ -3,7 +3,7 @@ layout: musicwork
 title: "Quintet movement"
 categories: [musicworks]
 sharing: true
-opus: 30
+opus: 31
 composition_date: 2003
 instrumentation:
 - Violin 1 (solo)

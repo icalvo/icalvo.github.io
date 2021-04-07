@@ -85,3 +85,4 @@ packages/
 *.mp4
 *.wav
 *.omf
+tools/config.ps1

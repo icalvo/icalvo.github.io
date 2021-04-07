@@ -4,7 +4,7 @@ title: "Bronze Fantasia"
 date: 2021-01-14
 categories: [musicworks]
 sharing: true
-opus: 34
+opus: 35
 opus_letter: b
 composition_date: 2018-05
 instrumentation:
