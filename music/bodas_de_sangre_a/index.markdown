@@ -21,7 +21,7 @@ movements:
   description: This song goes along the wedding of the (unnamed) bride.
 - name: "'Agua de molino' (Water of the mill)"
   key: agua_de_molino
-  description: This is a suppossedly happy song, but it is sung by the Maid, so it is also 
+  description: This is a suppossedly happy song, but it is sung by the Maid, so it has also bits of ironic tragedy.
 - name: Dance of the knives
   key: dance_knives
   description: Dance.
@@ -29,4 +29,4 @@ movements:
 
 Incidental music for Bodas de Sangre, a play by Barbara Otto Schneider for the theatrical group (Grupo Pentagrama) of Ramiro de Maeztu Secondary School.
 
-This music won an award for the Best Original Score at the "IV Certamen de Teatro Escolar" (4th School Theatre Competition), organized by the Madrid Autonomous Community. The awards ceremony happened at January 28th 1998
+This music won an award for the Best Original Score at the "IV Certamen de Teatro Escolar" (4th School Theatre Competition), organized by the Community of Madrid. The awards ceremony happened at January 28th 1998.
