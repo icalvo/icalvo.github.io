@@ -6,9 +6,9 @@ param (
 )
 
 $workDirectory = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
-
+Write-Host "workdir: $workDirectory"
 Push-Location $workDirectory
-$pdf = "$($workDirectory.Name)_full_parts.pdf"
+$pdf = "$($work)_full_parts.pdf"
 $output = 'background.png'
 $pdfExists = Test-Path $pdf -PathType Leaf
 if (-not $pdfExists -and (Test-Path "index.markdown")) {
