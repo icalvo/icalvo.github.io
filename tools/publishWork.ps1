@@ -6,26 +6,30 @@ Param(
 Push-Location $PSScriptRoot
 
 .\config.ps1
+$target = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
 
 if (-not $notCheckPendingCommits)
 {
-    git status | Tee-Object -Variable gitStatusOutput
+    git status -- $target | Tee-Object -Variable gitStatusOutput > $null
 
     if ($gitStatusOutput[-1] -notlike "*nothing to commit*") {
-        Write-Host "There are pending things to commit, please solve them before publishing new things."
+        Write-Host "There are pending things to commit, please solve them before publishing new things. Otherwise add the switch -notCheckPendingCommits"
         exit
+    }
+    else {
+        Write-Host "Nothing pending to commit"
     }
 }
 
 .\copyWork.ps1 $work
 
-git status | Tee-Object -Variable gitStatusOutput > $null
+git status -- $target | Tee-Object -Variable gitStatusOutput > $null
 
 if ($gitStatusOutput[-1] -like "*nothing to commit*") {
     Write-Host "No differences detected, nothing to do."
     exit
 }
-.\generate_background.ps1 $work
+.\generateBackground.ps1 $work
 
 $answer = Read-Host "Want to go ahead an commit/push everything?"
 
