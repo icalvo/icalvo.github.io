@@ -1,8 +1,6 @@
 source "https://rubygems.org"
 
-gem "github-pages", "214", group: :jekyll_plugins
-gem "nokogiri", ">= 1.12.5"
-gem "activesupport", ">= 4.1.11"
+gem "github-pages", "222", group: :jekyll_plugins
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do

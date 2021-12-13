@@ -20,5 +20,6 @@
         "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.color": "#7fe82c",
-    "jekyll-run.commandLineArguments": "-V"
+    "jekyll-run.commandLineArguments": "-V",
+    "cmake.configureOnOpen": false
 }
