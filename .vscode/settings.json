@@ -4,25 +4,27 @@
         "*.html": "jekyll"
     },
     "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#9bed5a",
         "activityBar.activeBorder": "#5396ec",
-        "activityBar.background": "#9bed5a",
+        "activityBar.activeBackground": "#9afc27",
+        "activityBar.background": "#9afc27",
         "activityBar.foreground": "#15202b",
         "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#5396ec",
+        "activityBarBadge.background": "#2398fc",
         "activityBarBadge.foreground": "#15202b",
-        "statusBar.background": "#7fe82c",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#9afc27",
+        "statusBar.background": "#81ed03",
         "statusBar.foreground": "#15202b",
-        "statusBarItem.hoverBackground": "#66cb16",
-        "titleBar.activeBackground": "#7fe82c",
+        "statusBarItem.hoverBackground": "#66bb02",
+        "statusBarItem.remoteBackground": "#81ed03",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#81ed03",
         "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#7fe82c99",
-        "titleBar.inactiveForeground": "#15202b99",
-        "sash.hoverBorder": "#9bed5a",
-        "statusBarItem.remoteBackground": "#7fe82c",
-        "statusBarItem.remoteForeground": "#15202b"
+        "titleBar.inactiveBackground": "#81ed0399",
+        "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.color": "#7fe82c",
     "jekyll-run.commandLineArguments": "-V",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "peacock.remoteColor": "#81ed03"
 }
