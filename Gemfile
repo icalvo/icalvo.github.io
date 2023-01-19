@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "github-pages", "225", group: :jekyll_plugins
+gem "github-pages", "227", group: :jekyll_plugins
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
