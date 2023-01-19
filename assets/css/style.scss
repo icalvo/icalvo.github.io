@@ -6,3 +6,17 @@
   "minima/skins/{{ site.minima.skin | default: 'classic' }}",
   "minima/initialize",
   "green-audio-player/main";
+
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+.footnotes {
+  border-top: 1px solid red;
+  padding-top: 10px;
+
+  ol {
+    list-style: decimal;
+  }
+}
