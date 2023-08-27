@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Logging with Microsoft"
-date: 2019-03-07
+date: 2023-03-07
 comments: true
 categories: [software]
 tags: [c#,dotnet,logging]
@@ -41,7 +41,7 @@ As you can see, the thing that you log is not necessarily a string but a generic
 bool IsEnabled(LogLevel logLevel);
 ```
 
-This informs whether the logger is enabled for a given log level. This allows the client to avoid some complex logic to compose a log message (or a state, in general), if the desired log level is not enabled in the logger.
+This informs whether the logger is enabled for a given log level. This allows the client to avoid some complex logic to compose a log message (or a state, in general), and also to avoid the actual log operation (which could be hitting a database or making some network call) if the desired log level is not enabled in the logger.
 
 ## `ILoggerProvider`
 
@@ -56,7 +56,7 @@ ILogger CreateLogger(string categoryName);
 Usually, implementors create a single logger instance per category, with the help of a `ConcurrentDictionary`. It is also at this level that the scopes are tracked. In this way all the loggers provided will have the same scope breadcrumb available.
 
 # Console logging
-The starting point of console logging is `ConsoleLoggerProvider`. This provider returns instances of `ConsoleLogger`. This logger uses an implementation of the abstract class `ConsoleFormatter` to actually format and print the messages. All `ConsoleFormatter` has one abstract method:
+The starting point of console logging is `ConsoleLoggerProvider`. This provider returns instances of `ConsoleLogger`. This logger uses an implementation of the abstract class `ConsoleFormatter` to actually format and print the messages. `ConsoleFormatter` has just one abstract method:
 
 ```csharp
 public abstract void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider scopeProvider, TextWriter textWriter);
