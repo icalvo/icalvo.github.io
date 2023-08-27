@@ -1,6 +1,6 @@
 Param(
     [Parameter(Mandatory=$true)][string]$work,
-    [Parameter(Mandatory=$false)][Switch]$notCheckPendingCommits
+    [Parameter(Mandatory=$false)][Switch]$skipPendingCommitsCheck
 )
 
 Push-Location $PSScriptRoot
@@ -8,7 +8,7 @@ Push-Location $PSScriptRoot
 .\config.ps1
 $target = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
 
-if (-not $notCheckPendingCommits)
+if (-not $skipPendingCommitsCheck)
 {
     git status -- $target | Tee-Object -Variable gitStatusOutput > $null
 
