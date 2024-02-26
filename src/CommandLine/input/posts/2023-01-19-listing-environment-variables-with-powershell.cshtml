@@ -1,0 +1,42 @@
+@{
+    Model.Metadata = 
+        new Post
+        {
+            Title = "Listing environment variables with Powershell",
+            Published = DateTime.Parse("2023-01-19"),
+            Tags = ["powershell", "linux"]
+        };
+}
+<markdown>
+A pretty basic Powershell command that everyone uses to list environment variables is:
+
+```powershell
+ls env:
+```
+<!--more-->
+A few caveats here: this is NOT going to work in Linux or MacOS because in those environments the alias `ls` is not defined[^1]. Therefore the safest bet is to use `Get-ChildItem` instead.
+
+Also, this is shown in table format (which is nice), but it truncates long values (which is not nice with variables like `PATH`):
+
+![Table format with truncate](/assets/img/2013-01-19-1.png)
+
+In order to avoid that we can re-format the output in this way:
+
+```powershell
+Get-ChildItem env: | Format-Table -Wrap
+```
+
+This will show a long value like this:
+![Table format with wrap](/assets/img/2013-01-19-2.png)
+
+Finally, if you miss the classical format you get from Linux `env` or Windows CMD `set`, you can do the following:
+
+```powershell
+Get-ChildItem env: | % { "$($_.Name)=$($_.Value)" }
+```
+
+It shows like this:
+![Classical format](/assets/img/2013-01-19-3.png)
+
+[^1]: [Microsoft Powershell Aliases Documentation](https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/using-aliases?view=powershell-7.3)
+</markdown>

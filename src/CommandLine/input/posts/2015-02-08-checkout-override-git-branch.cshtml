@@ -1,0 +1,19 @@
+@{
+    Model.Metadata = 
+        new Post
+        {
+            Title = "TFS 2013 Checkout override with a git branch",
+            Published = DateTime.Parse("2015-02-06"),
+            Tags = "tfs,git".Split(','),
+            Categories = ["software"]
+        };
+}
+<markdown>
+Another quick note, this time on TFS + git. When you queue a manual build you can specify what commit you want in a number of ways, using the "Checkout override" option. You can specify either a commit ID, a tag or a branch.
+
+For the commit you paste the SHA-1, or a significant part of it, just as you do with the command line.
+
+For the tag you just use the tag name.
+
+For the branch you use the branch name, but there's a silly trick that drove me nuts until [jessehouwing](http://stackoverflow.com/users/736079/jessehouwing) [pointed it out for me](http://stackoverflow.com/questions/21409192/queue-build-for-non-default-branch-with-git-and-vs/21409699?noredirect=1#comment45059423_21409699): you must prepend `origin/` to your branch name.
+</markdown>
