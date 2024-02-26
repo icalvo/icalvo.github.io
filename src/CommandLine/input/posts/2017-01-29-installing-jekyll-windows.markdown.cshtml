@@ -1,0 +1,28 @@
+@{
+    Model.Metadata = 
+        new Post
+        {
+            Title = "Installing Jekyll in Windows",
+            Published = DateTime.Parse("2017-01-29"),
+            Tags = "jekyll,ruby".Split(','),
+            Categories = ["software"]
+        };
+}
+<!--start-->
+
+The best least failure-prone way I've found is by using RubyInstaller builds. Go to http://rubyinstaller.org/downloads/ to get the latest Ruby+Devkit (be careful to choose well your architecture).
+
+    gem install jekyll bundler
+
+If you have to create a new Jekyll app:
+
+    jekyll new appdir
+    cd appdir
+
+Finally:
+
+    bundle install
+    bundle exec jekyll serve
+
+
+2020-04-24: Removed update of `Gemfile` to add `wdm`, `jekyll new` adds that already.

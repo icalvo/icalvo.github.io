@@ -1,0 +1,13 @@
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\bin\Debug\net8.0\SWGen.deps.json
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\bin\Debug\net8.0\SWGen.dll
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\bin\Debug\net8.0\SWGen.pdb
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.csproj.AssemblyReference.cache
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.AssemblyInfoInputs.cache
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.AssemblyInfo.cs
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.csproj.CoreCompileInputs.cache
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.sourcelink.json
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.dll
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\refint\SWGen.dll
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\SWGen.pdb
+C:\Users\ignacio.calvo\Repos\StaticWebGenerator\src\SWGen\obj\Debug\net8.0\ref\SWGen.dll

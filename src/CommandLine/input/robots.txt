@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: https://ignaciocalvo.com/sitemap.xml 
