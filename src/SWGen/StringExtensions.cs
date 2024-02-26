@@ -2,7 +2,7 @@
 
 public static class StringExtensions
 {
-    public static string CutFromLine(this string content, string lineStart) =>
+    public static string UntilLine(this string content, string lineStart) =>
         content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
             .TakeWhile(line => !line.StartsWith(lineStart)).StringJoin(Environment.NewLine);
     

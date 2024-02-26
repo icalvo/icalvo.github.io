@@ -1,31 +1,33 @@
-@{
-    Model.Metadata = 
-        new Post
+﻿@{
+    Layout = "/_MainLayout.cshtml";
+    Model.Metadata =
+        new Page
         {
-            Title = "My new home recording studio is ready",
-            Published = DateTime.Parse("2019-03-04"),
-            Categories = ["music"]
+            Title = "My home recording studio",
+            Link = "homestudio/index.html",
         };
 }
-<!--start-->
 
-This Monday I received the last item of my new home recording studio! I can't wait to start playing with it!
-
+<markdown>
 ## Computer
 + **HP Compaq 8300 MT**
 + **Processor:** Intel Core i7-3770 3.40Ghz
 + **Memory:** [Kingston 4x HyperX Fury Blue HX316C10F/8](https://www.kingston.com/en/hyperx/memory/fury) (32GB, 1600Mhz)
-+ **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/usa/en/storage-ssd-mx500) (250GB SSD)
++ **Disk 1:** [Crucial MX500 CT250MX500SSD1](https://www.crucial.com/products/ssd/crucial-mx500-ssd) (250GB SSD)
 + **Disk 2:** [Seagate Barracuda ST1000DM003](https://www.seagate.com/es/es/internal-hard-drives/hdd/barracuda/) (1TB, 7200rpm)
++ **Disk 3:** [Crucial BX500 CT1000BX500SSD1](https://www.crucial.com/products/ssd/bx500-ssd) (1TB SSD)
 + **Graphics Adapter:** [AMD Radeon HD 7450](http://www8.hp.com/es/es/products/oas/product-detail.html?oid=5226363) (1GB)
 + **External backup disk:** Samsung D3 Station (3TB)
-+ **Display monitor 1:** BenQ G2400W (24'', 1920x1200)
-+ **Display monitor 2:** Acer P244W (24'', 1920x1080)
++ **Display monitor:** `[Samsung Oddysey G5](https://www.samsung.com/ca/monitors/gaming/odyssey-g5-34-inch-165hz-curved-ultra-wqhd-lc34g55twwnxza/) (34'' ultrawide curve, 3440x1440)
++ **UPS**: [Salicru SPS One](https://www.salicru.com/sps-one.html)
 
 ## Software
 + **OS:** Microsoft Windows 10
 + **DAW:** [Bandlab Cakewalk](https://www.bandlab.com/products/cakewalk)
-+ **Score editor:** [Musescore](https://musescore.com/)
++ **Score editor 1:** [Steinberg Dorico](https://www.steinberg.net/dorico/)
++ **Score editor 2:** [Avid Sibelius](https://www.avid.com/sibelius)
++ **Score editor 3:** [Musescore](https://musescore.com/)
++ **Playback software**: [NotePerformer 4](https://www.noteperformer.com/)
 
 ## Audio gear
 + **Audio interface:** [Behringer U-Phoria UMC204HD](https://www.musictribe.com/Categories/Behringer/Computer-Audio/Interfaces/UMC204HD/p/P0BK0)
@@ -35,9 +37,12 @@ This Monday I received the last item of my new home recording studio! I can't wa
   + Pop filter
   + Shock mount
   + Articulated arm
-+ **Workstation:** Korg M50-61
-+ **MIDI controller:** Evolution MK-425C
-+ **DAW remote controller:**[ Asus Nexus 7 (2013)](https://www.asus.com/es/Tablets/Nexus_7_2013/) with TouchDAW app.
++ **Desktop:** [Glorious Sound Desk Pro Black](https://www.glorious.de/glorious-sound-desk-pro-black)
++ **Workstation:** Korg M50 61 keys
+  + Expression pedal: [Korg EXP-2](https://www.korg.com/es/products/accessories/exp_2/)
++ **MIDI controller:** [Novation Impulse 61](https://novationmusic.com/en/keys/impulse)
+  + Expression pedal: [M-Audio EX-P](https://m-audio.com/products/view/ex-p)
+  + Sustain pedal: [Proel GF01](https://www.proel.com/index.php?route=product/product&product_id=5374)
 
 ## Acoustic instruments
 + Flute: [Yamaha YFL-272ID](https://es.yamaha.com/es/products/musical_instruments/winds/flutes/400_300_200_series/lineup.html#product-tabs)
@@ -47,8 +52,6 @@ This Monday I received the last item of my new home recording studio! I can't wa
   + Stand: [Hercules DS530BB](http://herculesstands.com/international/products/winds-and-percussion/saxophone/ds530bb/)
   + Harness: [Jazzlab SaXholder](https://www.jazzlab.com/en/saxholder/)
   + Reeds: [Vandoren](https://vandoren.fr/en/saxophone-reeds/), several types
-+ Spanish guitar
-  + Stand: Unknown (was a gift)
 + Soprano recorder: Hohner
 + Alto recorder: [Yamaha YRA-314BII](https://es.yamaha.com/es/products/musical_instruments/winds/recorders/abs_resin_alto/index.html)
 + Tin whistle
@@ -56,3 +59,5 @@ This Monday I received the last item of my new home recording studio! I can't wa
 + Harmonica 1
 + Harmonica 2
 + Multiple percussion instruments
+    
+</markdown>

@@ -1,4 +1,6 @@
-﻿namespace SWGen;
+﻿using Microsoft.CodeAnalysis;
+
+namespace SWGen;
 
 public class Document : IDocument
 {
@@ -7,6 +9,7 @@ public class Document : IDocument
         File = file;
         OutputFile = "NOOUTPUT!!";
         SiteContents = siteContents;
+        ((IDocument)this).Metadata = new object();
     }
 
     public PathEx File { get; }
@@ -24,7 +27,7 @@ public class Document : IDocument
 
 public class Document<TMetadata> : Document where TMetadata : class, ICreatable<TMetadata>
 {
-    private string _content;
+    private string? _content;
 
     public Document(SiteContents siteContents, PathEx file) : base(siteContents, file)
     {
@@ -44,12 +47,12 @@ public class Document<TMetadata> : Document where TMetadata : class, ICreatable<
         {
             if (SiteContents.ContentAvailable)
             {
-                return _content;
+                return _content!;
             }
             throw new Exception($"Content is not available for {File} while loading!");
         }
         set => _content = value;
     }
 
-    public string Summary => Content.CutFromLine("<!--more-->");
+    public string Summary => Content.UntilLine("<!--more-->");
 }

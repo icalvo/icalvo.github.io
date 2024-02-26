@@ -15,7 +15,7 @@ public static class StaticMainTool
             {
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                await GuardedGenerate(config, loaders, projectRoot, outputRoot);
+                await GuardedGenerate(config, loaders, projectRoot, outputRoot, CancellationToken.None);
 
                 break;
             }
@@ -23,7 +23,7 @@ public static class StaticMainTool
             {
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                await Watch(config, loaders, projectRoot, new ClientWebSocket(), outputRoot);
+                await Watch(config, loaders, projectRoot, new ClientWebSocket(), outputRoot, CancellationToken.None);
                 break;
             }
             default:
@@ -33,13 +33,13 @@ public static class StaticMainTool
         return 0;
     }
 
-    private static async Task GuardedGenerate(Config config, ILoader[] loaders, AbsolutePathEx projectRoot, AbsolutePathEx outputRoot)
+    private static async Task GuardedGenerate(Config config, ILoader[] loaders, AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, CancellationToken ct)
     {
         Logger.Info($"Input: {projectRoot}");
         Logger.Info($"Output: {outputRoot}");
         try
         {
-            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot);
+            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, ct);
         }
         catch (Exception ex)
         {
@@ -47,10 +47,10 @@ public static class StaticMainTool
         }
     }
 
-    public static async Task Watch(Config cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket, AbsolutePathEx outputRoot)
+    public static async Task Watch(Config cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket, AbsolutePathEx outputRoot, CancellationToken ct)
     {
         var lastAccessed = new Dictionary<string, DateTime>();
-        await GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot);
+        await GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot, ct);
         
         using var watcher = new FileSystemWatcher();
         watcher.Path = projectRoot.Normalized();
@@ -85,14 +85,14 @@ public static class StaticMainTool
                 {
                     Logger.Info($"Changes detected in {args.FullPath}, regenerating...");
                     lastAccessed[args.FullPath] = lastTimeWrite;
-                    GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot).Wait();
+                    GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot, ct).Wait(ct);
                 }
             }
         }
 
         void ContentChangedHandler(object sender, FileSystemEventArgs args)
         {
-            webSocket.SendAsync(ArraySegment<byte>.Empty, WebSocketMessageType.Close, endOfMessage:true, CancellationToken.None).Wait();
+            webSocket.SendAsync(ArraySegment<byte>.Empty, WebSocketMessageType.Close, endOfMessage:true, CancellationToken.None).Wait(ct);
         }
         
     }
@@ -150,12 +150,10 @@ public static class StaticMainTool
                 response.StatusCode = 404;
             }
         }
-
-        listener.Stop();
     }
     
     public static async Task GenerateFolder(AbsolutePathEx projectRoot, bool isWatch, Config config, ILoader[] loaders,
-        AbsolutePathEx outputRoot)
+        AbsolutePathEx outputRoot, CancellationToken ct)
     {
         var sw = Stopwatch.StartNew();
         var sc = new SiteContents();
@@ -177,7 +175,7 @@ public static class StaticMainTool
         {
             using (Logger.BeginScope("Once"))
             {
-                RunOnceGenerators(config, sc, projectRoot, outputRoot);
+                await RunOnceGenerators(config, sc, projectRoot, outputRoot, ct);
             }
 
             using (Logger.BeginScope("File based"))
@@ -189,7 +187,7 @@ public static class StaticMainTool
                     if (relative.Parts[0] is "bin" or "obj") continue;
                     if (sc.TryGetError(relative.Normalized()) != null) continue;
 
-                    Generate(config, sc, projectRoot, relative.Normalized(), outputRoot);
+                    await Generate(config, sc, projectRoot, relative.Normalized(), outputRoot, ct);
                 }
             }
         }
@@ -197,16 +195,17 @@ public static class StaticMainTool
         Logger.Info($"Overall time: {sw.Elapsed}");
     }
 
-    private static void RunOnceGenerators(Config cfg, SiteContents siteContent, AbsolutePathEx projectRoot, AbsolutePathEx outputRoot)
+    private static async Task RunOnceGenerators(Config cfg, SiteContents siteContent, AbsolutePathEx projectRoot,
+        AbsolutePathEx outputRoot, CancellationToken ct)
     {
         foreach (var n in cfg.Generators.Where(n => n.Trigger is GeneratorTrigger.Once).Select(n => n.Generator))
         {
-            GenerateAux(n, siteContent, projectRoot, outputRoot);
+            await GenerateAux(n, siteContent, projectRoot, outputRoot, ct);
         }
     }
 
-    private static void Generate(Config cfg, SiteContents siteContents, AbsolutePathEx projectRoot, RelativePathEx page,
-        AbsolutePathEx outputRoot)
+    private static async Task Generate(Config cfg, SiteContents siteContents, AbsolutePathEx projectRoot,
+        RelativePathEx page, AbsolutePathEx outputRoot, CancellationToken ct)
     {
         siteContents.ContentAvailable = true;
         GeneratorConfig? pick = cfg.Generators.FirstOrDefault(n => n.MatchesFile(projectRoot, page));
@@ -218,14 +217,15 @@ public static class StaticMainTool
 
         Logger.Debug($"Picked [{pick}] for {page}");
 
-        GenerateAux(pick.Generator, siteContents, projectRoot, outputRoot, page);
+        await GenerateAux(pick.Generator, siteContents, projectRoot, outputRoot, ct, page);
     }
 
-    private static void GenerateAux(Generator generator, SiteContents siteContents, AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, RelativePathEx? page = null)
+    private static async Task GenerateAux(Generator generator, SiteContents siteContents, AbsolutePathEx projectRoot,
+        AbsolutePathEx outputRoot, CancellationToken ct, RelativePathEx? page = null)
     {
         page ??= RelativePathEx.Self();
         var sw = Stopwatch.StartNew();
-        var results = generator.Generate(siteContents, projectRoot, page);
+        var results = await generator.Generate(siteContents, projectRoot, page, ct).ToArrayAsync(ct);
         List<AbsolutePathEx> outputPaths = new();
         foreach (var result in results)
         {
@@ -237,7 +237,7 @@ public static class StaticMainTool
                 Directory.CreateDirectory(dir.Normalized());
             }
 
-            File.WriteAllBytes(outputPath.Normalized(), result.Content);
+            await File.WriteAllBytesAsync(outputPath.Normalized(), result.Content, ct);
         }
 
         sw.Stop();

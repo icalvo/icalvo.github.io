@@ -2,5 +2,6 @@
 
 public abstract class Generator
 {
-    public abstract GeneratorItem[] Generate(SiteContents ctx, AbsolutePathEx projectRoot, RelativePathEx page);
+    public abstract IAsyncEnumerable<GeneratorItem> Generate(SiteContents ctx, AbsolutePathEx projectRoot,
+        RelativePathEx page, CancellationToken ct);
 }

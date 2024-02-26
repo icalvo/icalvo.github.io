@@ -12,7 +12,8 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
         _razorEngineFactory = razorEngineFactory;
     }
 
-    protected override (RelativePathEx, string) GenerateString(SiteContents ctx, AbsolutePathEx projectRoot, RelativePathEx page)
+    protected override async Task<(RelativePathEx Link, string Content)> GenerateString(SiteContents ctx,
+        AbsolutePathEx projectRoot, RelativePathEx page, CancellationToken ct)
     {
         var engine = _razorEngineFactory.Create(projectRoot.Normalized());
         var doc =
@@ -26,33 +27,12 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
         if (pageAbsolutePath.Parent.GetFirstExistingFileInParentDirs("_ViewStart.cshtml") is { } f)
         {
             Logger.Info($"Running {f}...");
-            var template = engine.CompileTemplateAsync(f.Normalized()).Result;
-            engine.RenderTemplateAsync(template, doc);
-            _ = engine.CompileRenderAsync(f.Normalized(), doc).Result;
+            var template = await engine.CompileTemplateAsync(f.Normalized());
+            _ = await engine.RenderTemplateAsync(template, doc);
             layout = template.Layout;
         }
 
-        var templateContent = File.ReadAllText(pageAbsolutePath.Normalized());
-        if (!templateContent.Contains("<!--start-->"))
-        {
-            var tpl = engine.CompileTemplateAsync(page.Normalized()).Result;
-            tpl.Layout = layout;
-            var result = engine.RenderTemplateAsync(tpl, doc).Result;
-            return (doc.OutputFile, result);
-        }
-
-        var fullTemplate = $"""
-                            {templateContent.CutFromLine("<!--start-->")}
-
-                            {doc.Content}
-                            """;
-
-        _razorEngineFactory.Project?.RegisterGenerationContent(page + ".generation", fullTemplate);
-        
-        var tpl2 = engine.CompileTemplateAsync(page + ".generation").Result;
-        tpl2.Layout = layout;
-        var fullContent = engine.RenderTemplateAsync(tpl2, doc).Result;
-
-        return (doc.OutputFile, fullContent);
+        var result = await engine.RenderWithLayout(pageAbsolutePath, page, doc, layout);
+        return (doc.OutputFile, result);
     }
 }

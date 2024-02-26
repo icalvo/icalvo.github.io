@@ -18,6 +18,7 @@ public static class SiteConfig
     public static Config GetConfig => new (
     [
         // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
+        new (new RazorGenerator<Page>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPage)),
         new (new RazorGenerator<Page>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicPage)),
         new (new RazorGenerator<MusicWork>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicWork)),
         new (new RazorGenerator<Post>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPost)),
@@ -34,13 +35,22 @@ public static class SiteConfig
         return !page.Contains("_public");
     }
 
+    private static bool IsPage(AbsolutePathEx projectRoot, RelativePathEx page)
+    {
+        if (page.ElementAtOrDefault(0) != "pages") return false;
+        if (page.FileName.StartsWith('_')) return false;
+        var ext = page.Extension;
+        if (ext != ".cshtml") return false;
+        return !page.Contains("_public");
+    }
+
     private static bool IsMusicPage(AbsolutePathEx projectRoot, RelativePathEx page)
     {
         if (page.ElementAtOrDefault(^2) != "music") return false;
         if (page.FileName.StartsWith('_')) return false;
         var ext = page.Extension;
         if (ext != ".cshtml") return false;
-        return !page.Contains("_public");        
+        return !page.Contains("_public");
     }
 
     private static bool IsMusicWork(AbsolutePathEx projectRoot, RelativePathEx page)

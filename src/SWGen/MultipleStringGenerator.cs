@@ -16,9 +16,12 @@ public abstract class MultipleStringGenerator : Generator
         _encoding = encoding;
     }
 
-    protected abstract IEnumerable<(string, string)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot, RelativePathEx page);
-    public override GeneratorItem[] Generate(SiteContents ctx, AbsolutePathEx projectRoot, RelativePathEx page) =>
-        GenerateString(ctx, projectRoot, page)
-            .Select(x => new GeneratorItem(x.Item1, _encoding.GetBytes(x.Item2)))
-            .ToArray();
+    protected abstract IAsyncEnumerable<(string, string)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
+        RelativePathEx page, CancellationToken ct);
+    public override IAsyncEnumerable<GeneratorItem> Generate(
+        SiteContents ctx,
+        AbsolutePathEx projectRoot,
+        RelativePathEx page, CancellationToken ct) =>
+        GenerateString(ctx, projectRoot, page, ct)
+            .Select(x => new GeneratorItem(x.Item1, _encoding.GetBytes(x.Item2)));
 }

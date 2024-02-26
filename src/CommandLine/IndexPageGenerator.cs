@@ -11,15 +11,17 @@ public class IndexPageGenerator : MultipleStringGenerator
         _razorEngineFactory = razorEngineFactory;
     }
 
-    protected override IEnumerable<(string, string)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot, RelativePathEx page)
+    protected override IAsyncEnumerable<(string, string)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
+        RelativePathEx page, CancellationToken ct)
     {
         var engine = _razorEngineFactory.Create(projectRoot.Normalized());
         var batches = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published)
             .Batch(ctx.TryGetValue<SiteInfo>()?.PostPageSize ?? 5)
             .ToArray();
         return batches
-            .Select(
-            (batch, i) =>
+            .ToAsyncEnumerable()
+            .SelectAwait(
+            async (batch, i) =>
             {
                 string? nextPageLink = LinkFor(i + 1);
                 string? prevPageLink = LinkFor(i - 1);
@@ -32,7 +34,7 @@ public class IndexPageGenerator : MultipleStringGenerator
                         new PageInfo(i + 1, LinkFor(i + 1)!))
                 };
 
-                var result = engine.CompileRenderAsync(doc.File.Normalized(), doc).Result;
+                var result = await engine.CompileRenderAsync(doc.File.Normalized(), doc);
 
                 return (LinkFor(i)!, result);
 

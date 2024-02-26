@@ -55,7 +55,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
 
     public string FileName => Parts[^1];
     public string FileNameWithoutExtension => Path.GetFileNameWithoutExtension(Parts[^1]);
-    public PathEx Directory => Parent;
+    public PathEx Directory => Parent!;
     public string Extension => Path.GetExtension(Parts[^1]);
     public string[] Parts { get; init; }
     public static implicit operator PathEx(string rawPath) => Create(rawPath);
