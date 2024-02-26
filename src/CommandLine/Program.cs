@@ -6,4 +6,3 @@ return await StaticMainTool.Process(
     SiteConfig.GetConfig,
     SiteConfig.GetLoaders);
 
-return 0;

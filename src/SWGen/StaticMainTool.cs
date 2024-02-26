@@ -35,6 +35,8 @@ public static class StaticMainTool
 
     private static async Task GuardedGenerate(Config config, ILoader[] loaders, AbsolutePathEx projectRoot, AbsolutePathEx outputRoot)
     {
+        Logger.Info($"Input: {projectRoot}");
+        Logger.Info($"Output: {outputRoot}");
         try
         {
             await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot);
