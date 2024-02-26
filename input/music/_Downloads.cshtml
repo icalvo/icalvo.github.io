@@ -1,0 +1,39 @@
+﻿@inherits TemplatePage<AudioInfo>
+
+@{
+    string Icon(string ext) =>
+        ext switch
+        {
+            ".pdf" => "/assets/img/file_type_pdf.svg",
+            ".mp3" => "/assets/img/file_type_audio.svg",
+            ".mid" => "/assets/img/midi.jfif",
+            ".sib" => "/assets/img/sibelius.jfif",
+            _ => "",
+        };
+    
+    (string key, string name, string ext, string desc)[] PossibleResources(string x) => [
+        (x, $"{x}_full", ".pdf", "Full score"),
+        (x, $"{x}_full_parts", ".pdf", "Score and parts"),
+        (x, $"{x}_parts", ".pdf", "Parts"),
+        (x, $"{x}", ".mid", "MIDI"),
+    ];
+
+    var availableResources = (
+        from r in PossibleResources(Model.MovementKey)
+        let absPath = Model.ProjectRoot / Model.WorkDir / (r.name + r.ext)
+        where File.Exists(absPath.Normalized())
+        let url = (Model.WorkDir / (r.name + r.ext)).Url()
+        let icon = Icon(r.ext)
+        select (r.key, r.name, r.ext, r.desc, url, icon)).ToArray();
+
+    <div class="download-list">
+    @foreach ((string key, string name, string ext, string desc, Uri url, string icon) r in availableResources)
+    {
+        <div class="download">
+            <a href="@r.url">
+                <img title="@r.desc available" alt="@r.desc available" src="@r.icon"/><br/>@r.desc
+            </a>
+        </div>
+    }
+    </div>        
+}
