@@ -1,8 +1,11 @@
 ﻿using CommandLine;
 using SWGen;
 
+var rootLogger = new ConsoleSwgLogger();
+var razorEngineFactory = new RazorEngineFactory(rootLogger);
 return await StaticMainTool.Process(
     args,
-    SiteConfig.GetConfig,
-    SiteConfig.GetLoaders);
+    SiteConfig.GetConfig(razorEngineFactory),
+    SiteConfig.GetLoaders(razorEngineFactory),
+    rootLogger);
 

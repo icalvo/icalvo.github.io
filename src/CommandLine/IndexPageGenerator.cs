@@ -12,7 +12,7 @@ public class IndexPageGenerator : MultipleStringGenerator
     }
 
     protected override IEnumerable<(string, Func<Task<string>>)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
-        RelativePathEx page, CancellationToken ct)
+        RelativePathEx page, ISwgLogger logger, CancellationToken ct)
     {
         var engine = _razorEngineFactory.Create(projectRoot.Normalized());
         var batches = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published)

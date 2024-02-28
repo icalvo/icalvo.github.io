@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Design;
+﻿using System.Collections;
+using System.ComponentModel.Design;
 
 namespace SWGen;
 
@@ -12,16 +13,34 @@ public record SiteContents
     {
         _errors.Add(error.Path, error);
     }
-    
-    public void Add<T>(T value)
+    public void Add(object value, Type type)
     {
-        var key = typeof(List<T>);
+        var key = typeof(List<>).MakeGenericType([type]);
         switch (_container.GetService(key))
         {
-            case List<T> list: list.Add(value);
+            case IList list: list.Add(value);
                 break;
-            default: _container.AddService(key, new List<T> { value });
+            default:
+                var newList = Activator.CreateInstance(key) as IList ?? throw new InvalidOperationException();
+                newList.Add(value);
+                _container.AddService(key, newList);
                 break;
+        }
+    }
+
+    private readonly object _lock = new();
+    public void Add<T>(T value)
+    {
+        lock (_lock)
+        {
+            var key = typeof(List<T>);
+            switch (_container.GetService(key))
+            {
+                case List<T> list: list.Add(value);
+                    break;
+                default: _container.AddService(key, new List<T> { value });
+                    break;
+            }
         }
     }
 

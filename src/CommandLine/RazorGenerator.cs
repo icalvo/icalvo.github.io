@@ -13,7 +13,7 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
     }
 
     protected override (RelativePathEx Link, Func<Task<string>> Content) GenerateString(SiteContents ctx,
-        AbsolutePathEx projectRoot, RelativePathEx page, CancellationToken ct)
+        AbsolutePathEx projectRoot, RelativePathEx page, ISwgLogger logger, CancellationToken ct)
     {
         Document<T> doc =
             ctx.TryGetValues<Document<T>>().SingleOrDefault(doc => doc.File == page)
@@ -31,7 +31,7 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
             string? layout = null;
             if (pageAbsolutePath.Parent.GetFirstExistingFileInParentDirs("_ViewStart.cshtml") is { } f)
             {
-                Logger.Info($"Running {f}...");
+                logger.Info($"Running {f}...");
                 var template = await engine.CompileTemplateAsync(f.Normalized());
                 _ = await engine.RenderTemplateAsync(template, doc);
                 layout = template.Layout;

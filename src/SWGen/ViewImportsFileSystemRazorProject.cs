@@ -7,25 +7,30 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
     private static readonly string[] DefaultImports = ["_ViewImports"];
     private readonly string[] _imports;
     private readonly Dictionary<string, string> _generationContent = new();
+    private ISwgLogger _logger;
 
-    public ViewImportsFileSystemRazorProject(string root) : base(root)
+    public ViewImportsFileSystemRazorProject(string root, ISwgLogger logger) : base(root)
     {
+        _logger = logger;
         _imports = DefaultImports;
     }
 
-    public ViewImportsFileSystemRazorProject(string root, string extension) : base(root, extension)
+    public ViewImportsFileSystemRazorProject(string root, string extension, ISwgLogger logger) : base(root, extension)
     {
+        _logger = logger;
         _imports = DefaultImports;
     }
 
-    public ViewImportsFileSystemRazorProject(string root, string[] imports) : base(root)
+    public ViewImportsFileSystemRazorProject(string root, string[] imports, ISwgLogger logger) : base(root)
     {
         _imports = imports;
+        _logger = logger;
     }
 
-    public ViewImportsFileSystemRazorProject(string root, string extension, string[] imports) : base(root, extension)
+    public ViewImportsFileSystemRazorProject(string root, string extension, string[] imports, ISwgLogger logger) : base(root, extension)
     {
         _imports = imports;
+        _logger = logger;
     }
 
     public override Task<RazorLightProjectItem> GetItemAsync(string templateKey)
@@ -41,7 +46,7 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
     public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
     {
         var imports = GetImports(templateKey).ToArray();
-        Logger.Debug($"Imports for {templateKey}: {imports.Select(i => i.File).StringJoin(", ")}");
+        _logger.Debug($"Imports: {imports.Select(i => i.File).StringJoin(", ")}");
         return Task.FromResult<IEnumerable<RazorLightProjectItem>>(imports);
     }
 

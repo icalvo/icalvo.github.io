@@ -4,25 +4,23 @@ namespace CommandLine;
 
 public static class SiteConfig
 {
-    private static readonly RazorEngineFactory RazorEngineFactory = new();
-
-    public static readonly ILoader[] GetLoaders =
+    public static ILoader[] GetLoaders(IRazorEngineFactory razorEngineFactory) =>
     [
         new GlobalLoader(),
-        new RazorWithMetadataLoader<Page>("pages", recursive:true, RazorEngineFactory),
-        new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, RazorEngineFactory),
-        new RazorWithMetadataLoader<Page>("music", recursive:false, RazorEngineFactory),
-        new RazorWithMetadataLoader<Post>("posts", recursive:true, RazorEngineFactory)
+        new RazorWithMetadataLoader<Page>("pages", recursive:true, razorEngineFactory),
+        new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, razorEngineFactory),
+        new RazorWithMetadataLoader<Page>("music", recursive:false, razorEngineFactory),
+        new RazorWithMetadataLoader<Post>("posts", recursive:true, razorEngineFactory)
     ];
 
-    public static Config GetConfig => new (
+    public static Config GetConfig(IRazorEngineFactory razorEngineFactory) => new (
     [
         // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
-        new (new RazorGenerator<Page>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPage)),
-        new (new RazorGenerator<Page>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicPage)),
-        new (new RazorGenerator<MusicWork>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicWork)),
-        new (new RazorGenerator<Post>(RazorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPost)),
-        new (new IndexPageGenerator(RazorEngineFactory), new GeneratorTrigger.OnFile("index.cshtml")),
+        new (new RazorGenerator<Page>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPage)),
+        new (new RazorGenerator<Page>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicPage)),
+        new (new RazorGenerator<MusicWork>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicWork)),
+        new (new RazorGenerator<Post>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPost)),
+        new (new IndexPageGenerator(razorEngineFactory), new GeneratorTrigger.OnFile("index.cshtml")),
         new (new StaticFileGenerator(), new GeneratorTrigger.OnFilePredicate(IsStatic)),
     ]);
 

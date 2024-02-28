@@ -6,7 +6,8 @@ namespace SWGen;
 
 public static class StaticMainTool
 {
-    public static async Task<int> Process(string[] args, Config config, ILoader[] loaders)
+
+    public static async Task<int> Process(string[] args, Config config, ILoader[] loaders, ISwgLogger logger)
     {
         var cwd = AbsolutePathEx.Create(Directory.GetCurrentDirectory());
         switch (args)
@@ -15,7 +16,7 @@ public static class StaticMainTool
             {
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                await GuardedGenerate(config, loaders, projectRoot, outputRoot, CancellationToken.None);
+                await GuardedGenerate(config, loaders, projectRoot, outputRoot, logger, CancellationToken.None);
 
                 break;
             }
@@ -23,7 +24,14 @@ public static class StaticMainTool
             {
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                await Watch(config, loaders, projectRoot, new ClientWebSocket(), outputRoot, CancellationToken.None);
+                await Watch(
+                    config,
+                    loaders,
+                    projectRoot,
+                    new ClientWebSocket(),
+                    outputRoot,
+                    logger,
+                    CancellationToken.None);
                 break;
             }
             default:
@@ -33,13 +41,14 @@ public static class StaticMainTool
         return 0;
     }
 
-    private static async Task GuardedGenerate(Config config, ILoader[] loaders, AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, CancellationToken ct)
+    private static async Task GuardedGenerate(Config config, ILoader[] loaders, AbsolutePathEx projectRoot,
+        AbsolutePathEx outputRoot, ISwgLogger Logger, CancellationToken ct)
     {
         Logger.Info($"Input: {projectRoot}");
         Logger.Info($"Output: {outputRoot}");
         try
         {
-            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, ct);
+            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, Logger, ct);
         }
         catch (Exception ex)
         {
@@ -47,11 +56,12 @@ public static class StaticMainTool
         }
     }
 
-    public static async Task Watch(Config cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket, AbsolutePathEx outputRoot, CancellationToken ct)
+    public static async Task Watch(Config cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket,
+        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         var lastAccessed = new Dictionary<string, DateTime>();
-        await GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot, ct);
-        
+        await GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot, logger, ct);
+
         using var watcher = new FileSystemWatcher();
         watcher.Path = projectRoot.Normalized();
         watcher.EnableRaisingEvents = true;
@@ -66,42 +76,46 @@ public static class StaticMainTool
         watcher.Created += ContentChangedHandler;
         watcher.Changed += ContentChangedHandler;
         watcher.Deleted += ContentChangedHandler;
-        
-        SimpleWebServer(outputRoot);
-        
+
+        SimpleWebServer(outputRoot, logger);
+
         return;
 
         void Handler(object sender, FileSystemEventArgs args)
         {
-            var pathDirectories = AbsolutePathEx.Create(args.FullPath).RelativeTo(projectRoot)
-                ?? throw new Exception("Should not happen");
-            var shouldHandle =
-                !pathDirectories.Parts.Any(fragment => fragment is "_public" or ".git" or "bin" or "obj" or ".sass-cache" or ".ionide");
+            var pathDirectories = AbsolutePathEx.Create(args.FullPath).RelativeTo(projectRoot) ??
+                                  throw new Exception("Should not happen");
+            var shouldHandle = !pathDirectories.Parts.Any(
+                fragment => fragment is "_public" or ".git" or "bin" or "obj" or ".sass-cache" or ".ionide");
             if (shouldHandle)
             {
                 var lastTimeWrite = File.GetLastWriteTime(args.FullPath);
                 if (!lastAccessed.TryGetValue(args.FullPath, out var lastTimeAccessed) ||
                     Math.Abs((lastTimeAccessed - lastTimeWrite).Seconds) >= 1)
                 {
-                    Logger.Info($"Changes detected in {args.FullPath}, regenerating...");
+                    logger.Info($"Changes detected in {args.FullPath}, regenerating...");
                     lastAccessed[args.FullPath] = lastTimeWrite;
-                    GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot, ct).Wait(ct);
+                    GuardedGenerate(cfg, loaders, Directory.GetCurrentDirectory(), outputRoot, logger, ct).Wait(ct);
                 }
             }
         }
 
         void ContentChangedHandler(object sender, FileSystemEventArgs args)
         {
-            webSocket.SendAsync(ArraySegment<byte>.Empty, WebSocketMessageType.Close, endOfMessage:true, CancellationToken.None).Wait(ct);
+            webSocket.SendAsync(
+                ArraySegment<byte>.Empty,
+                WebSocketMessageType.Close,
+                endOfMessage: true,
+                CancellationToken.None).Wait(ct);
         }
-        
+
     }
 
-    public static void SimpleWebServer(AbsolutePathEx localPath, params string[] prefixes)
+    public static void SimpleWebServer(AbsolutePathEx localPath, ISwgLogger logger, params string[] prefixes)
     {
         if (!HttpListener.IsSupported)
         {
-            Logger.Error("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+            logger.Error("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
             return;
         }
 
@@ -119,10 +133,10 @@ public static class StaticMainTool
         }
 
         listener.Start();
-        Logger.Info($"Listening to {string.Join(", ",prefixes)}...");
+        logger.Info($"Listening to {string.Join(", ", prefixes)}...");
         while (true)
         {
-            
+
             // Note: The GetContext method blocks while waiting for a request.
             HttpListenerContext context = listener.GetContext();
             HttpListenerRequest request = context.Request;
@@ -133,7 +147,7 @@ public static class StaticMainTool
             {
                 return;
             }
-            
+
             var file = localPath / request.Url!.LocalPath;
             if (File.Exists(file.Normalized()))
             {
@@ -151,84 +165,84 @@ public static class StaticMainTool
             }
         }
     }
-    
+
     public static async Task GenerateFolder(AbsolutePathEx projectRoot, bool isWatch, Config config, ILoader[] loaders,
-        AbsolutePathEx outputRoot, CancellationToken ct)
+        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         var sw = Stopwatch.StartNew();
         var sc = new SiteContents();
 
-        using (Logger.BeginScope("Load"))
+        var loadLogger = logger.BeginScope("Load");
+        foreach (var loader in loaders)
         {
-            foreach (var loader in loaders)
-            {
-                sc = await loader.Load(sc, projectRoot);
-            }
-
-            foreach (var error in sc.Errors())
-            {
-                Logger.Error($"{error.Path}: {error.Message}");
-            }
+            var loaderLogger = loadLogger.BeginScope(loader.ToString() ?? "");
+            sc = await loader.Load(sc, projectRoot, loaderLogger, ct);
         }
 
-        using (Logger.BeginScope("Generation"))
+        foreach (var error in sc.Errors())
         {
-            using (Logger.BeginScope("Once"))
-            {
-                await RunOnceGenerators(config, sc, projectRoot, outputRoot, ct);
-            }
-
-            using (Logger.BeginScope("File based"))
-            {
-                foreach (var filePath in Directory.GetFiles(projectRoot.Normalized(), "*", new EnumerationOptions { RecurseSubdirectories = true })
-                             .Select(AbsolutePathEx.Create))
-                {
-                    var relative = filePath.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
-                    if (relative.Parts[0] is "bin" or "obj") continue;
-                    if (sc.TryGetError(relative.Normalized()) != null) continue;
-
-                    await Generate(config, sc, projectRoot, relative.Normalized(), outputRoot, ct);
-                }
-            }
+            logger.Error($"{error.Path}: {error.Message}");
         }
 
-        Logger.Info($"Overall time: {sw.Elapsed}");
+        var generateLogger = logger.BeginScope("Generation");
+        var onceLogger = generateLogger.BeginScope("Once");
+        {
+            await RunOnceGenerators(config, sc, projectRoot, outputRoot, onceLogger, ct);
+        }
+
+        var fileBasedLogger = generateLogger.BeginScope("FileBased");
+        await Parallel.ForEachAsync(
+            Directory.GetFiles(projectRoot.Normalized(), "*", new EnumerationOptions { RecurseSubdirectories = true })
+                .Select(AbsolutePathEx.Create),
+            ct,
+            async (filePath, token) =>
+            {
+                var relative = filePath.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+                var fileGeneratorLogger = fileBasedLogger.BeginScope(relative.Normalized());
+                if (relative.Parts[0] is "bin" or "obj") return;
+                if (sc.TryGetError(relative.Normalized()) != null) return;
+
+                await Generate(config, sc, projectRoot, relative.Normalized(), outputRoot, fileGeneratorLogger, token);
+            });
+
+        logger.Info($"Overall time: {sw.Elapsed}");
     }
 
     private static async Task RunOnceGenerators(Config cfg, SiteContents siteContent, AbsolutePathEx projectRoot,
-        AbsolutePathEx outputRoot, CancellationToken ct)
+        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         foreach (var n in cfg.Generators.Where(n => n.Trigger is GeneratorTrigger.Once).Select(n => n.Generator))
         {
-            await GenerateAux(n, siteContent, projectRoot, outputRoot, ct);
+            await GenerateAux(n, siteContent, projectRoot, outputRoot, logger, ct);
         }
     }
 
     private static async Task Generate(Config cfg, SiteContents siteContents, AbsolutePathEx projectRoot,
-        RelativePathEx inputFile, AbsolutePathEx outputRoot, CancellationToken ct)
+        RelativePathEx inputFile, AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         siteContents.ContentAvailable = true;
         GeneratorConfig? pick = cfg.Generators.FirstOrDefault(n => n.MatchesFile(projectRoot, inputFile));
         if (pick == null)
         {
-            Logger.Debug($"{inputFile} Ignored");
+            logger.Debug("Ignored");
             return;
         }
 
-        Logger.Debug($"Picked [{pick}] for {inputFile}");
+        logger.Debug($"Picked [{pick}]");
 
-        await GenerateAux(pick.Generator, siteContents, projectRoot, outputRoot, ct, inputFile);
+        await GenerateAux(pick.Generator, siteContents, projectRoot, outputRoot, logger, ct, inputFile);
     }
 
     private static async Task GenerateAux(Generator generator, SiteContents siteContents, AbsolutePathEx projectRoot,
-        AbsolutePathEx outputRoot, CancellationToken ct, RelativePathEx? inputFile = null)
+        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct, RelativePathEx? inputFile = null)
     {
         inputFile ??= RelativePathEx.Self();
         var sw = Stopwatch.StartNew();
-        var results = generator.Generate(siteContents, projectRoot, inputFile, ct);
+        var results = generator.Generate(siteContents, projectRoot, inputFile, logger, ct);
         List<AbsolutePathEx> outputPaths = new();
         foreach (var result in results)
         {
+            var resultLogger = logger.BeginScope(result.File.Normalized());
             var outputPath = outputRoot / result.File;
             outputPaths.Add(outputPath);
             var dir = outputPath.Parent ?? throw new Exception("Should not happen");
@@ -241,29 +255,25 @@ public static class StaticMainTool
             {
                 if (generator.SkipWriteIfFileExists())
                 {
+                    resultLogger.Debug("Skipped writing file because it already exists");
                     continue;
                 }
             }
 
-            await using var newFile = File.Create(outputPath.Normalized());
-            await using var stream = await result.Content();
-            await stream.CopyToAsync(newFile, ct);
+            var tempFile = Guid.NewGuid().ToString("N") + ".tmp";
+
+            await using (var newFile = File.Create(tempFile))
+            await using (var stream = await result.Content())
+                await stream.CopyToAsync(newFile, ct);
+
+            File.Move(tempFile, outputPath.Normalized(), overwrite: true);
+
+            resultLogger.Debug("Written");
+
+            sw.Stop();
+            var relativeOutputPaths = outputPaths.Select(o => o.RelativeTo(outputRoot));
+            logger.Info(
+                $"Generated by {generator.GetType().Name} in {sw.ElapsedMilliseconds}ms ({relativeOutputPaths.Count()} file(s))");
         }
-
-        sw.Stop();
-        var relativeOutputPaths = outputPaths.Select(o => o.RelativeTo(outputRoot));
-        Logger.Info($"{inputFile} generated by {generator.GetType().Name} in {sw.ElapsedMilliseconds}ms -> [{relativeOutputPaths.StringJoin(",")}]");
-    }
-    
-}
-
-public static class StreamExtensions
-{
-    public static async Task<byte[]> ToByteArray(Stream input, CancellationToken ct = default)
-    {
-        if (input is MemoryStream ms) return ms.ToArray();
-        ms = new MemoryStream();
-        await input.CopyToAsync(ms, ct);
-        return ms.ToArray();
     }
 }

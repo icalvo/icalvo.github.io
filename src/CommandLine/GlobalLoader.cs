@@ -4,7 +4,8 @@ namespace CommandLine;
 
 public class GlobalLoader : ILoader
 {
-    public Task<SiteContents> Load(SiteContents siteContent, AbsolutePathEx projectRoot)
+    public Task<SiteContents> Load(SiteContents siteContent, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
+        CancellationToken ct = default)
     {
         siteContent.Add(new SiteInfo
         {
