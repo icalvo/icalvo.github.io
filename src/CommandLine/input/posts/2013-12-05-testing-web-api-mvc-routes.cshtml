@@ -1,0 +1,16 @@
+@using System.IO
+
+@{
+    Model.Metadata = 
+        new Post
+        {
+            Title = "Testing Web API and MVC routes altogether",
+            Published = DateTime.Parse("2013-12-05"),
+            Tags = "code,csharp,testing,webapi,mvc".Split(','),
+            Categories = ["software"]
+        };
+    var md = await File.ReadAllTextAsync("input/posts/2013-12-05-testing-web-api-mvc-routes.markdown");
+}
+<markdown>
+@Raw(md)
+</markdown>

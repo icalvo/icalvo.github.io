@@ -1,0 +1,43 @@
+﻿@inherits TemplatePage<SWGen.Document<IndexPage>>
+
+@{
+    Layout = "/_MainLayout.cshtml";
+}
+<div class="home">
+
+  <ul class="post-list">
+    @foreach (var post in Model.Metadata.PostPage)
+    {
+        <li>
+            <span class="post-meta">
+                <time class="dt-published" datetime="@post.Metadata.Published.ToString("O")" itemprop="datePublished">@post.Metadata.Published.ToString("yyyy-MM-dd")</time></span>
+            <h3>
+                <a class="post-link" href="@post.RootRelativeLink">@post.Title</a>
+            </h3>
+            @Raw(post.Summary)
+            <p><a href="@post.RootRelativeLink">Read more...</a></p>
+        </li>                
+    }
+  </ul>
+
+  <div class="pager">
+      <ul class="pagination">
+          @if (Model.Metadata.PrevPage != null) {
+              <li><a href="@Model.Metadata.PrevPage.Link" class="previous-page">@Model.Metadata.PrevPage.Number</a></li>
+          }
+          else
+          {
+              <li><div class="pager-edge">•</div></li>
+          }
+          <li><div class="current-page">@Model.Metadata.CurrentPage.Number</div></li>
+          @if (Model.Metadata.NextPage != null) {
+              <li><a href="@Model.Metadata.NextPage.Link" class="next-page">@Model.Metadata.NextPage.Number</a></li>
+          }
+          else
+          {
+              <li><div class="pager-edge">•</div></li>
+          }
+      </ul>
+  </div>
+  </div>
+

@@ -1,0 +1,93 @@
+﻿@inherits MyTemplatePage<SWGen.Document<MusicWork>>
+
+@{
+    Layout = "/_MainLayout.cshtml";
+    var work = Model.Metadata;
+    var completeTitle = $"{Model.Title}, Op.&nbsp;{work.Opus}{work.OpusLetter}";
+    RelativePathEx workDir = Model.OutputFile.Parent!;
+    var workKey = Model.File.Directory.FileName;
+}
+
+<article class="post">
+    <header class="post-header">
+        <h1 class="post-title">@Raw(completeTitle)</h1>
+    </header>
+
+    <div class="post-content">
+        @if (!work.Movements.Any())
+        {
+            await IncludeAsync(
+                "/music/_AudioPlayer.cshtml",
+                new AudioInfo { WorkDir = workDir, MovementKey = workKey, ProjectRoot = Model.SiteInfo.ProjectRoot  });
+        }
+
+        <p><b>Composition date:</b> @work.CompositionDate</p>
+
+        @RenderBody()
+
+        @if (work.Instrumentation.Any())
+        {
+            <h2>Instrumentation</h2>
+            <ul class="instrumentation">
+                @foreach (var instrument in work.Instrumentation)
+                {
+                    <li>@instrument</li>
+                }
+            </ul>
+        }
+
+        @if (work.Movements.Any())
+        {
+            <h2>Movements</h2>
+            @foreach (var x in work.Movements.Select((mov, idx) => (mov, idx)))
+            {
+                var (movement, index) = x;
+                <h3>@index. @movement.Name</h3>
+                await IncludeAsync(
+                    "/music/_AudioPlayer.cshtml",
+                    new AudioInfo { WorkDir = workDir, MovementKey = movement.Key, ProjectRoot = Model.SiteInfo.ProjectRoot  });
+
+                <p>@movement.Description</p>
+
+                <h4>Downloads</h4>
+                await IncludeAsync(
+                    "/music/works/_Downloads.cshtml",
+                    new AudioInfo { WorkDir = workDir, MovementKey = movement.Key, ProjectRoot = Model.SiteInfo.ProjectRoot });
+                <div style="clear: both"></div>
+            }
+        }
+        else
+        {
+            <h2>Downloads</h2>
+            await IncludeAsync(
+                "/music/works/_Downloads.cshtml",
+                new AudioInfo { WorkDir = workDir, MovementKey = workKey, ProjectRoot = Model.SiteInfo.ProjectRoot  });
+        }
+    </div>
+    
+  <div id="disqus_thread"></div>
+  <script>
+    const disqus_config = function () {
+      this.page.url = '@Model.CanonicalLink';
+      this.page.identifier = '@Model.CanonicalLink';
+    };
+
+    (function() {
+      const d = document, s = d.createElement('script');
+
+      s.src = 'https://@(Model.SiteInfo.DisqusShortName).disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    
+</article>
+<script>
+    GreenAudioPlayer.init({
+        selector: '.player', // inits Green Audio Player on each audio container that has class "player"
+        stopOthersOnPlay: true,
+        showDownloadButton: true
+    });
+</script>

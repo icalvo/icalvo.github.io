@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "/_MainLayout.cshtml";
+    Model.Metadata = 
+        new Page
+        {
+            Title = "Music works",
+            Link = "music/index.html",
+            //Categories = ["projects"]
+        };
+}
+<div class="music-works">
+
+    <header class="post-header">
+        <h1 class="post-title">Music works</h1>
+        <p>This is the complete list of my original complete compositions. You can <strong>click on each of the work titles to get more details</strong> about that work, as well as several downloadable files that can include a PDF with the full score & parts, audio files, and MIDI files.</p>
+        <p>All the pieces are licensed under a <strong>Creative Commons Attribution License</strong>. This means that you are free to use the audio files and the scores, as long as you credit me as the composer. However, I would be very grateful if you let me know about any use you make of my music. Please contact me (check the footer of this page) in that case, or if you want to commission an original work.</p>
+        <p>You can <strong>check my musical biography <a href="/music/biography.html">here</a></strong>.</p>
+    </header>
+
+    <div>
+        <ul class="music-works-list">
+            @{
+                var workDocs = Model.SiteContents.TryGetValues<Document<MusicWork>>()
+                    .OrderByDescending(x => x.Metadata.CompositionDate)
+                    .ThenByDescending(x => x.Metadata.Opus);
+            }
+      
+            @foreach (var workDoc in workDocs)
+            {
+                var work = workDoc.Metadata;
+                var completeTitle = $"{workDoc.Title}, Op.&nbsp;{work.Opus}{work.OpusLetter}";
+                var movementKeys = work.Movements.Any() ? work.Movements.Select(x => x.Key) : [workDoc.File.Directory.FileName];
+                RelativePathEx workDir = workDoc.OutputFile.Parent!;
+
+                (string key, string name, string ext, string desc)[] PossibleResources(string x) => [
+                    (x, $"{x}", ".mp3", "Audio"),
+                    (x, $"{x}_full", ".pdf", "Score"),
+                    (x, $"{x}_full_parts", ".pdf", "Score and parts"),
+                    (x, $"{x}_parts", ".pdf", "Parts"),
+                    (x, $"{x}", ".mid", "MIDI"),
+                ];
+
+                var workDirPath = (Model.SiteInfo.ProjectRoot / workDir).Normalized();
+                var availableResources = (
+                    from movementKey in movementKeys
+                    from r in PossibleResources(movementKey)
+                    let filePath = r.name + r.ext
+                    let r2 = Directory.EnumerateFiles(workDirPath, filePath, SearchOption.AllDirectories).FirstOrDefault()
+                    where r2 != null                        
+                    let absPath = AbsolutePathEx.Create(r2)
+                    let url = absPath.RelativeTo(Model.SiteInfo.ProjectRoot)!.Url()
+                    select new { r.key, r.name, r.ext, r.desc, url }).ToArray();
+
+                var availableResourceTypes =
+                    from r in availableResources
+                    group r by (r.desc, r.ext)
+                    into g
+                    let icon = g.Key.ext switch
+                    {
+                        ".pdf" => "/assets/img/file_type_pdf.svg",
+                        ".mp3" => "/assets/img/file_type_audio.svg",
+                        ".mid" => "/assets/img/midi.jfif",
+                        ".sib" => "/assets/img/sibelius.jfif",
+                        _ => "",
+                    }
+                    select new { icon, g.Key.desc };
+
+                var audioUrl =
+                    work.DefaultAudioMovementKey != null
+                    ? availableResources.FirstOrDefault(x => x.ext == ".mp3" && x.key == work.DefaultAudioMovementKey)?.url
+                      ?? throw new Exception($"No MP3 file for default audio movement {work.DefaultAudioMovementKey}")
+                    : availableResources.Where(x => x.ext == ".mp3").Select(x => x.url).FirstOrDefault();
+
+                <li style="background-image:url(@(workDoc.OutputFile.Parent?.Url())/background.png)">
+                    <div class="work-title">
+                        <small>@work.CompositionDate</small><br/>
+                        <a class="page-link" href="@(workDoc.RootRelativeLink)">@Raw(completeTitle)</a>
+                        <br/>
+                        @foreach (var r in availableResourceTypes)
+                        {
+                            <a class="page-link" href="@(workDoc.RootRelativeLink)"><img title="@r.desc available" alt="@r.desc available" src="@r.icon" style="width: 1em; height: 1em"/></a>
+                        }
+                    </div>
+
+                    @if (audioUrl != null)
+                    {
+                        <div class="player">
+                            <audio>
+                                <source src="@audioUrl" type="audio/mpeg">
+                            </audio>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<script>
+    GreenAudioPlayer.init({
+        selector: '.player', // inits Green Audio Player on each audio container that has class "player"
+        stopOthersOnPlay: true,
+        showDownloadButton: false
+    });
+</script>
+
