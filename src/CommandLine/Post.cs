@@ -1,8 +1,9 @@
-﻿using SWGen;
+﻿using Slugify;
+using SWGen;
 
 namespace CommandLine;
 
-public class Post : ITitled, IAuthored, ICreatable<Post>, ISubDirectory
+public class Post : ITitled, IAuthored, ICreatable<Post>, ILink
 {
     public required string Title { get; init; }
     public required DateTime Published { get; init; }
@@ -15,9 +16,17 @@ public class Post : ITitled, IAuthored, ICreatable<Post>, ISubDirectory
         return new Post { Title = "NO TITLE!", Published = DateTime.UnixEpoch };
     }
 
-    public string[] SubDirectory()
-    {
-        return [..Categories, Published.Year.ToString(), Published.Month.ToString(), Published.Day.ToString()];
-    }
+    private readonly SlugHelper _slugHelper = new();
+
+    public RelativePathEx BuildLink(IDocument doc) =>
+        new(
+        [
+            "posts",
+            ..Categories,
+            Published.Year.ToString(),
+            Published.Month.ToString(),
+            Published.Day.ToString(),
+            $"{_slugHelper.GenerateSlug(Title)}.html"
+        ]);
 }
 

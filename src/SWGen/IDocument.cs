@@ -2,8 +2,9 @@
 
 public interface IDocument
 {
-    PathEx File { get; }
-    Uri Link { get; }
+    RelativePathEx File { get; }
+    Uri CanonicalLink { get; }
+    Uri RootRelativeLink { get; }
     SiteContents SiteContents { get; init; }
     SiteInfo SiteInfo { get; }
     object Metadata { get; set; }

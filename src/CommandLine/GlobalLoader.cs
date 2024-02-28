@@ -29,8 +29,9 @@ public class GlobalLoader : ILoader
                 { "rss", "RSS feed" },
             },
             BaseUrl = "",
-            Url = "https://ignaciocalvo.com",
+            Url = new Uri("https://ignaciocalvo.com"),
             ProjectRoot = projectRoot,
+            DisqusShortName = "ignaciocalvo",
         });
         
         return Task.FromResult(siteContent);

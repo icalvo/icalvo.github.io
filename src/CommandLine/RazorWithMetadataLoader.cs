@@ -28,13 +28,12 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         var engine = _razorEngineFactory.Create(projectRoot.Normalized());
         foreach (var inputFile in files)
         {
-            var dirPart = inputFile.Parent.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
             var postFile = inputFile.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
             
             var doc = new Document<TMetadata>(siteContent, postFile);
             var fakeMetadata = doc.Metadata;
 
-            var content = await engine.RenderWithoutLayout(inputFile, postFile, doc);
+            var content = await engine.RenderWithoutLayout(inputFile, doc);
 
             doc.Content = content;
             if (ReferenceEquals(fakeMetadata, doc.Metadata))
@@ -43,18 +42,15 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
                     $$"""You must set the metadata in your template, e.g. @{ Model.Metadata = new {{typeof(TMetadata).Name}} { Title = "My Title" }; }""");
             }
 
-            if (doc.Metadata is Page page)
+            if (doc.Metadata is ILink link)
             {
-                doc.OutputFile = page.Link;
+                doc.OutputFile = link.BuildLink(doc);
             }
             else
             {
-                string[] subDirectory = doc.Metadata is ISubDirectory s ? s.SubDirectory() : [];
-            
-                doc.OutputFile = new RelativePathEx([
-                    ..dirPart,
-                    ..subDirectory,
-                    inputFile.Parts[^1].ReplaceEnd(RazorExtension, ".html")!]);
+                var dirPart = inputFile.Parent.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+                var fileName = inputFile.Parts[^1];
+                doc.OutputFile = dirPart.Combine(Path.ChangeExtension(fileName, ".html"));
             }
 
             Logger.Info($"Loaded {doc.File} in {sw.ElapsedMilliseconds}ms");

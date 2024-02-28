@@ -17,11 +17,11 @@ public abstract class MultipleStringGenerator : Generator
     }
 
     protected abstract IAsyncEnumerable<(string, string)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
-        RelativePathEx page, CancellationToken ct);
+        RelativePathEx page, CancellationToken _);
     public override IAsyncEnumerable<GeneratorItem> Generate(
         SiteContents ctx,
         AbsolutePathEx projectRoot,
-        RelativePathEx page, CancellationToken ct) =>
-        GenerateString(ctx, projectRoot, page, ct)
-            .Select(x => new GeneratorItem(x.Item1, _encoding.GetBytes(x.Item2)));
+        RelativePathEx inputFile, CancellationToken ct) =>
+        GenerateString(ctx, projectRoot, inputFile, ct)
+            .Select(x => new GeneratorItem(x.Item1, new MemoryStream(_encoding.GetBytes(x.Item2))));
 }

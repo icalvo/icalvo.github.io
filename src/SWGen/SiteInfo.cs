@@ -10,6 +10,7 @@ public class SiteInfo
     public required string GoogleAnalytics { get; init; }
     public required string GoogleSiteVerification { get; init; }
     public required string BaseUrl { get; init; }
-    public required string Url { get; init; }
-    public required AbsolutePathEx ProjectRoot { get; set; }
+    public required Uri Url { get; init; }
+    public required AbsolutePathEx ProjectRoot { get; init; }
+    public required string DisqusShortName { get; init; }
 }

@@ -74,11 +74,11 @@
                 <li style="background-image:url(@(workDoc.OutputFile.Parent?.Url())/background.png)">
                     <div class="work-title">
                         <small>@work.CompositionDate</small><br/>
-                        <a class="page-link" href="@(workDoc.Link)">@Raw(completeTitle)</a>
+                        <a class="page-link" href="@(workDoc.RootRelativeLink)">@Raw(completeTitle)</a>
                         <br/>
                         @foreach (var r in availableResourceTypes)
                         {
-                            <a class="page-link" href="@(workDoc.Link)"><img title="@r.desc available" alt="@r.desc available" src="@r.icon" style="width: 1em; height: 1em"/></a>
+                            <a class="page-link" href="@(workDoc.RootRelativeLink)"><img title="@r.desc available" alt="@r.desc available" src="@r.icon" style="width: 1em; height: 1em"/></a>
                         }
                     </div>
 

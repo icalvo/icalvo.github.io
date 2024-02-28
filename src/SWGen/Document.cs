@@ -4,43 +4,27 @@ namespace SWGen;
 
 public class Document : IDocument
 {
-    public Document(SiteContents siteContents, PathEx file)
+    private string? _content;
+
+    public Document(SiteContents siteContents, RelativePathEx file)
     {
         File = file;
-        OutputFile = "NOOUTPUT!!";
+        OutputFile = RelativePathEx.Create("NOOUTPUT!!");
         SiteContents = siteContents;
         ((IDocument)this).Metadata = new object();
     }
 
-    public PathEx File { get; }
+    public RelativePathEx File { get; }
     public RelativePathEx OutputFile { get; set; }
-    public Uri Link => OutputFile.Url();
+    public Uri RootRelativeLink => OutputFile.Url();
     public SiteContents SiteContents { get; init; }
     public SiteInfo SiteInfo => SiteContents.TryGetValue<SiteInfo>() ?? throw new Exception("SiteInfo not found!");
-
     object IDocument.Metadata { get; set; }
-
     protected IDocument This => this;
     public string? Title => (This.Metadata as ITitled)?.Title;
     public string Author => (This.Metadata as IAuthored)?.Author ?? SiteInfo?.Owner.Name ?? "Anonymous";
-}
-
-public class Document<TMetadata> : Document where TMetadata : class, ICreatable<TMetadata>
-{
-    private string? _content;
-
-    public Document(SiteContents siteContents, PathEx file) : base(siteContents, file)
-    {
-        Metadata = TMetadata.Create();
-        SiteContents.Add(this);
-    }
-
-    public TMetadata Metadata
-    {
-        get => (TMetadata)This.Metadata;
-        set => This.Metadata = value;
-    }
-
+    public Uri CanonicalLink => new (SiteInfo.Url, RootRelativeLink);
+    
     public string Content
     {
         get
@@ -55,4 +39,20 @@ public class Document<TMetadata> : Document where TMetadata : class, ICreatable<
     }
 
     public string Summary => Content.UntilLine("<!--more-->");
+}
+
+public class Document<TMetadata> : Document where TMetadata : class, ICreatable<TMetadata>
+{
+    public Document(SiteContents siteContents, RelativePathEx file) : base(siteContents, file)
+    {
+        Metadata = TMetadata.Create();
+        SiteContents.Add(this);
+    }
+
+    public TMetadata Metadata
+    {
+        get => (TMetadata)This.Metadata;
+        set => This.Metadata = value;
+    }
+
 }

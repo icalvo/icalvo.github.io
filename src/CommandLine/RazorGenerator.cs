@@ -32,7 +32,7 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
             layout = template.Layout;
         }
 
-        var result = await engine.RenderWithLayout(pageAbsolutePath, page, doc, layout);
+        var result = await engine.RenderWithLayout(pageAbsolutePath, doc, layout);
         return (doc.OutputFile, result);
     }
 }

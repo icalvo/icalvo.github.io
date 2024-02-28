@@ -8,24 +8,23 @@ namespace CommandLine;
 public static class EngineExtensions
 {
     public static Task<string> RenderWithoutLayout<TMetadata>(this IRazorLightEngine engine,
-        AbsolutePathEx inputFile, RelativePathEx postFile, Document<TMetadata> doc)
+        AbsolutePathEx inputFile, Document<TMetadata> doc)
         where TMetadata : class, ICreatable<TMetadata> =>
-        engine.RenderEx(inputFile, postFile, doc, false);
+        engine.RenderEx(inputFile, doc, false);
 
     public static Task<string> RenderWithLayout<TMetadata>(this IRazorLightEngine engine,
-        AbsolutePathEx inputFile, RelativePathEx postFile, Document<TMetadata> doc, string? layout)
+        AbsolutePathEx inputFile, Document<TMetadata> doc, string? layout)
         where TMetadata : class, ICreatable<TMetadata> =>
-        engine.RenderEx(inputFile, postFile, doc, true, layout);
+        engine.RenderEx(inputFile, doc, true, layout);
     
     public static async Task<string> RenderEx<TMetadata>(
         this IRazorLightEngine engine,
         AbsolutePathEx inputFile,
-        RelativePathEx postFile,
         Document<TMetadata> doc,
         bool withLayout,
         string? layout = null) where TMetadata : class, ICreatable<TMetadata>
     {
-        var templatePage = await engine.CompileTemplateAsync(postFile.Normalized());
+        var templatePage = await engine.CompileTemplateAsync(inputFile.Normalized());
         if (withLayout)
         {
             templatePage.Layout = layout;

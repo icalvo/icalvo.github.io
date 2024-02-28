@@ -21,9 +21,9 @@ public abstract class StringGenerator : Generator
         AbsolutePathEx projectRoot, RelativePathEx page, CancellationToken ct);
 
     public override async IAsyncEnumerable<GeneratorItem> Generate(SiteContents ctx, AbsolutePathEx projectRoot,
-        RelativePathEx page, [EnumeratorCancellation] CancellationToken ct)
+        RelativePathEx inputFile, [EnumeratorCancellation] CancellationToken ct)
     {
-        var (link, content) = await GenerateString(ctx, projectRoot, page, ct);
-        yield return new(link, _encoding.GetBytes(content));
+        var (link, content) = await GenerateString(ctx, projectRoot, inputFile, ct);
+        yield return new(link, new MemoryStream(_encoding.GetBytes(content)));
     }
 }

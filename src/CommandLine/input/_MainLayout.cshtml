@@ -20,8 +20,8 @@
   <meta property="og:locale" content="en_US" />
   <meta name="description" content="@Model.SiteInfo.Description" />
   <meta property="og:description" content="@Model.SiteInfo.Description" />
-  <link rel="canonical" href="@Model.Link" />
-  <meta property="og:url" content="@Model.Link" />
+  <link rel="canonical" href="@Model.CanonicalLink" />
+  <meta property="og:url" content="@Model.CanonicalLink" />
   <meta property="og:site_name" content="@Model.SiteInfo.Title" />
   <meta property="og:type" content="@(Model.Metadata is Document<Post> ? "article": "website")" />
   @if (Model.Metadata is Document<IndexPage> d)
@@ -39,7 +39,7 @@
   <meta property="twitter:title" content="@Model.SiteInfo.Title" />
   <meta name="twitter:site" content="@("@")@Model.SiteInfo.SocialLinks["twitter"]" />
   <meta name="twitter:creator" content="@Model.Author" />
-  <meta name="google-site-verification" content="lYI_fzae0p3Hx_Ta5lkgLAztpNDFaWHb39crE9KBYjA" />
+  <meta name="google-site-verification" content="@Model.SiteInfo.GoogleSiteVerification" />
   <script type="application/ld+json">
     {
       "@@context":"https://schema.org",
@@ -53,15 +53,15 @@
   </script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
-  <link type="application/atom+xml" rel="alternate" href="https://ignaciocalvo.com/feed.xml" title="@Model.SiteInfo.Title" />
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1520724-2"></script>
+  <link type="application/atom+xml" rel="alternate" href="@Model.SiteInfo.Url/feed.xml" title="@Model.SiteInfo.Title" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=@Model.SiteInfo.GoogleAnalytics"></script>
   <script>
-      window['ga-disable-UA-1520724-2'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+      window['ga-disable-@Model.SiteInfo.GoogleAnalytics'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'UA-1520724-2');
+      gtag('config', '@Model.SiteInfo.GoogleAnalytics');
     </script>
     <script src="/assets/js/green-audio-player.js"></script>
 </head>
@@ -117,12 +117,10 @@
 
     <div class="social-links">
       <ul class="social-media-list">
-        <li><a rel="me" href="https://www.facebook.com/ignacio.calvomartinez" title="ignacio.calvomartinez"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li>
-        <li><a rel="me" href="https://github.com/icalvo" title="icalvo"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li>
-        <li><a rel="me" href="https://www.instagram.com/ignaciocalvo2" title="ignaciocalvo2"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#instagram"></use></svg></a></li>
-        <li><a rel="me" href="https://www.linkedin.com/in/ignaciocalvomartinez" title="ignaciocalvomartinez"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li>
-        <li><a rel="me" href="https://twitter.com/ignaciocalvo" title="ignaciocalvo"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li>
-        <li><a rel="me" href="https://www.youtube.com/icalvo" title="icalvo"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg></a></li>
+        @foreach(var link in Model.SiteInfo.SocialLinks)
+        {
+          <li><a rel="me" href="@link.Value" title="@link.Key"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#@link.Key"></use></svg></a></li>
+        }
       </ul>
     </div>
 
