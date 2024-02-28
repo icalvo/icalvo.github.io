@@ -1,3 +1,3 @@
 ﻿namespace SWGen;
 
-public record GeneratorItem(RelativePathEx File, Stream Content);
+public record GeneratorItem(RelativePathEx File, Func<Task<Stream>> Content);

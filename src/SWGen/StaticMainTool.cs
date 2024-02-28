@@ -225,7 +225,7 @@ public static class StaticMainTool
     {
         inputFile ??= RelativePathEx.Self();
         var sw = Stopwatch.StartNew();
-        var results = await generator.Generate(siteContents, projectRoot, inputFile, ct).ToArrayAsync(ct);
+        var results = generator.Generate(siteContents, projectRoot, inputFile, ct);
         List<AbsolutePathEx> outputPaths = new();
         foreach (var result in results)
         {
@@ -246,7 +246,8 @@ public static class StaticMainTool
             }
 
             await using var newFile = File.Create(outputPath.Normalized());
-            await result.Content.CopyToAsync(newFile, ct);
+            await using var stream = await result.Content();
+            await stream.CopyToAsync(newFile, ct);
         }
 
         sw.Stop();

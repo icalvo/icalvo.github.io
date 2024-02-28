@@ -17,13 +17,13 @@ public abstract class StringGenerator : Generator
         _encoding = encoding;
     }
 
-    protected abstract Task<(RelativePathEx Link, string Content)> GenerateString(SiteContents ctx,
+    protected abstract (RelativePathEx Link, Func<Task<string>> Content) GenerateString(SiteContents ctx,
         AbsolutePathEx projectRoot, RelativePathEx page, CancellationToken ct);
 
-    public override async IAsyncEnumerable<GeneratorItem> Generate(SiteContents ctx, AbsolutePathEx projectRoot,
-        RelativePathEx inputFile, [EnumeratorCancellation] CancellationToken ct)
+    public override IEnumerable<GeneratorItem> Generate(SiteContents ctx, AbsolutePathEx projectRoot,
+        RelativePathEx inputFile, CancellationToken ct)
     {
-        var (link, content) = await GenerateString(ctx, projectRoot, inputFile, ct);
-        yield return new(link, new MemoryStream(_encoding.GetBytes(content)));
+        var (link, content) = GenerateString(ctx, projectRoot, inputFile, ct);
+        yield return new(link, async () => new MemoryStream(_encoding.GetBytes(await content())));
     }
 }

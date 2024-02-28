@@ -12,27 +12,32 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
         _razorEngineFactory = razorEngineFactory;
     }
 
-    protected override async Task<(RelativePathEx Link, string Content)> GenerateString(SiteContents ctx,
+    protected override (RelativePathEx Link, Func<Task<string>> Content) GenerateString(SiteContents ctx,
         AbsolutePathEx projectRoot, RelativePathEx page, CancellationToken ct)
     {
-        var engine = _razorEngineFactory.Create(projectRoot.Normalized());
-        var doc =
+        Document<T> doc =
             ctx.TryGetValues<Document<T>>().SingleOrDefault(doc => doc.File == page)
             ?? throw new Exception($"{typeof(T).Name} {page} has not been loaded");
 
-        TemplateLayoutToggle.IsEnabled = true;
-        
-        AbsolutePathEx pageAbsolutePath = projectRoot / page;
-        string? layout = null;
-        if (pageAbsolutePath.Parent.GetFirstExistingFileInParentDirs("_ViewStart.cshtml") is { } f)
-        {
-            Logger.Info($"Running {f}...");
-            var template = await engine.CompileTemplateAsync(f.Normalized());
-            _ = await engine.RenderTemplateAsync(template, doc);
-            layout = template.Layout;
-        }
+        return (doc.OutputFile, Func);
 
-        var result = await engine.RenderWithLayout(pageAbsolutePath, doc, layout);
-        return (doc.OutputFile, result);
+        async Task<string> Func()
+        {
+            var engine = _razorEngineFactory.Create(projectRoot.Normalized());
+
+            TemplateLayoutToggle.IsEnabled = true;
+        
+            AbsolutePathEx pageAbsolutePath = projectRoot / page;
+            string? layout = null;
+            if (pageAbsolutePath.Parent.GetFirstExistingFileInParentDirs("_ViewStart.cshtml") is { } f)
+            {
+                Logger.Info($"Running {f}...");
+                var template = await engine.CompileTemplateAsync(f.Normalized());
+                _ = await engine.RenderTemplateAsync(template, doc);
+                layout = template.Layout;
+            }
+
+            return await engine.RenderWithLayout(pageAbsolutePath, doc, layout);            
+        }
     }
 }
