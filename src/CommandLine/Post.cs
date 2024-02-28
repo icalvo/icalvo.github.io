@@ -10,6 +10,7 @@ public class Post : ITitled, IAuthored, ICreatable<Post>, ILink
     public string Author { get; init; } = "Anonymous";
     public string[] Tags { get; init; } = [];
     public string[] Categories { get; init; } = [];
+    public PostIdentifiers? Id { get; init; } = null;
 
     public static Post Create()
     {
@@ -29,4 +30,3 @@ public class Post : ITitled, IAuthored, ICreatable<Post>, ILink
             $"{_slugHelper.GenerateSlug(Title)}.html"
         ]);
 }
-

@@ -8,6 +8,7 @@ public record SiteContents
     private readonly ServiceContainer _container = new();
     private readonly Dictionary<string, SiteError> _errors = new();
     public bool ContentAvailable { get; set; }
+    public List<IDocument> DocsWithPendingLinks { get; } = new();
 
     public void AddError(SiteError error)
     {
@@ -48,25 +49,16 @@ public record SiteContents
 
     public IEnumerable<T> TryGetValues<T>()
     {
-        var key = typeof(List<T>);
-        if (_container.GetService(key) == null)
+        lock (_lock)
         {
-            return Enumerable.Empty<T>();
-        }
+            var key = typeof(List<T>);
+            if (_container.GetService(key) == null)
+            {
+                return Enumerable.Empty<T>();
+            }
 
-        return GetValues<T>();
-    }
-    
-    public IEnumerable<T> GetValues<T>()
-    {
-        var key = typeof(List<T>);
-        var service = _container.GetService(key);
-        if (service == null)
-        {
-            return Enumerable.Empty<T>();
+            return GetValues<T>();
         }
-
-        return (IEnumerable<T>)service;
     }
 
     public T? TryGetValue<T>()
@@ -77,5 +69,20 @@ public record SiteContents
     public IEnumerable<SiteError> Errors()
     {
         return _errors.Values;
+    }
+
+    private IEnumerable<T> GetValues<T>()
+    {
+        lock (_lock)
+        {
+            var key = typeof(List<T>);
+            var service = _container.GetService(key);
+            if (service == null)
+            {
+                return Enumerable.Empty<T>();
+            }
+
+            return ((IEnumerable<T>)service).ToArray();
+        }
     }
 }

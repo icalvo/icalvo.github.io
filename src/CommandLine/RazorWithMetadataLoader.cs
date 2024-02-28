@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Components.Forms;
 using SWGen;
 
 namespace CommandLine;
@@ -18,7 +19,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
 
     public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", {_recursive})";
 
-    public async Task<SiteContents> Load(SiteContents siteContent, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
+    public async Task<SiteContents> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default)
     {
         var sw = Stopwatch.StartNew();
@@ -29,42 +30,51 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
             .Where(f => !f.FileName.StartsWith('_'));
         
         var engine = _razorEngineFactory.Create(projectRoot.Normalized());
+
         await Parallel.ForEachAsync(
             files,
             ct,
-            async (inputFile, ct2) =>
+            ExtractMetadata);
+
+        foreach (IDocument doc in siteContents.DocsWithPendingLinks)
+        {
+            await ExtractMetadata(projectRoot / doc.File, ct);
+        }
+
+        siteContents.Add(new PostConfig(DisableLiveRefresh:false));
+        return siteContents;
+
+        async ValueTask ExtractMetadata(AbsolutePathEx inputFile, CancellationToken ct2)
+        {
+            var inputRelativeFile = inputFile.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+
+            var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized());
+            var existing = siteContents.TryGetValues<Document<TMetadata>>().FirstOrDefault(doc => doc.File == inputRelativeFile);
+            var doc = existing ?? new Document<TMetadata>(siteContents, inputRelativeFile);
+            if (existing == null)
+                siteContents.Add(doc);
+            var fakeMetadata = doc.Metadata;
+
+            var content = await engine.CompileRenderWithoutLayout(inputFile, doc);
+
+            doc.Content = content;
+            if (ReferenceEquals(fakeMetadata, doc.Metadata))
             {
-                var inputRelativeFile = inputFile.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+                throw new Exception($$"""You must set the metadata in your template, e.g. @{ Model.Metadata = new {{typeof(TMetadata).Name}} { Title = "My Title" }; }""");
+            }
 
-                var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized());
-                
-                var doc = new Document<TMetadata>(siteContent, inputRelativeFile);
-                var fakeMetadata = doc.Metadata;
+            if (doc.Metadata is ILink link)
+            {
+                doc.OutputFile = link.BuildLink(doc);
+            }
+            else
+            {
+                var dirPart = inputFile.Parent.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+                var fileName = inputFile.Parts[^1];
+                doc.OutputFile = dirPart.Combine(Path.ChangeExtension(fileName, ".html"));
+            }
 
-                var content = await engine.CompileRenderWithoutLayout(inputFile, doc);
-
-                doc.Content = content;
-                if (ReferenceEquals(fakeMetadata, doc.Metadata))
-                {
-                    throw new Exception(
-                        $$"""You must set the metadata in your template, e.g. @{ Model.Metadata = new {{typeof(TMetadata).Name}} { Title = "My Title" }; }""");
-                }
-
-                if (doc.Metadata is ILink link)
-                {
-                    doc.OutputFile = link.BuildLink(doc);
-                }
-                else
-                {
-                    var dirPart = inputFile.Parent.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
-                    var fileName = inputFile.Parts[^1];
-                    doc.OutputFile = dirPart.Combine(Path.ChangeExtension(fileName, ".html"));
-                }
-
-                fileLogger.Info("Loaded in {sw.ElapsedMilliseconds}ms");
-            });
-
-        siteContent.Add(new PostConfig(DisableLiveRefresh:false));
-        return siteContent;
+            fileLogger.Info("Loaded in {sw.ElapsedMilliseconds}ms");
+        }
     }
 }

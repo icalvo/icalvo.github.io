@@ -4,10 +4,10 @@ namespace CommandLine;
 
 public class GlobalLoader : ILoader
 {
-    public Task<SiteContents> Load(SiteContents siteContent, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
+    public Task<SiteContents> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default)
     {
-        siteContent.Add(new SiteInfo
+        siteContents.Add(new SiteInfo
         {
             Title = "Ignacio Calvo Blog",
             Owner = new Author
@@ -35,6 +35,6 @@ public class GlobalLoader : ILoader
             DisqusShortName = "ignaciocalvo",
         });
         
-        return Task.FromResult(siteContent);
+        return Task.FromResult(siteContents);
     }
 }

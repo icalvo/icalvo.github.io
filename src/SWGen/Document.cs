@@ -44,7 +44,6 @@ public class Document<TMetadata> : Document where TMetadata : class, ICreatable<
     public Document(SiteContents siteContents, RelativePathEx file) : base(siteContents, file)
     {
         Metadata = TMetadata.Create();
-        SiteContents.Add(this);
     }
 
     public TMetadata Metadata
@@ -52,5 +51,4 @@ public class Document<TMetadata> : Document where TMetadata : class, ICreatable<
         get => (TMetadata)This.Metadata;
         set => This.Metadata = value;
     }
-
 }

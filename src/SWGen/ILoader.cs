@@ -2,6 +2,6 @@
 
 public interface ILoader
 {
-    Task<SiteContents> Load(SiteContents siteContent, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
+    Task<SiteContents> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default);
 }
