@@ -7,7 +7,7 @@ namespace SWGen;
 public static class StaticMainTool
 {
 
-    public static async Task<int> Process(string[] args, Config config, ILoader[] loaders, ISwgLogger logger)
+    public static async Task<int> Process(string[] args, GeneratorConfig[] config, ILoader[] loaders, ISwgLogger logger)
     {
         var cwd = AbsolutePathEx.Create(Directory.GetCurrentDirectory());
         switch (args)
@@ -41,22 +41,22 @@ public static class StaticMainTool
         return 0;
     }
 
-    private static async Task GuardedGenerate(Config config, ILoader[] loaders, AbsolutePathEx projectRoot,
-        AbsolutePathEx outputRoot, ISwgLogger Logger, CancellationToken ct)
+    private static async Task GuardedGenerate(GeneratorConfig[] config, ILoader[] loaders, AbsolutePathEx projectRoot,
+        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
-        Logger.Info($"Input: {projectRoot}");
-        Logger.Info($"Output: {outputRoot}");
+        logger.Info($"Input: {projectRoot}");
+        logger.Info($"Output: {outputRoot}");
         try
         {
-            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, Logger, ct);
+            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, logger, ct);
         }
         catch (Exception ex)
         {
-            Logger.Error(ex.ToStringDemystified());
+            logger.Error(ex.ToStringDemystified());
         }
     }
 
-    public static async Task Watch(Config cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket,
+    public static async Task Watch(GeneratorConfig[] cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket,
         AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         var lastAccessed = new Dictionary<string, DateTime>();
@@ -166,7 +166,7 @@ public static class StaticMainTool
         }
     }
 
-    public static async Task GenerateFolder(AbsolutePathEx projectRoot, bool isWatch, Config config, ILoader[] loaders,
+    public static async Task GenerateFolder(AbsolutePathEx projectRoot, bool isWatch, GeneratorConfig[] config, ILoader[] loaders,
         AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         var sw = Stopwatch.StartNew();
@@ -208,20 +208,20 @@ public static class StaticMainTool
         logger.Info($"Overall time: {sw.Elapsed}");
     }
 
-    private static async Task RunOnceGenerators(Config cfg, SiteContents siteContent, AbsolutePathEx projectRoot,
+    private static async Task RunOnceGenerators(GeneratorConfig[] cfg, SiteContents siteContent, AbsolutePathEx projectRoot,
         AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
-        foreach (var n in cfg.Generators.Where(n => n.Trigger is GeneratorTrigger.Once).Select(n => n.Generator))
+        foreach (var n in cfg.Where(n => n.Trigger is GeneratorTrigger.Once).Select(n => n.Generator))
         {
             await GenerateAux(n, siteContent, projectRoot, outputRoot, logger, ct);
         }
     }
 
-    private static async Task Generate(Config cfg, SiteContents siteContents, AbsolutePathEx projectRoot,
+    private static async Task Generate(GeneratorConfig[] cfg, SiteContents siteContents, AbsolutePathEx projectRoot,
         RelativePathEx inputFile, AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         siteContents.ContentAvailable = true;
-        GeneratorConfig? pick = cfg.Generators.FirstOrDefault(n => n.MatchesFile(projectRoot, inputFile));
+        GeneratorConfig? pick = cfg.FirstOrDefault(n => n.MatchesFile(projectRoot, inputFile));
         if (pick == null)
         {
             logger.Debug("Ignored");

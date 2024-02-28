@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-
-namespace SWGen;
+﻿namespace SWGen;
 
 public class Document : IDocument
 {

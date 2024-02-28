@@ -1,5 +1,4 @@
 ﻿using Markdig;
-using Markdig.Syntax;
 using RazorLight;
 using SWGen;
 
@@ -7,17 +6,17 @@ namespace CommandLine;
 
 public static class EngineExtensions
 {
-    public static Task<string> RenderWithoutLayout<TMetadata>(this IRazorLightEngine engine,
+    public static Task<string> CompileRenderWithoutLayout<TMetadata>(this IRazorLightEngine engine,
         AbsolutePathEx inputFile, Document<TMetadata> doc)
         where TMetadata : class, ICreatable<TMetadata> =>
-        engine.RenderEx(inputFile, doc, false);
+        engine.CompileRenderLayoutToggle(inputFile, doc, false);
 
-    public static Task<string> RenderWithLayout<TMetadata>(this IRazorLightEngine engine,
+    public static Task<string> CompileRenderWithLayout<TMetadata>(this IRazorLightEngine engine,
         AbsolutePathEx inputFile, Document<TMetadata> doc, string? layout)
         where TMetadata : class, ICreatable<TMetadata> =>
-        engine.RenderEx(inputFile, doc, true, layout);
+        engine.CompileRenderLayoutToggle(inputFile, doc, true, layout);
     
-    public static async Task<string> RenderEx<TMetadata>(
+    public static async Task<string> CompileRenderLayoutToggle<TMetadata>(
         this IRazorLightEngine engine,
         AbsolutePathEx inputFile,
         Document<TMetadata> doc,
@@ -37,7 +36,7 @@ public static class EngineExtensions
             }
             else
             {
-                throw new Exception("Cannot disable layout unless your template page class ILayoutToggle");
+                throw new Exception("Cannot disable layout unless your template page class implements ILayoutToggle");
             }
         }
 

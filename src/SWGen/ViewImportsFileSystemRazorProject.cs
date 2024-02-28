@@ -6,8 +6,7 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
 {
     private static readonly string[] DefaultImports = ["_ViewImports"];
     private readonly string[] _imports;
-    private readonly Dictionary<string, string> _generationContent = new();
-    private ISwgLogger _logger;
+    private readonly ISwgLogger _logger;
 
     public ViewImportsFileSystemRazorProject(string root, ISwgLogger logger) : base(root)
     {
@@ -33,16 +32,6 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
         _logger = logger;
     }
 
-    public override Task<RazorLightProjectItem> GetItemAsync(string templateKey)
-    {
-        if (_generationContent.TryGetValue(templateKey, out var content))
-        {
-            return Task.FromResult<RazorLightProjectItem>(new InMemoryRazorProjectItem(templateKey, content));
-        }
-
-        return base.GetItemAsync(templateKey);
-    }
-    
     public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
     {
         var imports = GetImports(templateKey).ToArray();
@@ -50,7 +39,7 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
         return Task.FromResult<IEnumerable<RazorLightProjectItem>>(imports);
     }
 
-    public IEnumerable<FileSystemRazorProjectItem> GetImports(string templateKey)
+    private IEnumerable<FileSystemRazorProjectItem> GetImports(string templateKey)
     {
         var filePath = AbsolutePathEx.Create(GetAbsoluteFilePathFromKey(templateKey));
 
@@ -63,11 +52,6 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
                 yield return new FileSystemRazorProjectItem(templateKey, new FileInfo(file.Normalized()));
             }
         }
-    }
-
-    public void RegisterContent(string key, string content)
-    {
-        _generationContent[key] = content;
     }
 }
 

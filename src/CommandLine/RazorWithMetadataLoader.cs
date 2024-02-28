@@ -41,7 +41,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
                 var doc = new Document<TMetadata>(siteContent, inputRelativeFile);
                 var fakeMetadata = doc.Metadata;
 
-                var content = await engine.RenderWithoutLayout(inputFile, doc);
+                var content = await engine.CompileRenderWithoutLayout(inputFile, doc);
 
                 doc.Content = content;
                 if (ReferenceEquals(fakeMetadata, doc.Metadata))

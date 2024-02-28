@@ -1,5 +1,4 @@
-﻿using RazorLight;
-using SWGen;
+﻿using SWGen;
 
 namespace CommandLine;
 
@@ -37,7 +36,7 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
                 layout = template.Layout;
             }
 
-            return await engine.RenderWithLayout(pageAbsolutePath, doc, layout);            
+            return await engine.CompileRenderWithLayout(pageAbsolutePath, doc, layout);            
         }
     }
 }

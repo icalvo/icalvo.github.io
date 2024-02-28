@@ -4,6 +4,8 @@ namespace CommandLine;
 
 public static class SiteConfig
 {
+    // Here we define the loaders that will be used to load the content of the site.
+    // Order is important. Each loader will be able to access metadata from the previous loaders.
     public static ILoader[] GetLoaders(IRazorEngineFactory razorEngineFactory) =>
     [
         new GlobalLoader(),
@@ -13,7 +15,7 @@ public static class SiteConfig
         new RazorWithMetadataLoader<Post>("posts", recursive:true, razorEngineFactory)
     ];
 
-    public static Config GetConfig(IRazorEngineFactory razorEngineFactory) => new (
+    public static GeneratorConfig[] GetConfig(IRazorEngineFactory razorEngineFactory) =>
     [
         // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
         new (new RazorGenerator<Page>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPage)),
@@ -22,7 +24,7 @@ public static class SiteConfig
         new (new RazorGenerator<Post>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPost)),
         new (new IndexPageGenerator(razorEngineFactory), new GeneratorTrigger.OnFile("index.cshtml")),
         new (new StaticFileGenerator(), new GeneratorTrigger.OnFilePredicate(IsStatic)),
-    ]);
+    ];
 
     private static bool IsPost(AbsolutePathEx projectRoot, RelativePathEx page)
     {

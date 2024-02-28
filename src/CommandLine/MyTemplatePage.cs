@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
-using RazorLight;
-using RazorLight.Internal;
+﻿using RazorLight;
 
 namespace CommandLine;
 
