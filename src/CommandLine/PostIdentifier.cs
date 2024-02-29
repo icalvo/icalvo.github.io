@@ -1,6 +1,7 @@
 ﻿namespace CommandLine;
 
-public enum PostIdentifiers
+public enum PostIdentifier
 {
+    None,
     PurchasedNotePerformer
 }

@@ -3,7 +3,7 @@
 @{
     Layout = "/_MainLayout.cshtml";
     var work = Model.Metadata;
-    var completeTitle = $"{Model.Title}, Op.&nbsp;{work.Opus}{work.OpusLetter}";
+    var completeTitle = work.CompleteTitle;
     RelativePathEx workDir = Model.OutputFile.Parent!;
     var workKey = Model.File.Directory.FileName;
 }

@@ -1,3 +1,7 @@
+@using static CommandLine.PostIdentifier
+@using static CommandLine.MusicWorkIdentifier
+@using static CommandLine.PageIdentifier
+
 @{
     Model.Metadata = 
         new Post
@@ -9,7 +13,7 @@
         };
 }
 <markdown>
-Since I've [started using Sibelius+Noteperformer](@(Model.LinkTo<Post>(d => d.Metadata.Id == PostIdentifiers.PurchasedNotePerformer))), I've been working on rearranging and making decent score editions of my past works, before moving on and composing new things. It's still work in progress but I've made some advances.
+Since I've [started using Sibelius+Noteperformer](@(Model.LinkTo<Post>(d => d.Id == PurchasedNotePerformer))), I've been working on rearranging and making decent score editions of my past works, before moving on and composing new things. It's still work in progress but I've made some advances.
 
-I've created a new page with the [complete list of my works](/music/). Right new all the music work pages are a bit empty, except for the first one I added: the [Waltz Miniature, Op.1](/music/works/waltz_miniature/). Please check the piece out!
+I've created a new page with the [complete list of my works](@Model.LinkTo<Page>(d => d.Id == MusicIndex)). Right new all the music work pages are a bit empty, except for the first one I added: the [Waltz Miniature, Op.1](@(Model.LinkTo<MusicWork>(d => d.Id == WaltzMiniature))). Please check the piece out!
 </markdown>

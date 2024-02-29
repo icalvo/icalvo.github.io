@@ -4,6 +4,7 @@ namespace CommandLine;
 
 public class Page : ITitled, ICreatable<Page>, ILink
 {
+    public PageIdentifier? Id { get; init; }
     public required string Title { get; init; }
     public required RelativePathEx Link { get; init; }
     public static Page Create()
