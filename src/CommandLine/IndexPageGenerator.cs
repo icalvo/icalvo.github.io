@@ -11,8 +11,8 @@ public class IndexPageGenerator : MultipleStringGenerator
         _razorEngineFactory = razorEngineFactory;
     }
 
-    protected override IEnumerable<(string, Func<Task<string>>)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
-        RelativePathEx page, ISwgLogger logger, CancellationToken ct)
+    protected override IEnumerable<(RelativePathEx, Func<Task<string>>)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
+        RelativePathEx inputFile, ISwgLogger logger, CancellationToken ct)
     {
         var engine = _razorEngineFactory.Create(projectRoot.Normalized());
         var batches = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published)
@@ -22,14 +22,14 @@ public class IndexPageGenerator : MultipleStringGenerator
             .Select(
                 (batch, i) =>
                 {
-                    return ((string, Func<Task<string>>))(LinkFor(i)!, Func);
+                    return ((RelativePathEx, Func<Task<string>>))(LinkFor(i)!, Func);
 
                     async Task<string> Func()
                     {
                         string? nextPageLink = LinkFor(i + 1);
                         string? prevPageLink = LinkFor(i - 1);
 
-                        var doc = new Document<IndexPage>(ctx, page)
+                        var doc = new Document<IndexPage>(ctx, inputFile)
                         {
                             Metadata = new IndexPage(
                                 batch.ToArray(),

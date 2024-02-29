@@ -23,6 +23,8 @@ public static class SiteConfig
         new (new RazorGenerator<MusicWork>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicWork)),
         new (new RazorGenerator<Post>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPost)),
         new (new IndexPageGenerator(razorEngineFactory), new GeneratorTrigger.OnFile("index.cshtml")),
+        new (new AtomGenerator(razorEngineFactory), new GeneratorTrigger.OnFile("atom.cshtml")),
+        new (new SiteMapGenerator(razorEngineFactory), new GeneratorTrigger.OnFile("sitemap.cshtml")),
         new (new StaticFileGenerator(), new GeneratorTrigger.OnFilePredicate(IsStatic)),
     ];
 

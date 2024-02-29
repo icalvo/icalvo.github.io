@@ -10,6 +10,5 @@ public static class DocumentExtensions
         if (doc != null) return doc.OutputFile.Url();
         document.SiteContents.DocsWithPendingLinks.Add(document);
         return null;
-
     }
 }

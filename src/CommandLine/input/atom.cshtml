@@ -1,0 +1,26 @@
+@inherits MyTemplatePage<SWGen.Document<IndexPage>>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[@Model.SiteInfo.Title]]></title>
+  <link href="@Model.SiteInfo.Url/atom.xml" rel="self"/>
+  <link href="@Model.SiteInfo.Url/"/>
+  <updated>@DateTime.UtcNow.ToString("O")</updated>
+  <id>@Model.SiteInfo.Url/</id>
+  <author>
+    <name><![CDATA[@Model.SiteInfo.Owner.Name]]></name>
+    <email><![CDATA[@Model.SiteInfo.Owner.Email]]></email>
+  </author>
+  <generator uri="https://github.com/icalvo">SWG</generator>
+
+  @foreach (var post in Model.Metadata.PostPage)
+  {
+    <entry>
+      <title type="html"><![CDATA[@post.Title?.CDataEscape()]]></title>
+      <link href="@post.CanonicalLink"/>
+      <updated>@DateTime.UtcNow.ToString("O")</updated>
+      <id>@post.CanonicalLink</id>
+      <content type="html"><![CDATA[@post.Title?.ExpandUrls(Model.SiteInfo.Url.AbsoluteUri).CDataEscape()]]></content>
+    </entry>
+  }
+</feed>

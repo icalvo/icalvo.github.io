@@ -16,4 +16,8 @@ public static class StringManipulation
             content,
             m => transform(m.Groups[1].Value));
     }
+    
+    public static string CDataEscape(this string content) => content;
+    
+    public static string ExpandUrls(this string content, string root) => content;
 }
