@@ -187,12 +187,6 @@ public static class StaticMainTool
         }
 
         var generateLogger = logger.BeginScope("Generation");
-        var onceLogger = generateLogger.BeginScope("Once");
-        {
-            await RunOnceGenerators(config, sc, projectRoot, outputRoot, onceLogger, ct);
-        }
-
-        var fileBasedLogger = generateLogger.BeginScope("FileBased");
         await Parallel.ForEachAsync(
             Directory.GetFiles(projectRoot.Normalized(), "*", new EnumerationOptions { RecurseSubdirectories = true })
                 .Select(AbsolutePathEx.Create),
@@ -200,22 +194,13 @@ public static class StaticMainTool
             async (filePath, token) =>
             {
                 var relative = filePath.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
-                var fileGeneratorLogger = fileBasedLogger.BeginScope(relative.Normalized());
+                var fileGeneratorLogger = generateLogger.BeginScope(relative.Normalized());
                 if (relative.Parts[0] is "bin" or "obj") return;
 
                 await Generate(config, sc, projectRoot, relative.Normalized(), outputRoot, fileGeneratorLogger, token);
             });
 
         logger.Info($"Overall time: {sw.Elapsed}");
-    }
-
-    private static async Task RunOnceGenerators(GeneratorConfig[] cfg, SiteContents siteContent, AbsolutePathEx projectRoot,
-        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
-    {
-        foreach (var n in cfg.Where(n => n.Trigger is GeneratorTrigger.Once).Select(n => n.Generator))
-        {
-            await GenerateAux(n, siteContent, projectRoot, outputRoot, logger, ct);
-        }
     }
 
     private static async Task Generate(GeneratorConfig[] cfg, SiteContents siteContents, AbsolutePathEx projectRoot,

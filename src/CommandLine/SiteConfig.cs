@@ -18,16 +18,20 @@ public static class SiteConfig
     public static GeneratorConfig[] GetConfig(IRazorEngineFactory razorEngineFactory) =>
     [
         // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
-        new (new RazorGenerator<Page>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPage)),
-        new (new RazorGenerator<Page>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicPage)),
-        new (new RazorGenerator<MusicWork>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsMusicWork)),
-        new (new RazorGenerator<Post>(razorEngineFactory), new GeneratorTrigger.OnFilePredicate(IsPost)),
-        new (new IndexPageGenerator(razorEngineFactory), new GeneratorTrigger.OnFilePredicate((_, t) => t.FileName == "index.cshtml")),
-        new (new AtomGenerator(razorEngineFactory), new GeneratorTrigger.OnFilePredicate((_, t) => t.FileName == "atom.cshtml")),
-        new (new SiteMapGenerator(razorEngineFactory), new GeneratorTrigger.OnFilePredicate((_, t) => t.FileName == "sitemap.cshtml")),
-        new (new StaticFileGenerator(), new GeneratorTrigger.OnFilePredicate(IsStatic)),
+        new (new RazorGenerator<Page>(razorEngineFactory), IsPage),
+        new (new RazorGenerator<Page>(razorEngineFactory), IsMusicPage),
+        new (new RazorGenerator<MusicWork>(razorEngineFactory), IsMusicWork),
+        new (new RazorGenerator<Post>(razorEngineFactory), IsPost),
+        new (new IndexPageGenerator(razorEngineFactory), IsFile("index.cshtml")),
+        new (new AtomGenerator(razorEngineFactory), IsFile("atom.cshtml")),
+        new (new SiteMapGenerator(razorEngineFactory), IsFile("sitemap.cshtml")),
+        new (new StaticFileGenerator(), IsStatic),
     ];
 
+    private static Func<AbsolutePathEx, RelativePathEx, bool> IsFile(string fileName)
+    {
+        return (_, t) => t.FileName == fileName;
+    }
     private static bool IsPost(AbsolutePathEx inputRoot, RelativePathEx inputFile)
     {
         if (!inputFile.Parts.Contains("posts")) return false;
