@@ -73,6 +73,11 @@ public static class SiteConfig
         var fileShouldBeExcluded =
             ext == ".cshtml" ||
             ext == ".markdown" ||
+            ext == ".dorico" ||
+            ext == ".sib" ||
+            ext == ".cwp" ||
+            ext == ".mus" ||
+            inputFile.FileName.Contains(".cwp") ||
             inputFile.Parts.Contains(".git");
             
         return !fileShouldBeExcluded;
