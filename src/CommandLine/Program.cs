@@ -9,9 +9,4 @@ var result = await StaticMainTool.Process(
     SiteConfig.GetLoaders(razorEngineFactory),
     rootLogger);
 
-foreach (var key in await razorEngineFactory.Project!.GetKnownKeysAsync())
-{
-    rootLogger.Log(LogLevel.Error, key);
-}
-
 return result;

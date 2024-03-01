@@ -7,7 +7,7 @@ public class GlobalLoader : ILoader
     public Task<SiteContents> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default)
     {
-        siteContents.Add(new SiteInfo
+        siteContents.Replace(new SiteInfo
         {
             Title = "Ignacio Calvo Blog",
             Owner = new Author

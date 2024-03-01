@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Components.Forms;
+using RazorLight.Razor;
 using SWGen;
 
 namespace CommandLine;
@@ -34,28 +35,47 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         await Parallel.ForEachAsync(
             files,
             ct,
-            ExtractMetadata);
-
-        foreach (IDocument doc in siteContents.DocsWithPendingLinks)
-        {
-            await ExtractMetadata(projectRoot / doc.File, ct);
-        }
+            LoadDocument);
 
         siteContents.Add(new PostConfig(DisableLiveRefresh:false));
         return siteContents;
 
-        async ValueTask ExtractMetadata(AbsolutePathEx inputFile, CancellationToken ct2)
+        async ValueTask LoadDocument(AbsolutePathEx inputFile, CancellationToken ct2)
         {
             var inputRelativeFile = inputFile.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
 
             var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized());
             var existing = siteContents.TryGetValues<Document<TMetadata>>().FirstOrDefault(doc => doc.File == inputRelativeFile);
-            var doc = existing ?? new Document<TMetadata>(siteContents, inputRelativeFile);
-            if (existing == null)
+
+            bool reprocessing;
+            Document<TMetadata> doc;
+            if (existing != null)
+            {
+                if (!existing.HasPendingLinks)
+                {
+                    fileLogger.Info("Already loaded");
+                    return;
+                }
+
+                doc = existing;
+                fileLogger.Debug("Reprocessing");
+                existing.PendingLinks.Clear();
+                reprocessing = true;
+            }
+            else
+            {
+                doc = new Document<TMetadata>(siteContents, inputRelativeFile);
                 siteContents.Add(doc);
+                reprocessing = false;
+            }
+
             var fakeMetadata = doc.Metadata;
 
-            var content = await engine.CompileRenderWithoutLayout(inputFile, doc);
+
+            var templateKey = inputFile.Normalized();
+            var content = await engine.CompileRenderWithoutLayout(templateKey, doc);
+            var imports = _razorEngineFactory.Project != null ? await _razorEngineFactory.Project.GetImportsAsync(templateKey) : Enumerable.Empty<RazorLightProjectItem>();
+            fileLogger.Debug($"Imports: {imports.Select(i => i.Key).StringJoin(", ")}");
 
             doc.Content = content;
             if (ReferenceEquals(fakeMetadata, doc.Metadata))
@@ -72,6 +92,16 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
                 var dirPart = inputFile.Parent.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
                 var fileName = inputFile.Parts[^1];
                 doc.OutputFile = dirPart.Combine(Path.ChangeExtension(fileName, ".html"));
+            }
+
+            if (reprocessing && doc.HasPendingLinks)
+            {
+                foreach (var pendingLink in doc.PendingLinks)
+                {
+                    fileLogger.Error($"Pending link: {pendingLink}");
+                }
+
+                throw new Exception("Reprocessing did not resolve all links");
             }
 
             fileLogger.Info("Loaded in {sw.ElapsedMilliseconds}ms");

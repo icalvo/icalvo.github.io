@@ -36,7 +36,7 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
                 layout = template.Layout;
             }
 
-            return await engine.CompileRenderWithLayout(pageAbsolutePath, doc, layout);            
+            return await engine.CompileRenderWithLayout(pageAbsolutePath.Normalized(), doc, layout);            
         }
     }
 }

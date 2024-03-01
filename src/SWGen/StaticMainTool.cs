@@ -172,10 +172,17 @@ public static class StaticMainTool
         var sw = Stopwatch.StartNew();
         var sc = new SiteContents();
 
-        var loadLogger = logger.BeginScope("Load");
+        var loadLogger1 = logger.BeginScope("Load (1st pass)");
         foreach (var loader in loaders)
         {
-            var loaderLogger = loadLogger.BeginScope(loader.ToString() ?? "");
+            var loaderLogger = loadLogger1.BeginScope(loader.ToString() ?? "");
+            sc = await loader.Load(sc, projectRoot, loaderLogger, ct);
+        }
+
+        var loadLogger2 = logger.BeginScope("Load (2nd pass)");
+        foreach (var loader in loaders)
+        {
+            var loaderLogger = loadLogger2.BeginScope(loader.ToString() ?? "");
             sc = await loader.Load(sc, projectRoot, loaderLogger, ct);
         }
 
@@ -236,6 +243,7 @@ public static class StaticMainTool
     private static async Task GenerateAux(Generator generator, SiteContents siteContents, AbsolutePathEx projectRoot,
         AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct, RelativePathEx? inputFile = null)
     {
+        var tempDir = Path.GetTempPath();
         inputFile ??= RelativePathEx.Self();
         var sw = Stopwatch.StartNew();
         var results = generator.Generate(siteContents, projectRoot, inputFile, logger, ct);
@@ -260,7 +268,7 @@ public static class StaticMainTool
                 }
             }
 
-            var tempFile = Guid.NewGuid().ToString("N") + ".tmp";
+            var tempFile = Path.Join(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".tmp");
 
             await using (var newFile = File.Create(tempFile))
             await using (var stream = await result.Content())

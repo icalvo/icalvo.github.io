@@ -43,7 +43,9 @@ public class PathExtTests
 
     [Theory]
     [ClassData(typeof(PathExTestData))]
+#pragma warning disable xUnit1026
     public void PathExTest(PathEx? path, string? drive, string[] parts, string? testCase)
+#pragma warning restore xUnit1026
     {
         Assert.NotNull(path);
         Assert.Equal(drive, (path as AbsolutePathEx)?.Drive);

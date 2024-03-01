@@ -35,7 +35,6 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
     public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
     {
         var imports = GetImports(templateKey).ToArray();
-        _logger.Debug($"Imports: {imports.Select(i => i.File).StringJoin(", ")}");
         return Task.FromResult<IEnumerable<RazorLightProjectItem>>(imports);
     }
 

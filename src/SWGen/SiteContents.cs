@@ -30,6 +30,20 @@ public record SiteContents
     }
 
     private readonly object _lock = new();
+    public void Replace<T>(T value)
+    {
+        lock (_lock)
+        {
+            var key = typeof(List<T>);
+            if (_container.GetService(key) != null)
+            {
+                _container.RemoveService(key);
+            }
+
+            _container.AddService(key, new List<T> { value });
+        }
+    }
+
     public void Add<T>(T value)
     {
         lock (_lock)
