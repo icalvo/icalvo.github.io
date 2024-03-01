@@ -21,6 +21,7 @@ public class Document : IDocument
     protected IDocument This => this;
     public string? Title => (This.Metadata as ITitled)?.Title;
     public string Author => (This.Metadata as IAuthored)?.Author ?? SiteInfo?.Owner.Name ?? "Anonymous";
+    public bool HasPendingLinks { get; set; }
     public Uri CanonicalLink => new (SiteInfo.Url, RootRelativeLink);
     
     public string Content

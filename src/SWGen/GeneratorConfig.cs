@@ -6,8 +6,6 @@ public record GeneratorConfig(Generator Generator, GeneratorTrigger Trigger)
         Trigger switch
         {
             GeneratorTrigger.Once => false,
-            GeneratorTrigger.OnFile t => t.FileName.Equals(page),
-            GeneratorTrigger.OnFileExt t => t.Extension == page.Extension,
             GeneratorTrigger.OnFilePredicate t => t.Predicate(projectRoot, page),
             _ => throw new ArgumentOutOfRangeException()
         };
