@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using System.ComponentModel.Design;
 
 namespace SWGen;
 
 public record SiteContents
 {
-    private readonly ServiceContainer _container = new();
+    private readonly Dictionary<Type, IList> _container = new();
     public bool ContentAvailable { get; set; }
 
     private readonly object _lock = new();
@@ -14,12 +13,7 @@ public record SiteContents
         lock (_lock)
         {
             var key = typeof(List<T>);
-            if (_container.GetService(key) != null)
-            {
-                _container.RemoveService(key);
-            }
-
-            _container.AddService(key, new List<T> { value });
+            _container[key] = new List<T> { value };
         }
     }
 
@@ -28,12 +22,13 @@ public record SiteContents
         lock (_lock)
         {
             var key = typeof(List<T>);
-            switch (_container.GetService(key))
+            if (_container.TryGetValue(key, out var list))
             {
-                case List<T> list: list.Add(value);
-                    break;
-                default: _container.AddService(key, new List<T> { value });
-                    break;
+                list.Add(value);
+            }
+            else
+            {
+                _container[key] = new List<T> { value };
             }
         }
     }
@@ -42,33 +37,15 @@ public record SiteContents
     {
         lock (_lock)
         {
-            var key = typeof(List<T>);
-            if (_container.GetService(key) == null)
-            {
-                return Enumerable.Empty<T>();
-            }
-
-            return GetValues<T>();
+            return
+                _container.TryGetValue(typeof(List<T>), out var list)
+                    ? ((IEnumerable<T>)list).ToArray()
+                    : Enumerable.Empty<T>();
         }
     }
 
     public T? TryGetValue<T>()
     {
-        return GetValues<T>().SingleOrDefault();
-    }
-
-    private IEnumerable<T> GetValues<T>()
-    {
-        lock (_lock)
-        {
-            var key = typeof(List<T>);
-            var service = _container.GetService(key);
-            if (service == null)
-            {
-                return Enumerable.Empty<T>();
-            }
-
-            return ((IEnumerable<T>)service).ToArray();
-        }
+        return TryGetValues<T>().SingleOrDefault();
     }
 }

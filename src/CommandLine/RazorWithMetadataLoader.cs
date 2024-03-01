@@ -104,7 +104,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
                 throw new Exception("Reprocessing did not resolve all links");
             }
 
-            fileLogger.Info("Loaded in {sw.ElapsedMilliseconds}ms");
+            fileLogger.Info($"Loaded in {sw.ElapsedMilliseconds}ms");
         }
     }
 }

@@ -33,6 +33,7 @@ public class Document : IDocument
             {
                 return _content!;
             }
+
             throw new Exception($"Content is not available for {File} while loading!");
         }
         set => _content = value;
