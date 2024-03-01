@@ -186,11 +186,6 @@ public static class StaticMainTool
             sc = await loader.Load(sc, projectRoot, loaderLogger, ct);
         }
 
-        foreach (var error in sc.Errors())
-        {
-            logger.Error($"{error.Path}: {error.Message}");
-        }
-
         var generateLogger = logger.BeginScope("Generation");
         var onceLogger = generateLogger.BeginScope("Once");
         {
@@ -207,7 +202,6 @@ public static class StaticMainTool
                 var relative = filePath.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
                 var fileGeneratorLogger = fileBasedLogger.BeginScope(relative.Normalized());
                 if (relative.Parts[0] is "bin" or "obj") return;
-                if (sc.TryGetError(relative.Normalized()) != null) return;
 
                 await Generate(config, sc, projectRoot, relative.Normalized(), outputRoot, fileGeneratorLogger, token);
             });
