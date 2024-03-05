@@ -1,20 +1,25 @@
 ﻿using SWGen;
+using SWGen.FileSystems;
 
 namespace CommandLine;
 
 public class IndexPageGenerator : MultipleStringGenerator
 {
     private readonly IRazorEngineFactory _razorEngineFactory;
+    private readonly IFileSystem _fs;
+    private const string FirstPageLink = "index.html";
+    private string OtherPageLink(int number) => $"page{number}.html";
 
-    public IndexPageGenerator(IRazorEngineFactory razorEngineFactory)
+    public IndexPageGenerator(IRazorEngineFactory razorEngineFactory, IFileSystem fs)
     {
         _razorEngineFactory = razorEngineFactory;
+        _fs = fs;
     }
 
     protected override IEnumerable<(RelativePathEx, Func<Task<string>>)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
         RelativePathEx inputFile, ISwgLogger logger, CancellationToken ct)
     {
-        var engine = _razorEngineFactory.Create(projectRoot.Normalized());
+        var engine = _razorEngineFactory.Create(projectRoot.Normalized(_fs));
         var batches = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published)
             .Batch(ctx.TryGetValue<SiteInfo>()?.PostPageSize ?? 5)
             .ToArray();
@@ -22,31 +27,26 @@ public class IndexPageGenerator : MultipleStringGenerator
             .Select(
                 (batch, i) =>
                 {
-                    return ((RelativePathEx, Func<Task<string>>))(LinkFor(i)!, Func);
+                    var pageNumber = i + 1;
+                    return ((RelativePathEx, Func<Task<string>>))(UnsafeLinkFor(pageNumber), Content);
 
-                    async Task<string> Func()
+                    async Task<string> Content()
                     {
-                        string? nextPageLink = LinkFor(i + 1);
-                        string? prevPageLink = LinkFor(i - 1);
-
-                        var doc = new Document<IndexPage>(ctx, inputFile)
+                        var doc = new Document<IndexPage>(ctx, inputFile, _fs)
                         {
+                            OutputFile = UnsafeLinkFor(pageNumber),
                             Metadata = new IndexPage(
                                 batch.ToArray(),
-                                nextPageLink is not null ? new PageInfo(i + 2, nextPageLink) : null,
-                                prevPageLink is not null ? new PageInfo(i, prevPageLink) : null,
-                                new PageInfo(i + 1, LinkFor(i + 1)!))
+                                IsValid(pageNumber + 1) ? new PageInfo(pageNumber + 1, UnsafeLinkFor(pageNumber + 1)) : null,
+                                IsValid(pageNumber - 1) ? new PageInfo(pageNumber - 1, UnsafeLinkFor(pageNumber - 1)) : null,
+                                new PageInfo(pageNumber, UnsafeLinkFor(pageNumber)))
                         };
-                        return await engine.CompileRenderAsync(doc.File.Normalized(), doc);
+                        return (await engine.CompileRenderAsync(doc.File.Normalized(_fs), doc)).Tidy();
                     }
 
-                    string? LinkFor(int idx)
-                    {
-                        if (idx < 0) return null;
-                        if (idx > batches.Length - 1) return null;
-                        if (idx == 0) return "index.html";
-                        return $"page{idx + 1}.html";
-                    }
+                    bool IsValid(int number) => number > 0 && number <= batches.Length;
+
+                    string UnsafeLinkFor(int number) => number == 1 ? FirstPageLink : OtherPageLink(number);
                 });
     }
 }

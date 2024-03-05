@@ -1,5 +1,6 @@
 ﻿using Slugify;
 using SWGen;
+using SWGen.FileSystems;
 
 namespace CommandLine;
 

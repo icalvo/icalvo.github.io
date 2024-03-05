@@ -1,4 +1,5 @@
-﻿@{
+﻿@using SWGen.FileSystems
+@{
     Layout = "/_MainLayout.cshtml";
     Model.Metadata = 
         new Page
@@ -41,14 +42,13 @@
                     (x, $"{x}", ".mid", "MIDI"),
                 ];
 
-                var workDirPath = (Model.SiteInfo.ProjectRoot / workDir).Normalized();
+                var workDirPath = (Model.SiteInfo.ProjectRoot / workDir);
                 var availableResources = (
                     from movementKey in movementKeys
                     from r in PossibleResources(movementKey)
                     let filePath = r.name + r.ext
-                    let r2 = Directory.EnumerateFiles(workDirPath, filePath, SearchOption.AllDirectories).FirstOrDefault()
-                    where r2 != null                        
-                    let absPath = AbsolutePathEx.Create(r2)
+                    let absPath = Model.Fs.Directory.GetFiles(workDirPath, filePath, new EnumerationOptions { RecurseSubdirectories = true }).FirstOrDefault()
+                    where absPath != null                        
                     let url = absPath.RelativeTo(Model.SiteInfo.ProjectRoot)!.Url()
                     select new { r.key, r.name, r.ext, r.desc, url }).ToArray();
 

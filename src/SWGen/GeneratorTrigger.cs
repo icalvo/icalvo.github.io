@@ -1,4 +1,6 @@
-﻿namespace SWGen;
+﻿using SWGen.FileSystems;
+
+namespace SWGen;
 
 public abstract record GeneratorTrigger
 {

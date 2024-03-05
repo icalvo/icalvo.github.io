@@ -1,4 +1,4 @@
-﻿namespace SWGen;
+﻿namespace SWGen.FileSystems;
 
 public class RelativePathEx : PathEx
 {
@@ -9,8 +9,6 @@ public class RelativePathEx : PathEx
     public new static RelativePathEx Create(string rawPath) =>
         PathEx.Create(rawPath) as RelativePathEx
         ?? throw new ArgumentException("Path must be relative", nameof(rawPath));
-
-    public override PathEx ToAbsolute() => Create(Environment.CurrentDirectory) / this;
 
     private static string[] LoadParts(string[] parts) =>
         parts.Aggregate(
@@ -27,7 +25,6 @@ public class RelativePathEx : PathEx
                 };
             });
 
-    public override bool IsAbsolute => false;
     public override RelativePathEx? Parent => Parts.Length == 0 ? null : new (Parts[..^1]);
     public bool IsSelf => Parts.Length == 0;
 
@@ -37,6 +34,10 @@ public class RelativePathEx : PathEx
     }
 
     public override RelativePathEx Combine(RelativePathEx right) => new(Parts.Concat(right.Parts).ToArray());
+    public virtual string Normalized(IFileSystem fs)
+    {
+        return fs.Path.NormalizeFolderSeparator(this);
+    }
 
     public Uri Url() =>new("/" + Normalized('/'), UriKind.Relative);
 

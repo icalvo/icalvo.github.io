@@ -21,7 +21,7 @@
     var availableResources = (
         from r in PossibleResources(Model.MovementKey)
         let absPath = Model.ProjectRoot / Model.WorkDir / (r.name + r.ext)
-        where File.Exists(absPath.Normalized())
+        where Model.Fs.File.ExistsAsync(absPath).Result
         let url = (Model.WorkDir / (r.name + r.ext)).Url()
         let icon = Icon(r.ext)
         select (r.key, r.name, r.ext, r.desc, url, icon)).ToArray();

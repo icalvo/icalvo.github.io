@@ -1,12 +1,15 @@
-﻿namespace SWGen;
+﻿using SWGen.FileSystems;
+
+namespace SWGen;
 
 public class Document : IDocument
 {
     private string? _content;
 
-    public Document(SiteContents siteContents, RelativePathEx file)
+    public Document(SiteContents siteContents, RelativePathEx file, IFileSystem fs)
     {
         File = file;
+        Fs = fs;
         OutputFile = RelativePathEx.Create("NOOUTPUT!!");
         SiteContents = siteContents;
         ((IDocument)this).Metadata = new object();
@@ -40,11 +43,13 @@ public class Document : IDocument
     }
 
     public string Summary => Content.UntilLine("<!--more-->");
+
+    public IFileSystem Fs { get; }
 }
 
 public class Document<TMetadata> : Document where TMetadata : class, ICreatable<TMetadata>
 {
-    public Document(SiteContents siteContents, RelativePathEx file) : base(siteContents, file)
+    public Document(SiteContents siteContents, RelativePathEx file, IFileSystem fs) : base(siteContents, file, fs)
     {
         Metadata = TMetadata.Create();
     }

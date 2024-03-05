@@ -1,14 +1,17 @@
 ﻿using SWGen;
+using SWGen.FileSystems;
 
 namespace CommandLine;
 
 public class AtomGenerator : StringGenerator
 {
     private readonly IRazorEngineFactory _razorEngineFactory;
+    private readonly IFileSystem _fs;
 
-    public AtomGenerator(IRazorEngineFactory razorEngineFactory)
+    public AtomGenerator(IRazorEngineFactory razorEngineFactory, IFileSystem fs)
     {
         _razorEngineFactory = razorEngineFactory;
+        _fs = fs;
     }
 
     protected override (RelativePathEx, Func<Task<string>>) GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
@@ -18,10 +21,10 @@ public class AtomGenerator : StringGenerator
 
         async Task<string> Func()
         {
-            var engine = _razorEngineFactory.Create(projectRoot.Normalized());
+            var engine = _razorEngineFactory.Create(projectRoot.Normalized(_fs));
             var posts = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published);
         
-            var doc = new Document<IndexPage>(ctx, page)
+            var doc = new Document<IndexPage>(ctx, page, _fs)
             {
                 Metadata = new IndexPage(
                     posts.ToArray(),
@@ -29,7 +32,7 @@ public class AtomGenerator : StringGenerator
                     null,
                     new PageInfo(0, "---"))
             };
-            return await engine.CompileRenderAsync(doc.File.Normalized(), doc);
+            return await engine.CompileRenderAsync(doc.File.Normalized(_fs), doc);
         }
     }
 }

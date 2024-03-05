@@ -1,4 +1,4 @@
-﻿namespace SWGen;
+﻿namespace SWGen.FileSystems;
 
 public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
 {
@@ -14,8 +14,6 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
         PathEx.Create(rawPath) as AbsolutePathEx
         ?? throw new ArgumentException("Path must be absolute", nameof(rawPath));
 
-    public override PathEx ToAbsolute() => this;
-
     private static string[] LoadParts(string[] parts) =>
         parts.Aggregate(
             Array.Empty<string>(),
@@ -30,8 +28,13 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
                 };
             });
 
-    public override bool IsAbsolute => true;
     public override AbsolutePathEx Parent => IsRoot ? this : new (Drive, Parts[..^1]);
+
+    public virtual string Normalized(IFileSystem fs)
+    {
+        return fs.Path.NormalizeFolderSeparator(this);
+    }
+
     public override string Normalized(char dirSeparator)
     {
         return $"{Drive}{dirSeparator}{string.Join(dirSeparator, Parts)}";

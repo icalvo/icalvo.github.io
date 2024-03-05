@@ -42,7 +42,7 @@ For archaeological purposes, you can listen the original piece, which was record
 @{ await IncludeAsync(
     "/music/_AudioPlayer.cshtml",
     new AudioInfo { WorkDir = Model.OutputFile.Parent!, MovementKey = "waltz_miniature_original.mp3",
-      ProjectRoot = Model.SiteInfo.ProjectRoot }); }
+      ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs }); }
 
 I managed to preserve most of the structural, thematic and harmonic material of the original. There were, however, a number of problems that required solution:
 

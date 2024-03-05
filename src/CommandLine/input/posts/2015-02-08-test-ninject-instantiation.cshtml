@@ -1,5 +1,3 @@
-@using System.IO
-
 @{
     Model.Metadata = 
         new Post
@@ -9,7 +7,8 @@
             Tags = "ninject,mstest,mvc,controller,dependency,injection".Split(','),
             Categories = ["software"],
         };
-    var md = await File.ReadAllTextAsync("input/posts/2015-02-08-test-ninject-instantiation.markdown");
+    var md = await Model.Fs.File.ReadAllTextAsync(
+        Model.SiteInfo.ProjectRoot / "posts/2015-02-08-test-ninject-instantiation.markdown");
 }
 <markdown>
     @Raw(md)

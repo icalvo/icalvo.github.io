@@ -1,5 +1,4 @@
-@using System.IO
-
+@using SWGen.FileSystems
 @{
     Model.Metadata = 
         new Post
@@ -9,7 +8,8 @@
             Tags = "code,csharp,testing,webapi,mvc".Split(','),
             Categories = ["software"]
         };
-    var md = await File.ReadAllTextAsync("input/posts/2013-12-05-testing-web-api-mvc-routes.markdown");
+    var md = await Model.Fs.File.ReadAllTextAsync(
+        Model.SiteInfo.ProjectRoot / "posts/2013-12-05-testing-web-api-mvc-routes.markdown");
 }
 <markdown>
 @Raw(md)

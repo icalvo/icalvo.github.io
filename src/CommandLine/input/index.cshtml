@@ -4,7 +4,6 @@
     Layout = "/_MainLayout.cshtml";
 }
 <div class="home">
-
   <ul class="post-list">
     @foreach (var post in Model.Metadata.PostPage)
     {
@@ -23,7 +22,7 @@
   <div class="pager">
       <ul class="pagination">
           @if (Model.Metadata.PrevPage != null) {
-              <li><a href="@Model.Metadata.PrevPage.Link" class="previous-page">@Model.Metadata.PrevPage.Number</a></li>
+              <li><a href="@Model.Metadata.PrevPage.Link" class="previous-page">@Model.Metadata.PrevPage.Number&lt;</a></li>
           }
           else
           {
@@ -31,7 +30,7 @@
           }
           <li><div class="current-page">@Model.Metadata.CurrentPage.Number</div></li>
           @if (Model.Metadata.NextPage != null) {
-              <li><a href="@Model.Metadata.NextPage.Link" class="next-page">@Model.Metadata.NextPage.Number</a></li>
+              <li><a href="@Model.Metadata.NextPage.Link" class="next-page">&gt;@Model.Metadata.NextPage.Number</a></li>
           }
           else
           {

@@ -4,15 +4,18 @@ namespace SWGen;
 
 public class ConsoleSwgLogger : ISwgLogger
 {
+    private readonly bool _enableDebug;
     private readonly string[] _scopes;
 
-    public ConsoleSwgLogger(params string[] scopes)
+    public ConsoleSwgLogger(bool enableDebug, params string[] scopes)
     {
+        _enableDebug = enableDebug;
         _scopes = scopes;
     }
 
     public void Log(LogLevel logLevel, string message)
     {
+        if (logLevel == LogLevel.Debug && !_enableDebug) return;
         var color = logLevel switch
         {
             LogLevel.Information => ConsoleColor.Green,
@@ -46,5 +49,5 @@ public class ConsoleSwgLogger : ISwgLogger
         Console.ForegroundColor = oldColor;
     }
 
-    ISwgLogger ISwgLogger.BeginScope(string scopeName) => new ConsoleSwgLogger([.._scopes, scopeName]);
+    ISwgLogger ISwgLogger.BeginScope(string scopeName) => new ConsoleSwgLogger(_enableDebug, [.._scopes, scopeName]);
 }

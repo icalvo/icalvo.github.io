@@ -1,4 +1,6 @@
-﻿using RazorLight.Razor;
+﻿using System.IO;
+using RazorLight.Razor;
+using SWGen.FileSystems;
 
 namespace SWGen;
 
@@ -6,39 +8,35 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
 {
     private static readonly string[] DefaultImports = ["_ViewImports"];
     private readonly string[] _imports;
-    private readonly ISwgLogger _logger;
-
-    public ViewImportsFileSystemRazorProject(string root, ISwgLogger logger) : base(root)
+    private readonly IFileSystem _fs;
+    public ViewImportsFileSystemRazorProject(string root, IFileSystem fs) : base(root)
     {
-        _logger = logger;
+        _fs = fs;
         _imports = DefaultImports;
     }
 
-    public ViewImportsFileSystemRazorProject(string root, string extension, ISwgLogger logger) : base(root, extension)
+    public ViewImportsFileSystemRazorProject(string root, string extension, IFileSystem fs) : base(root, extension)
     {
-        _logger = logger;
+        _fs = fs;
         _imports = DefaultImports;
     }
 
-    public ViewImportsFileSystemRazorProject(string root, string[] imports, ISwgLogger logger) : base(root)
+    public ViewImportsFileSystemRazorProject(string root, string[] imports, IFileSystem fs) : base(root)
     {
         _imports = imports;
-        _logger = logger;
+        _fs = fs;
     }
 
-    public ViewImportsFileSystemRazorProject(string root, string extension, string[] imports, ISwgLogger logger) : base(root, extension)
+    public ViewImportsFileSystemRazorProject(string root, string extension, string[] imports, IFileSystem fs) : base(root, extension)
     {
         _imports = imports;
-        _logger = logger;
+        _fs = fs;
     }
 
-    public override Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
-    {
-        var imports = GetImports(templateKey).ToArray();
-        return Task.FromResult<IEnumerable<RazorLightProjectItem>>(imports);
-    }
+    public override async Task<IEnumerable<RazorLightProjectItem>> GetImportsAsync(string templateKey)
+        => await GetImports(templateKey).ToArrayAsync();
 
-    private IEnumerable<FileSystemRazorProjectItem> GetImports(string templateKey)
+    private async IAsyncEnumerable<FileSystemRazorProjectItem> GetImports(string templateKey)
     {
         var filePath = AbsolutePathEx.Create(GetAbsoluteFilePathFromKey(templateKey));
 
@@ -46,9 +44,9 @@ public class ViewImportsFileSystemRazorProject : FileSystemRazorProject
 
         foreach (var import in _imports)
         {
-            if (startDirPath.GetFirstExistingFileInParentDirs(import + Extension) is { } file)
+            if (await startDirPath.GetFirstExistingFileInParentDirs(_fs, import + Extension) is { } file)
             {
-                yield return new FileSystemRazorProjectItem(templateKey, new FileInfo(file.Normalized()));
+                yield return new FileSystemRazorProjectItem(templateKey, new FileInfo(file.Normalized(_fs)));
             }
         }
     }
@@ -69,11 +67,12 @@ public static class EnumerableHelpers
 }
 public static class AbsoluteFilePathExExtensions
 {
-    public static AbsolutePathEx? GetFirstExistingFileInParentDirs(this AbsolutePathEx startDirPath, string fileName)
+    public static ValueTask<AbsolutePathEx?> GetFirstExistingFileInParentDirs(this AbsolutePathEx startDirPath, IFileSystem fs, string fileName)
     {
         return startDirPath.Unfold(x => x.IsRoot, x => x.Parent)
             .Select(dirPath => dirPath / fileName)
-            .FirstOrDefault(x => File.Exists(x.Normalized()));
+            .ToAsyncEnumerable()
+            .FirstOrDefaultAwaitAsync(async x => await fs.File.ExistsAsync(x));
     }
 
 }

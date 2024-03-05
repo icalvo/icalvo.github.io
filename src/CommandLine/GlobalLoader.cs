@@ -1,4 +1,5 @@
 ﻿using SWGen;
+using SWGen.FileSystems;
 
 namespace CommandLine;
 
@@ -21,13 +22,12 @@ public class GlobalLoader : ILoader
             GoogleAnalytics = "UA-1520724-2",
             SocialLinks = new()
             {
-                { "twitter", "ignaciocalvo" },
-                { "github", " icalvo" },
-                { "linkedin", "ignaciocalvomartinez" },
-                { "youtube", "icalvo" },
-                { "instagram", "ignaciocalvo2" },
-                { "facebook", "ignacio.calvomartinez" },
-                { "rss", "RSS feed" },
+                { "twitter", "https://twitter.com/ignaciocalvo" },
+                { "github", "https://github.com/icalvo" },
+                { "linkedin", "https://www.linkedin.com/in/ignaciocalvomartinez" },
+                { "youtube", "https://www.youtube.com/icalvo" },
+                { "instagram", "https://www.instagram.com/ignaciocalvo2" },
+                { "facebook", "https://www.facebook.com/ignacio.calvomartinez" },
             },
             BaseUrl = "",
             Url = new Uri("https://ignaciocalvo.com"),

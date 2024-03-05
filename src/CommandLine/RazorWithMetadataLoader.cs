@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using RazorLight.Razor;
 using SWGen;
+using SWGen.FileSystems;
 
 namespace CommandLine;
 
@@ -10,12 +11,14 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
     private readonly RelativePathEx _contentDir;
     private readonly bool _recursive;
     private readonly IRazorEngineFactory _razorEngineFactory;
+    private readonly IFileSystem _fs;
     private const string RazorExtension = ".cshtml";
-    public RazorWithMetadataLoader(RelativePathEx contentDir, bool recursive, IRazorEngineFactory razorEngineFactory)
+    public RazorWithMetadataLoader(RelativePathEx contentDir, bool recursive, IRazorEngineFactory razorEngineFactory, IFileSystem fs)
     {
         _contentDir = contentDir;
         _recursive = recursive;
         _razorEngineFactory = razorEngineFactory;
+        _fs = fs;
     }
 
     public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", {_recursive})";
@@ -26,11 +29,11 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         var sw = Stopwatch.StartNew();
         var postsPath = projectRoot / _contentDir;
 
-        var files = Directory.GetFiles(postsPath.Normalized(), $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
+        var files = Directory.GetFiles(postsPath.Normalized(_fs), $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
             .Select(AbsolutePathEx.Create)
             .Where(f => !f.FileName.StartsWith('_'));
         
-        var engine = _razorEngineFactory.Create(projectRoot.Normalized());
+        var engine = _razorEngineFactory.Create(projectRoot.Normalized(_fs));
 
         await Parallel.ForEachAsync(
             files,
@@ -44,7 +47,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         {
             var inputRelativeFile = inputFile.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
 
-            var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized());
+            var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized(_fs));
             var existing = siteContents.TryGetValues<Document<TMetadata>>().FirstOrDefault(doc => doc.File == inputRelativeFile);
 
             bool reprocessing;
@@ -64,7 +67,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
             }
             else
             {
-                doc = new Document<TMetadata>(siteContents, inputRelativeFile);
+                doc = new Document<TMetadata>(siteContents, inputRelativeFile, _fs);
                 siteContents.Add(doc);
                 reprocessing = false;
             }
@@ -72,7 +75,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
             var fakeMetadata = doc.Metadata;
 
 
-            var templateKey = inputFile.Normalized();
+            var templateKey = inputFile.Normalized(_fs);
             var content = await engine.CompileRenderWithoutLayout(templateKey, doc);
             var imports = _razorEngineFactory.Project != null ? await _razorEngineFactory.Project.GetImportsAsync(templateKey) : Enumerable.Empty<RazorLightProjectItem>();
             fileLogger.Debug($"Imports: {imports.Select(i => i.Key).StringJoin(", ")}");

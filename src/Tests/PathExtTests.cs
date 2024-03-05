@@ -1,4 +1,5 @@
 using SWGen;
+using SWGen.FileSystems;
 
 namespace Tests;
 

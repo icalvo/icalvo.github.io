@@ -1,9 +1,13 @@
 ﻿using CommandLine;
 using SWGen;
+using SWGen.FileSystems;
 
-var rootLogger = new ConsoleSwgLogger();
-var razorEngineFactory = new RazorEngineFactory(rootLogger);
-var result = await StaticMainTool.Process(
+var rootLogger = new ConsoleSwgLogger(enableDebug: false);
+var fs = new FileSystem(new LocalFileSystem());
+var razorEngineFactory = new RazorEngineFactory(fs);
+
+var smt = new StaticMainTool(fs, new ApplicationService(fs));
+var result = await smt.Process(
     args,
     GetConfig(),
     GetLoaders(),
@@ -16,23 +20,23 @@ return result;
 ILoader[] GetLoaders() =>
 [
     new GlobalLoader(),
-    new RazorWithMetadataLoader<Page>("pages", recursive:true, razorEngineFactory),
-    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, razorEngineFactory),
-    new RazorWithMetadataLoader<Page>("music", recursive:false, razorEngineFactory),
-    new RazorWithMetadataLoader<Post>("posts", recursive:true, razorEngineFactory)
+    new RazorWithMetadataLoader<Page>("pages", recursive:true, razorEngineFactory, fs),
+    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, razorEngineFactory, fs),
+    new RazorWithMetadataLoader<Page>("music", recursive:false, razorEngineFactory, fs),
+    new RazorWithMetadataLoader<Post>("posts", recursive:true, razorEngineFactory, fs)
 ];
 
 GeneratorConfig[] GetConfig() =>
 [
     // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
-    new (new RazorGenerator<Page>(razorEngineFactory), IsPage),
-    new (new RazorGenerator<Page>(razorEngineFactory), IsMusicPage),
-    new (new RazorGenerator<MusicWork>(razorEngineFactory), IsMusicWork),
-    new (new RazorGenerator<Post>(razorEngineFactory), IsPost),
-    new (new IndexPageGenerator(razorEngineFactory), IsFile("index.cshtml")),
-    new (new AtomGenerator(razorEngineFactory), IsFile("atom.cshtml")),
-    new (new SiteMapGenerator(razorEngineFactory), IsFile("sitemap.cshtml")),
-    new (new StaticFileGenerator(), IsStatic),
+    new (new RazorGenerator<Page>(razorEngineFactory, fs), IsPage),
+    new (new RazorGenerator<Page>(razorEngineFactory, fs), IsMusicPage),
+    new (new RazorGenerator<MusicWork>(razorEngineFactory, fs), IsMusicWork),
+    new (new RazorGenerator<Post>(razorEngineFactory, fs), IsPost),
+    new (new IndexPageGenerator(razorEngineFactory, fs), IsFile("index.cshtml")),
+    new (new AtomGenerator(razorEngineFactory, fs), IsFile("atom.cshtml")),
+    new (new SiteMapGenerator(razorEngineFactory, fs), IsFile("sitemap.cshtml")),
+    new (new StaticFileGenerator(fs), IsStatic),
 ];
 
 static Func<AbsolutePathEx, RelativePathEx, bool> IsFile(string fileName)

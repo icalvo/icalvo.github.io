@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using System.IO;
 
-namespace SWGen;
+namespace SWGen.FileSystems;
 
 public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
 {
@@ -9,7 +10,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
         Parts = parts;
     }
 
-    public static PathEx Create(string rawPath)
+    protected static PathEx Create(string rawPath)
     {
         if (string.IsNullOrWhiteSpace(rawPath))
         {
@@ -27,14 +28,8 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
         return (d is [var l, ':'] && char.IsLetter(l)) || d == "";
     }
 
-
-    public abstract PathEx ToAbsolute();
-
-    public abstract bool IsAbsolute { get; }
-
     public abstract PathEx? Parent { get; }
 
-    public string Normalized() => Normalized(Path.DirectorySeparatorChar);
     public abstract string Normalized(char dirSeparator);
     public abstract PathEx Combine(RelativePathEx right);
 
@@ -45,7 +40,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
 
     public override string ToString()
     {
-        return Normalized();
+        return Normalized('/');
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -59,7 +54,6 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
     public string Extension => Path.GetExtension(Parts[^1]);
     public string[] Parts { get; init; }
     public static implicit operator PathEx(string rawPath) => Create(rawPath);
-    public static explicit operator string(PathEx path) => path.Normalized();
     public static PathEx operator /(PathEx left, RelativePathEx right) => left.Combine(right);
     public static PathEx operator /(PathEx left, string right) => left.Combine(right);
 

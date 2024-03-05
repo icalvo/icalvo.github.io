@@ -1,4 +1,5 @@
-﻿@inherits TemplatePage<AudioInfo>
+﻿@using SWGen.FileSystems
+@inherits TemplatePage<AudioInfo>
 
 @{
     RelativePathEx workDir = Model.WorkDir;
@@ -8,7 +9,7 @@
 }
 
 
-@if (File.Exists(absPath.Normalized()))
+@if (await Model.Fs.File.ExistsAsync(absPath))
 {
 <div class="player">
     <audio>
