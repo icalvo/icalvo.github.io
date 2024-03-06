@@ -26,7 +26,6 @@ if ($gitStatusOutput[-1] -like "*nothing to commit*") {
     Write-Host "No differences detected, nothing to do."
     exit
 }
-.\generateBackground.ps1 $work
 
 $answer = Read-Host "Want to go ahead an commit/push everything?"
 
