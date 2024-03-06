@@ -7,9 +7,7 @@
             Tags = "ninject,mstest,mvc,controller,dependency,injection".Split(','),
             Categories = ["software"],
         };
-    var md = await Model.Fs.File.ReadAllTextAsync(
-        Model.SiteInfo.ProjectRoot / "posts/2015-02-08-test-ninject-instantiation.markdown");
 }
 <markdown>
-    @Raw(md)
+    @Raw(await Model.ReadAssociatedFileAsync(".markdown"))
 </markdown>

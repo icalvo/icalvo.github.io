@@ -483,3 +483,21 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 /src/CommandLine/_public/
+
+# My source music files
+tools/config.ps1
+*.cwp
+*.cwp.*
+*.dorico
+*.mxl
+*.musicxml
+*.mscz
+*.sib
+*.mus
+*.wrk
+*.cpr
+**/works/**/*.mp4
+**/works/**/*.omf
+**/works/**/*.wav
+**/works/**/*.xml
+**/works/**/*.markdown

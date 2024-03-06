@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using SWGen.FileSystems;
 
 namespace Tests;
@@ -30,15 +31,18 @@ public class PathExtTests
             Add(root / "dir21" / "dir22" / "..", "C:", ["dir21"]);
             Add(AbsolutePathEx.Create(@"C:\dir10\dir11\dir12").RelativeTo(@"C:\dir10\"), null, ["dir11", "dir12"]);            
             Add(AbsolutePathEx.Create(@"C:\dir10\").RelativeTo(@"C:\dir10\"), null, []);
+            
+            Add(RelativePathEx.Create("dir20/index.txt").ReplaceExtension(".html"), null, ["dir20", "index.html"]);
+            Add(RelativePathEx.Create("index.txt").ReplaceExtension(".html"), null, ["index.html"]);
         }
 
-        private void Add(string a, string? b, string[] c)
+        private void Add(string a, string? b, string[] c, [CallerArgumentExpression(nameof(a))] string? expr = null)
         {
-            Add(a, b, c, a);
+            base.Add(a, b, c, expr);
         }
-        private void Add(PathEx? a, string? b, string[] c)
+        private new void Add(PathEx? a, string? b, string[] c, [CallerArgumentExpression(nameof(a))] string? expr = null)
         {
-            Add(a, b, c, a?.ToString());
+            base.Add(a, b, c, expr);
         }
     }
 

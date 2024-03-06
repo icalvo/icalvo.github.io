@@ -44,4 +44,8 @@ public class RelativePathEx : PathEx
     public static implicit operator RelativePathEx(string rawPath) => Create(rawPath);
     public static RelativePathEx operator /(RelativePathEx left, string right) => left.Combine(right);
 
+    public RelativePathEx ReplaceExtension(string extension)
+    {
+        return new RelativePathEx([..Parts[..^1], FileNameWithoutExtension + extension]);
+    }
 }

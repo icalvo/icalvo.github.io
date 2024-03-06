@@ -48,7 +48,7 @@ try {
     }
     $target = Resolve-Path $unresolved
 
-    Invoke-Call { robocopy $source $target /MIR /XF *.wav /XF *.sib /XF *.dorico /XF *.xml } -MaxValidExitCode 8
+    Invoke-Call { robocopy $source $target /MIR /XF *.wav /XF *.sib /XF *.dorico /XF *.xml /XF *.markdown } -MaxValidExitCode 8
     Invoke-Call { git add $target }
     $gitStatusOutput = Invoke-Call { git status -s -uall -- $target }
     $actionOnIndex = Get-GitAction "index.markdown" $gitStatusOutput

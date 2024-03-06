@@ -16,6 +16,11 @@ public class Document : IDocument
     }
 
     public RelativePathEx File { get; }
+
+    public AbsolutePathEx AbsoluteFile => SiteInfo.ProjectRoot / File;
+
+    public Task<string> ReadAssociatedFileAsync(string extension)
+        => Fs.File.ReadAllTextAsync(AbsoluteFile.ReplaceExtension(extension));
     public RelativePathEx OutputFile { get; set; }
     public Uri RootRelativeLink => OutputFile.Url();
     public SiteContents SiteContents { get; init; }

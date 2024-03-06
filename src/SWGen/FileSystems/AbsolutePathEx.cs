@@ -63,7 +63,12 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
         if (root.Zip(this).Count(x => x.First == x.Second) != root.Count()) return null;
         return new RelativePathEx(this.SkipWhile((p, i) => i < root.Count() && root.Parts[i] == p).ToArray());
     }
-        
+
+    public AbsolutePathEx ReplaceExtension(string extension)
+    {
+        return new AbsolutePathEx(Drive, [..Parts[..^1], FileNameWithoutExtension + extension]);
+    }
+
     public static implicit operator AbsolutePathEx(string rawPath) => Create(rawPath);
     public static AbsolutePathEx operator /(AbsolutePathEx left, RelativePathEx right) => left.Combine(right);
     public static AbsolutePathEx operator /(AbsolutePathEx left, string right) => left.Combine(right);

@@ -53,6 +53,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
     public PathEx Directory => Parent!;
     public string Extension => Path.GetExtension(Parts[^1]);
     public string[] Parts { get; init; }
+
     public static implicit operator PathEx(string rawPath) => Create(rawPath);
     public static PathEx operator /(PathEx left, RelativePathEx right) => left.Combine(right);
     public static PathEx operator /(PathEx left, string right) => left.Combine(right);
