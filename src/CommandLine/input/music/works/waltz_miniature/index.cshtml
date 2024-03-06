@@ -40,7 +40,7 @@ This is a piece I composed when I was 16, with an ancient software called [Adlib
 For archaeological purposes, you can listen the original piece, which was recorded in a cassette and converted later to a digital format (so the quality is very low).
 
 @{ await IncludeAsync(
-    "/music/_AudioPlayer.cshtml",
+    "music/_AudioPlayer.cshtml",
     new AudioInfo { WorkDir = Model.OutputFile.Parent!, MovementKey = "waltz_miniature_original.mp3",
       ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs }); }
 

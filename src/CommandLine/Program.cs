@@ -1,41 +1,41 @@
 ﻿using CommandLine;
+using RazorLight;
+using RazorLight.Razor;
 using SWGen;
 using SWGen.FileSystems;
 
 var rootLogger = new ConsoleSwgLogger(enableDebug: false);
-var fs = new FileSystem(new LocalFileSystem());
-var razorEngineFactory = new RazorEngineFactory(fs);
 
-var smt = new StaticMainTool(fs, new ApplicationService(fs));
+var smt = new StaticMainTool();
 var result = await smt.Process(
     args,
-    GetConfig(),
-    GetLoaders(),
+    GetConfig,
+    GetLoaders,
     rootLogger);
 
 return result;
 
 // Here we define the loaders that will be used to load the content of the site.
 // Order is important. Each loader will be able to access metadata from the previous loaders.
-ILoader[] GetLoaders() =>
+static ILoader[] GetLoaders(IRazorLightEngine engine, RazorLightProject project, IFileSystem fs) =>
 [
     new GlobalLoader(),
-    new RazorWithMetadataLoader<Page>("pages", recursive:true, razorEngineFactory, fs),
-    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, razorEngineFactory, fs),
-    new RazorWithMetadataLoader<Page>("music", recursive:false, razorEngineFactory, fs),
-    new RazorWithMetadataLoader<Post>("posts", recursive:true, razorEngineFactory, fs)
+    new RazorWithMetadataLoader<Page>("pages", recursive:true, engine, fs, project),
+    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, engine, fs, project),
+    new RazorWithMetadataLoader<Page>("music", recursive:false, engine, fs, project),
+    new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project)
 ];
 
-GeneratorConfig[] GetConfig() =>
+static GeneratorConfig[] GetConfig(IRazorLightEngine engine, IFileSystem fs) =>
 [
     // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
-    new (new RazorGenerator<Page>(razorEngineFactory, fs), IsPage),
-    new (new RazorGenerator<Page>(razorEngineFactory, fs), IsMusicPage),
-    new (new RazorGenerator<MusicWork>(razorEngineFactory, fs), IsMusicWork),
-    new (new RazorGenerator<Post>(razorEngineFactory, fs), IsPost),
-    new (new IndexPageGenerator(razorEngineFactory, fs), IsFile("index.cshtml")),
-    new (new AtomGenerator(razorEngineFactory, fs), IsFile("atom.cshtml")),
-    new (new SiteMapGenerator(razorEngineFactory, fs), IsFile("sitemap.cshtml")),
+    new (new RazorGenerator<Page>(engine, fs), IsPage),
+    new (new RazorGenerator<Page>(engine, fs), IsMusicPage),
+    new (new RazorGenerator<MusicWork>(engine, fs), IsMusicWork),
+    new (new RazorGenerator<Post>(engine, fs), IsPost),
+    new (new IndexPageGenerator(engine, fs), IsFile("index.cshtml")),
+    new (new AtomGenerator(engine, fs), IsFile("atom.cshtml")),
+    new (new SiteMapGenerator(engine, fs), IsFile("sitemap.cshtml")),
     new (new StaticFileGenerator(fs), IsStatic),
 ];
 

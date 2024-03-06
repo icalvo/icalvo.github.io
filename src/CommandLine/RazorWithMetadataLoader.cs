@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Components.Forms;
+using RazorLight;
 using RazorLight.Razor;
 using SWGen;
 using SWGen.FileSystems;
@@ -10,15 +11,17 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
 {
     private readonly RelativePathEx _contentDir;
     private readonly bool _recursive;
-    private readonly IRazorEngineFactory _razorEngineFactory;
+    private readonly IRazorLightEngine _engine;
+    private readonly RazorLightProject _project;
     private readonly IFileSystem _fs;
     private const string RazorExtension = ".cshtml";
-    public RazorWithMetadataLoader(RelativePathEx contentDir, bool recursive, IRazorEngineFactory razorEngineFactory, IFileSystem fs)
+    public RazorWithMetadataLoader(RelativePathEx contentDir, bool recursive, IRazorLightEngine engine, IFileSystem fs, RazorLightProject project)
     {
         _contentDir = contentDir;
         _recursive = recursive;
-        _razorEngineFactory = razorEngineFactory;
+        _engine = engine;
         _fs = fs;
+        _project = project;
     }
 
     public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", {_recursive})";
@@ -27,14 +30,11 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         CancellationToken ct = default)
     {
         var sw = Stopwatch.StartNew();
-        var postsPath = projectRoot / _contentDir;
+        var contentPath = projectRoot / _contentDir;
 
-        var files = Directory.GetFiles(postsPath.Normalized(_fs), $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
-            .Select(AbsolutePathEx.Create)
+        var files = _fs.Directory.GetFiles(contentPath.Normalized(_fs), $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
             .Where(f => !f.FileName.StartsWith('_'));
         
-        var engine = _razorEngineFactory.Create(projectRoot.Normalized(_fs));
-
         await Parallel.ForEachAsync(
             files,
             ct,
@@ -74,10 +74,9 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
 
             var fakeMetadata = doc.Metadata;
 
-
             var templateKey = inputFile.Normalized(_fs);
-            var content = await engine.CompileRenderWithoutLayout(templateKey, doc);
-            var imports = _razorEngineFactory.Project != null ? await _razorEngineFactory.Project.GetImportsAsync(templateKey) : Enumerable.Empty<RazorLightProjectItem>();
+            var content = await _engine.CompileRenderWithoutLayout(templateKey, doc);
+            var imports = await _project.GetImportsAsync(templateKey);
             fileLogger.Debug($"Imports: {imports.Select(i => i.Key).StringJoin(", ")}");
 
             doc.Content = content;

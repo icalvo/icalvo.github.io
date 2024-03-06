@@ -69,7 +69,7 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
+        if (obj.GetType() != GetType()) return false;
         return Equals((AbsolutePathEx)obj);
     }
 

@@ -10,7 +10,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
         Parts = parts;
     }
 
-    protected static PathEx Create(string rawPath)
+    public static PathEx Create(string rawPath)
     {
         if (string.IsNullOrWhiteSpace(rawPath))
         {
@@ -68,7 +68,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
+        if (obj.GetType() != GetType()) return false;
         return Equals((PathEx)obj);
     }
 

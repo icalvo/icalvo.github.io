@@ -1,16 +1,17 @@
-﻿using SWGen;
+﻿using RazorLight;
+using SWGen;
 using SWGen.FileSystems;
 
 namespace CommandLine;
 
 public class SiteMapGenerator : StringGenerator
 {
-    private readonly IRazorEngineFactory _razorEngineFactory;
-    private readonly FileSystem _fs;
+    private readonly IRazorLightEngine _engine;
+    private readonly IFileSystem _fs;
 
-    public SiteMapGenerator(IRazorEngineFactory razorEngineFactory, FileSystem fs)
+    public SiteMapGenerator(IRazorLightEngine engine, IFileSystem fs)
     {
-        _razorEngineFactory = razorEngineFactory;
+        _engine = engine;
         _fs = fs;
     }
 
@@ -21,7 +22,6 @@ public class SiteMapGenerator : StringGenerator
 
         async Task<string> Func()
         {
-            var engine = _razorEngineFactory.Create(projectRoot.Normalized(_fs));
             var posts = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published);
         
             var doc = new Document<IndexPage>(ctx, page, _fs)
@@ -32,7 +32,7 @@ public class SiteMapGenerator : StringGenerator
                     null,
                     new PageInfo(0, "---"))
             };
-            return await engine.CompileRenderAsync(doc.File.Normalized(_fs), doc);
+            return await _engine.CompileRenderAsync(doc.File.Normalized(_fs), doc);
         }
     }
 }

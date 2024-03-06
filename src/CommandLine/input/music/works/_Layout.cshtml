@@ -2,7 +2,7 @@
 @inherits MyTemplatePage<SWGen.Document<MusicWork>>
 
 @{
-    Layout = "/_MainLayout.cshtml";
+    Layout = "_MainLayout.cshtml";
     var work = Model.Metadata;
     var completeTitle = work.CompleteTitle;
     RelativePathEx workDir = Model.OutputFile.Parent!;
@@ -18,7 +18,7 @@
         @if (!work.Movements.Any())
         {
             await IncludeAsync(
-                "/music/_AudioPlayer.cshtml",
+                "music/_AudioPlayer.cshtml",
                 new AudioInfo { WorkDir = workDir, MovementKey = workKey, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs });
         }
 
@@ -45,14 +45,14 @@
                 var (movement, index) = x;
                 <h3>@index. @movement.Name</h3>
                 await IncludeAsync(
-                    "/music/_AudioPlayer.cshtml",
+                    "music/_AudioPlayer.cshtml",
                     new AudioInfo { WorkDir = workDir, MovementKey = movement.Key, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs });
 
                 <p>@movement.Description</p>
 
                 <h4>Downloads</h4>
                 await IncludeAsync(
-                    "/music/works/_Downloads.cshtml",
+                    "music/works/_Downloads.cshtml",
                     new AudioInfo { WorkDir = workDir, MovementKey = movement.Key, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs });
                 <div style="clear: both"></div>
             }
@@ -61,7 +61,7 @@
         {
             <h2>Downloads</h2>
             await IncludeAsync(
-                "/music/works/_Downloads.cshtml",
+                "music/works/_Downloads.cshtml",
                 new AudioInfo { WorkDir = workDir, MovementKey = workKey, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs });
         }
     </div>

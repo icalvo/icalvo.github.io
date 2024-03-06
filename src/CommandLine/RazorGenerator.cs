@@ -1,16 +1,17 @@
-﻿using SWGen;
+﻿using RazorLight;
+using SWGen;
 using SWGen.FileSystems;
 
 namespace CommandLine;
 
 public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
 {
-    private readonly IRazorEngineFactory _razorEngineFactory;
+    private readonly IRazorLightEngine _engine;
     private readonly IFileSystem _fs;
 
-    public RazorGenerator(IRazorEngineFactory razorEngineFactory, IFileSystem fs)
+    public RazorGenerator(IRazorLightEngine engine, IFileSystem fs)
     {
-        _razorEngineFactory = razorEngineFactory;
+        _engine = engine;
         _fs = fs;
     }
 
@@ -25,8 +26,6 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
 
         async Task<string> Func()
         {
-            var engine = _razorEngineFactory.Create(projectRoot.Normalized(_fs));
-
             TemplateLayoutToggle.IsEnabled = true;
         
             AbsolutePathEx pageAbsolutePath = projectRoot / page;
@@ -34,12 +33,12 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
             if (await pageAbsolutePath.Parent.GetFirstExistingFileInParentDirs(_fs, "_ViewStart.cshtml") is { } f)
             {
                 logger.Info($"Running {f}...");
-                var template = await engine.CompileTemplateAsync(f.Normalized(_fs));
-                _ = await engine.RenderTemplateAsync(template, doc);
+                var template = await _engine.CompileTemplateAsync(f.Normalized(_fs));
+                _ = await _engine.RenderTemplateAsync(template, doc);
                 layout = template.Layout;
             }
 
-            return (await engine.CompileRenderWithLayout(pageAbsolutePath.Normalized(_fs), doc, layout)).Tidy();            
+            return (await _engine.CompileRenderWithLayout(pageAbsolutePath.Normalized(_fs), doc, layout)).Tidy();            
         }
     }
 }

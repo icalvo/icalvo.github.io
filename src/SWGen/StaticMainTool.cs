@@ -1,35 +1,48 @@
-﻿using SWGen.FileSystems;
+﻿using RazorLight;
+using RazorLight.Razor;
+using SWGen.FileSystems;
 
 namespace SWGen;
 
 public class StaticMainTool
 {
-    private readonly IFileSystem _fs;
-    private readonly ApplicationService _applicationService;
-
-    public StaticMainTool(IFileSystem fs, ApplicationService applicationService)
+    public async Task<int> Process(
+        string[] args,
+        Func<IRazorLightEngine, IFileSystem, GeneratorConfig[]> config,
+        Func<IRazorLightEngine, RazorLightProject, IFileSystem, ILoader[]> loaders,
+        ISwgLogger logger)
     {
-        _fs = fs;
-        _applicationService = applicationService;
-    }
-
-    public async Task<int> Process(string[] args, GeneratorConfig[] config, ILoader[] loaders, ISwgLogger logger)
-    {
-        var cwd = AbsolutePathEx.Create(_fs.Directory.GetCurrentDirectory());
         switch (args)
         {
             case ["build"]:
             {
+                var fs = new FileSystem(new LocalFileSystem());
+                var cwd = AbsolutePathEx.Create(fs.Directory.GetCurrentDirectory());
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                await _applicationService.Build(projectRoot, outputRoot, config, loaders, logger);
+                var project = new ViewImportsFileSystemRazorProject(projectRoot.Normalized(fs), fs);
+                var engine = new RazorLightEngineBuilder().UseProject(project)
+                    .UseMemoryCachingProvider().Build();
+
+                var applicationService = new ApplicationService(fs);
+                await applicationService.Build(projectRoot, outputRoot, config(engine, fs), loaders(engine, project, fs), logger);
                 break;
             }
             case ["watch"]:
             {
+                var fs = new FileSystem(new LocalFileSystem());
+                var cwd = AbsolutePathEx.Create(fs.Directory.GetCurrentDirectory());
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                await _applicationService.Watch(projectRoot, outputRoot, config, loaders, logger);
+                var mapOrigin = cwd / "input" / "music" / "works";
+                var mapDest = AbsolutePathEx.Create(@"D:\Dropbox\ignacio\music\Icm.Completo");
+                
+                var project = new ViewImportsFileSystemRazorProject(projectRoot.Normalized(fs), fs);
+                var engine = new RazorLightEngineBuilder().UseProject(project)
+                    .UseMemoryCachingProvider().Build();
+
+                var applicationService = new ApplicationService(fs);
+                await applicationService.Watch(projectRoot, outputRoot, config(engine, fs), loaders(engine, project, fs), logger);
                 break;
             }
             default:
