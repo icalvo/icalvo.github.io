@@ -15,9 +15,11 @@ There is a Development Container configuration for Visual Studio Code. If you op
 # Normal flow
 After editing a score and have it ready to be published, the required steps are:
 
-- Export the PDF file (full score and parts in a single file) to: `<WORK_NAME>_full_parts.pdf`
+- Export the PDF file, either:
+  - Full score and parts in a single file to: `<WORK_NAME>_full_parts.pdf`
+  - Full score only to: `<WORK_NAME>_full.pdf`
 - Export the MP3 file to: `<WORK_NAME>.mp3`
-- Edit the `index.cshtml` file to add a changelog line (you can skip this since the publish script will ask you for this line if it is not present.)
+- Edit the `index.cshtml` file to add a changelog line.
 - Execute `tools/generateBackground.ps1 -work <WORK_NAME>` to (re)generate the background image.
 - Execute `tools/build.ps1` to generate the site.
 - Execute `tools/serve.ps1` to preview the site.

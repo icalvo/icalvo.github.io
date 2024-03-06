@@ -88,6 +88,11 @@ static bool IsStatic(AbsolutePathEx inputRoot, RelativePathEx inputFile)
         ext == ".sib" ||
         ext == ".cwp" ||
         ext == ".mus" ||
+        ext == ".wav" ||
+        ext == ".wrk" ||
+        ext == ".musicxml" ||
+        ext == ".mscz" ||
+        ext == ".mxl" ||
         inputFile.FileName.Contains(".cwp") ||
         inputFile.Parts.Contains(".git");
         

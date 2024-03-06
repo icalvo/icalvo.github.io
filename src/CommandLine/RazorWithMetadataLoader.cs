@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Components.Forms;
 using RazorLight;
 using RazorLight.Razor;
 using SWGen;
@@ -56,7 +55,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
             {
                 if (!existing.HasPendingLinks)
                 {
-                    fileLogger.Info("Already loaded");
+                    fileLogger.Debug("Already loaded");
                     return;
                 }
 
