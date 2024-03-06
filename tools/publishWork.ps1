@@ -5,8 +5,7 @@ Param(
 
 Push-Location $PSScriptRoot
 
-.\config.ps1
-$target = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
+$target = Resolve-Path (Join-Path $PSScriptRoot "..\src\CommandLine\input\music\works\$work")
 
 if (-not $skipPendingCommitsCheck)
 {
@@ -20,8 +19,6 @@ if (-not $skipPendingCommitsCheck)
         Write-Host "Nothing pending to commit"
     }
 }
-
-.\copyWork.ps1 $work
 
 git status -- $target | Tee-Object -Variable gitStatusOutput > $null
 

@@ -4,9 +4,7 @@ Param(
 
 Push-Location $PSScriptRoot
 
-.\config.ps1
-
-$target = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
+$target = Resolve-Path (Join-Path $PSScriptRoot "..\src\CommandLine\input\music\works\$work")
 
 $filesToAdd = Join-Path $target "*"
 git add $filesToAdd

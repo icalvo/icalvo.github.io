@@ -4,7 +4,7 @@ Param(
 
 Push-Location $PSScriptRoot
 
-$target = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
+$target = Resolve-Path (Join-Path $PSScriptRoot "..\src\CommandLine\input\music\works\$work")
 
 git restore --source=HEAD --staged --worktree -- $target
 git clean -d -- $target

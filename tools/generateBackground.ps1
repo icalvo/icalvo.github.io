@@ -5,20 +5,29 @@ param (
     $work
 )
 
-$workDirectory = Resolve-Path (Join-Path $PSScriptRoot "..\music\$work")
+$workDirectory = Resolve-Path (Join-Path $PSScriptRoot "..\src\CommandLine\input\music\works\$work")
 Write-Host "workdir: $workDirectory"
 Push-Location $workDirectory
-$pdf = "$($work)_full_parts.pdf"
 $output = 'background.png'
+$pdf = "$($work)_full_parts.pdf"
 $pdfExists = Test-Path $pdf -PathType Leaf
-if (-not $pdfExists -and (Test-Path "index.markdown")) {
+if (-not $pdfExists) {
+    $pdf = "$($work)_full.pdf"
+    $pdfExists = Test-Path $pdf -PathType Leaf
+}
+
+if (-not $pdfExists -and (Test-Path "index.cshtml")) {
     Write-Host "$pdf does not exist"
 
-    $dmatches = Get-Content "index.markdown" | Select-String "default_audio_movement:\s*(.*)"
+    $dmatches = Get-Content "index.cshtml" | Select-String "default_audio_movement:\s*(.*)"
     if ($dmatches) {
         $defaultMovement = $dmatches.Matches.Groups[1].Value
         Write-Host "Default movement: $defaultMovement"
         $defaultMovementList = Get-ChildItem -r "$($defaultMovement)_full_parts.pdf"
+        if ($defaultMovementList.Length -eq 0) {
+            $defaultMovementList = Get-ChildItem -r "$($defaultMovement)_full.pdf"
+        }
+
         if ($defaultMovementList.Length -gt 0) {
             $pdf = $defaultMovementList[0]
             Write-Host "$pdf does exist"

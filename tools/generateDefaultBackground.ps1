@@ -8,4 +8,4 @@ canvas:none `
 -fill "rgb(255,240,100)" -colorize 20 `
 -channel RGB -function polynomial 0.6,0.4 `
 -attenuate 0.3 +noise Gaussian `
-"..\assets\img\score_background.png"
+"..\src\CommandLine\input\assets\img\score_background.png"
