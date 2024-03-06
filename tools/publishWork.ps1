@@ -9,20 +9,17 @@ $target = Resolve-Path (Join-Path $PSScriptRoot "..\src\CommandLine\input\music\
 
 if (-not $skipPendingCommitsCheck)
 {
-    git status -- $target | Tee-Object -Variable gitStatusOutput > $null
-
-    if ($gitStatusOutput[-1] -notlike "*nothing to commit*") {
-        Write-Host "There are pending things to commit, please solve them before publishing new things. Otherwise add the switch -notCheckPendingCommits"
+    if ((git status --porcelain | Where-Object { -not $_.Contains("music/works/$work") }).Count -gt 0) {
+        Write-Host "There are pending things to commit outside of $work, please solve them before publishing new things. Otherwise add the switch -notCheckPendingCommits"
         exit
     }
     else {
-        Write-Host "Nothing pending to commit"
+        Write-Host "Nothing pending to commit outside of $work"
     }
 }
 
-git status -- $target | Tee-Object -Variable gitStatusOutput > $null
-
-if ($gitStatusOutput[-1] -like "*nothing to commit*") {
+if ((git status --porcelain | Where-Object { $_.Contains("music/works/$work") }).Count -eq 0)
+{
     Write-Host "No differences detected, nothing to do."
     exit
 }
