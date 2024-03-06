@@ -32,7 +32,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         var sw = Stopwatch.StartNew();
         var contentPath = projectRoot / _contentDir;
 
-        var files = _fs.Directory.GetFiles(contentPath.Normalized(_fs), $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
+        var files = _fs.Directory.GetFiles(contentPath, $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
             .Where(f => !f.FileName.StartsWith('_'));
         
         await Parallel.ForEachAsync(

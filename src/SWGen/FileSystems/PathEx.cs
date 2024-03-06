@@ -74,7 +74,13 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
 
     public override int GetHashCode()
     {
-        return Parts.GetHashCode();
+        var hashCodeBuilder = new HashCode();
+        foreach (var part in Parts)
+        {
+            hashCodeBuilder.Add(part);
+        }
+
+        return hashCodeBuilder.ToHashCode();
     }
 
     public static bool operator ==(PathEx? left, PathEx? right)

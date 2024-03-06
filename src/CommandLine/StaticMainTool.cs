@@ -1,4 +1,5 @@
-﻿using RazorLight;
+﻿using CommandLine;
+using RazorLight;
 using RazorLight.Razor;
 using SWGen.FileSystems;
 
@@ -12,11 +13,12 @@ public class StaticMainTool
         Func<IRazorLightEngine, RazorLightProject, IFileSystem, ILoader[]> loaders,
         ISwgLogger logger)
     {
+        var localFileSystem = new LocalFileSystem();
         switch (args)
         {
             case ["build"]:
             {
-                var fs = new FileSystem(new LocalFileSystem());
+                var fs = new FileSystem(localFileSystem);
                 var cwd = AbsolutePathEx.Create(fs.Directory.GetCurrentDirectory());
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
@@ -30,12 +32,10 @@ public class StaticMainTool
             }
             case ["watch"]:
             {
-                var fs = new FileSystem(new LocalFileSystem());
+                var fs = new FileSystem(localFileSystem);
                 var cwd = AbsolutePathEx.Create(fs.Directory.GetCurrentDirectory());
                 var projectRoot = cwd / "input";
                 var outputRoot = cwd / "_public";
-                var mapOrigin = cwd / "input" / "music" / "works";
-                var mapDest = AbsolutePathEx.Create(@"D:\Dropbox\ignacio\music\Icm.Completo");
                 
                 var project = new ViewImportsFileSystemRazorProject(projectRoot.Normalized(fs), fs);
                 var engine = new RazorLightEngineBuilder().UseProject(project)

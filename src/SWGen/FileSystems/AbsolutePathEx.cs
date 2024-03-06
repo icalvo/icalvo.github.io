@@ -1,4 +1,6 @@
-﻿namespace SWGen.FileSystems;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SWGen.FileSystems;
 
 public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
 {
@@ -30,6 +32,11 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
 
     public override AbsolutePathEx Parent => IsRoot ? this : new (Drive, Parts[..^1]);
 
+    public virtual string Normalized(IRawFileSystem fs)
+    {
+        return fs.PathNormalizeFolderSeparator(this);
+    }
+
     public virtual string Normalized(IFileSystem fs)
     {
         return fs.Path.NormalizeFolderSeparator(this);
@@ -41,6 +48,9 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
     }
 
     public override AbsolutePathEx Combine(RelativePathEx right) => new (Drive, Parts.Concat(right.Parts).ToArray());
+
+    public bool IsChildOrSame(AbsolutePathEx parent) => RelativeTo(parent) != null;
+    public bool IsParentOrSame(AbsolutePathEx child) => child.RelativeTo(this) != null;
 
     public RelativePathEx? RelativeTo(AbsolutePathEx root)
     {

@@ -1,4 +1,3 @@
-using SWGen;
 using SWGen.FileSystems;
 
 namespace Tests;
@@ -30,6 +29,7 @@ public class PathExtTests
             Add(root / "dir20", "C:", ["dir20"]);
             Add(root / "dir21" / "dir22" / "..", "C:", ["dir21"]);
             Add(AbsolutePathEx.Create(@"C:\dir10\dir11\dir12").RelativeTo(@"C:\dir10\"), null, ["dir11", "dir12"]);            
+            Add(AbsolutePathEx.Create(@"C:\dir10\").RelativeTo(@"C:\dir10\"), null, []);
         }
 
         private void Add(string a, string? b, string[] c)
@@ -64,4 +64,5 @@ public class PathExtTests
     {
         Assert.Null(AbsolutePathEx.Create(@"C:\dir10\dir11\dir12").RelativeTo(@"C:\dir10\dir13"));
     }
+
 }
