@@ -15,13 +15,16 @@ public class StringManipulationTests
             </body>
             </html>
             """,
-            StringManipulation.TransformTags("""
-                                             <html>
-                                             <body>
-                                               Hello world <upper>this is important</upper> an also <upper>this</upper>.
-                                             </body>
-                                             </html>
-                                             """, "upper", s => s.ToUpperInvariant())
+            StringManipulation.TransformTags(
+                """
+                <html>
+                <body>
+                  Hello world <upper>this is important</upper> an also <upper>this</upper>.
+                </body>
+                </html>
+                """,
+                "upper",
+                s => s.ToUpperInvariant())
         );
     }
     
