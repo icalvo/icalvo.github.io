@@ -1,4 +1,4 @@
-﻿namespace CommandLine;
+﻿namespace SWGen.Razor;
 
 public static class TemplateLayoutToggle
 {

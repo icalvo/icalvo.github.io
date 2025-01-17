@@ -1,3 +1,3 @@
-﻿namespace CommandLine;
+﻿namespace SWGen.Razor;
 
 public record PostConfig(bool DisableLiveRefresh);

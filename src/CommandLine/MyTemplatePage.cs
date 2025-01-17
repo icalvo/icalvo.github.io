@@ -1,11 +1,7 @@
 ﻿using RazorLight;
+using SWGen.Razor;
 
 namespace CommandLine;
-
-public interface ILayoutToggle
-{
-    public bool LayoutEnabled { get; set; }
-}
 
 public abstract class MyTemplatePage<TModel> : TemplatePage<TModel>, ILayoutToggle
 {

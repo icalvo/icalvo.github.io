@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SWGen.Razor\SWGen.Razor.csproj" />
     <ProjectReference Include="..\SWGen\SWGen.csproj" />
   </ItemGroup>
 

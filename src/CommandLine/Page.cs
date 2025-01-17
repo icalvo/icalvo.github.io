@@ -1,5 +1,6 @@
 ﻿using SWGen;
 using SWGen.FileSystems;
+using SWGen.Razor;
 
 namespace CommandLine;
 

@@ -1,8 +1,11 @@
-﻿using RazorLight;
-using SWGen;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using RazorLight;
 using SWGen.FileSystems;
 
-namespace CommandLine;
+namespace SWGen.Razor;
 
 public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
 {

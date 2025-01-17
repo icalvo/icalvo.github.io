@@ -1,9 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
 using RazorLight.Razor;
 using SWGen.FileSystems;
-using Microsoft.Extensions.Primitives;
 
-namespace SWGen;
+namespace SWGen.Razor;
 public class MyFileSystemRazorProjectItem : RazorLightProjectItem
 {
     private readonly IFileSystem _fs;

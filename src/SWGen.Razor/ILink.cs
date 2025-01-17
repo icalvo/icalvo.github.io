@@ -1,7 +1,6 @@
-﻿using SWGen;
-using SWGen.FileSystems;
+﻿using SWGen.FileSystems;
 
-namespace CommandLine;
+namespace SWGen.Razor;
 
 public interface ILink
 {

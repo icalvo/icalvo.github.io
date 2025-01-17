@@ -1,8 +1,10 @@
 ﻿using CommandLine;
+using Markdig;
 using RazorLight;
 using RazorLight.Razor;
 using SWGen;
 using SWGen.FileSystems;
+using SWGen.Razor;
 
 var rootLogger = new ConsoleSwgLogger(enableDebug: false);
 
@@ -15,15 +17,18 @@ var result = await smt.Process(
 
 return result;
 
+static string TransformMarkdownTag(string content) =>
+    StringManipulation.TransformTags(content, "markdown", s => Markdown.Parse(s, trackTrivia: true).ToHtml());
+
 // Here we define the loaders that will be used to load the content of the site.
 // Order is important. Each loader will be able to access metadata from the previous loaders.
 static ILoader[] GetLoaders(IRazorLightEngine engine, RazorLightProject project, IFileSystem fs) =>
 [
     new GlobalLoader(),
-    new RazorWithMetadataLoader<Page>("pages", recursive:true, engine, fs, project),
-    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, engine, fs, project),
-    new RazorWithMetadataLoader<Page>("music", recursive:false, engine, fs, project),
-    new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project)
+    new RazorWithMetadataLoader<Page>("pages", recursive:true, engine, fs, project, TransformMarkdownTag),
+    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, engine, fs, project, TransformMarkdownTag),
+    new RazorWithMetadataLoader<Page>("music", recursive:false, engine, fs, project, TransformMarkdownTag),
+    new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project, TransformMarkdownTag)
 ];
 
 static GeneratorConfig[] GetConfig(IRazorLightEngine engine, IFileSystem fs) =>

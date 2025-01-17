@@ -1,8 +1,8 @@
-﻿using Markdig;
+﻿using System;
+using System.Threading.Tasks;
 using RazorLight;
-using SWGen;
 
-namespace CommandLine;
+namespace SWGen.Razor;
 
 public static class EngineExtensions
 {
@@ -41,8 +41,6 @@ public static class EngineExtensions
         }
 
         var content = await engine.RenderTemplateAsync(templatePage, doc);
-        content = StringManipulation.TransformTags(content, "markdown", s => Markdown.Parse(s, trackTrivia: true).ToHtml());
-
         return content;
     }
 }

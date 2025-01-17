@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWGen", "SWGen\SWGen.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{7F2DB33E-0477-45A8-863E-47235F2183E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWGen.Razor", "SWGen.Razor\SWGen.Razor.csproj", "{39E6731E-5B03-42B5-95A2-97A37813A565}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{7F2DB33E-0477-45A8-863E-47235F2183E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F2DB33E-0477-45A8-863E-47235F2183E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F2DB33E-0477-45A8-863E-47235F2183E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39E6731E-5B03-42B5-95A2-97A37813A565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E6731E-5B03-42B5-95A2-97A37813A565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39E6731E-5B03-42B5-95A2-97A37813A565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39E6731E-5B03-42B5-95A2-97A37813A565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
