@@ -1,10 +1,15 @@
-﻿using RazorLight;
-using SWGen;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using RazorLight;
 using SWGen.FileSystems;
 
-namespace CommandLine;
+namespace SWGen.Razor.Atom;
 
-public class AtomGenerator : StringGenerator
+public class AtomGenerator<TIndex, TPost> : StringGenerator
+    where TIndex : class, ICreatable<TIndex>, IAtomIndexBuilder<TIndex, TPost>
+    where TPost : class, IDated, ICreatable<TPost>
 {
     private readonly IRazorLightEngine _engine;
     private readonly IFileSystem _fs;
@@ -22,16 +27,13 @@ public class AtomGenerator : StringGenerator
 
         async Task<string> Func()
         {
-            var posts = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published);
+            var posts = ctx.TryGetValues<Document<TPost>>().OrderByDescending(p => p.Metadata.Published);
         
-            var doc = new Document<IndexPage>(ctx, page, _fs)
+            var doc = new Document<TIndex>(ctx, page, _fs)
             {
-                Metadata = new IndexPage(
-                    posts.ToArray(),
-                    null,
-                    null,
-                    new PageInfo(0, "---"))
+                Metadata = TIndex.CreateIndex(posts)
             };
+
             return await _engine.CompileRenderAsync(doc.File.Normalized(_fs), doc);
         }
     }

@@ -1,12 +1,12 @@
+@using SWGen
 @inherits MyTemplatePage<SWGen.Document<IndexPage>>
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-
   <title><![CDATA[@Model.SiteInfo.Title]]></title>
-  <link href="@Model.SiteInfo.Url/atom.xml" rel="self"/>
-  <link href="@Model.SiteInfo.Url/"/>
+  <link href="@Model.SiteInfo.Url.Combine("atom.xml")" rel="self"/>
+  <link href="@Model.SiteInfo.Url"/>
   <updated>@DateTime.UtcNow.ToString("O")</updated>
-  <id>@Model.SiteInfo.Url/</id>
+  <id>@Model.SiteInfo.Url</id>
   <author>
     <name><![CDATA[@Model.SiteInfo.Owner.Name]]></name>
     <email><![CDATA[@Model.SiteInfo.Owner.Email]]></email>
