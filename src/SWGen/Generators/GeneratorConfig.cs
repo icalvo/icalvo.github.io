@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using SWGen.FileSystems;
 
-namespace SWGen;
+namespace SWGen.Generators;
 
 public record GeneratorConfig
 {

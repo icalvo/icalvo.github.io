@@ -1,10 +1,17 @@
-﻿using RazorLight;
-using SWGen;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using RazorLight;
 using SWGen.FileSystems;
+using SWGen.Generators;
+using SWGen.Razor.Atom;
 
-namespace CommandLine;
+namespace SWGen.Razor;
 
-public class SiteMapGenerator : StringGenerator
+public class SiteMapGenerator<TIndex, TPost> : StringGenerator
+    where TIndex : class, ICreatable<TIndex>, IIndexBuilder<TIndex, TPost>
+    where TPost : class, IDated, ICreatable<TPost>
 {
     private readonly IRazorLightEngine _engine;
     private readonly IFileSystem _fs;
@@ -22,15 +29,11 @@ public class SiteMapGenerator : StringGenerator
 
         async Task<string> Func()
         {
-            var posts = ctx.TryGetValues<Document<Post>>().OrderByDescending(p => p.Metadata.Published);
+            var posts = ctx.TryGetValues<Document<TPost>>().OrderByDescending(p => p.Metadata.Published);
         
-            var doc = new Document<IndexPage>(ctx, page, _fs)
+            var doc = new Document<TIndex>(ctx, page, _fs)
             {
-                Metadata = new IndexPage(
-                    posts.ToArray(),
-                    null,
-                    null,
-                    new PageInfo(0, "---"))
+                Metadata = TIndex.CreateIndex(posts)
             };
             return await _engine.CompileRenderAsync(doc.File.Normalized(_fs), doc);
         }

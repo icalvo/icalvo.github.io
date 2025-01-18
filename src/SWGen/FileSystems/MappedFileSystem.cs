@@ -1,14 +1,12 @@
-﻿using SWGen.FileSystems;
+﻿using System.IO;
 
-namespace CommandLine;
+namespace SWGen.FileSystems;
 
-public record Mapping(AbsolutePathEx Origin, AbsolutePathEx Destination);
-public record MappingResult(AbsolutePathEx Destination, RelativePathEx RelativePath);
-public class MapFileSystem : IRawFileSystem
+public class MappedFileSystem : IRawFileSystem
 {
     private readonly IRawFileSystem _rawFileSystemImplementation;
-    private readonly List<Mapping> _mappings = new();
-    public MapFileSystem(IRawFileSystem rawFileSystemImplementation)
+    private readonly List<Mapping> _mappings = [];
+    public MappedFileSystem(IRawFileSystem rawFileSystemImplementation)
     {
         _rawFileSystemImplementation = rawFileSystemImplementation;
     }
@@ -100,7 +98,7 @@ public class MapFileSystem : IRawFileSystem
 
         var originFiles =
             _mappings.Any(m => path.IsChildOrSame(m.Origin))
-            ? Enumerable.Empty<AbsolutePathEx>()
+            ? []
             : _rawFileSystemImplementation.DirectoryGetFiles(path, pattern, options);
 
         return originFiles.Where(f => !IsMappedPath(f))

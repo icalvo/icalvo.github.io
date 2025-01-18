@@ -1,7 +1,7 @@
-﻿using SWGen;
+﻿using System.IO;
 using SWGen.FileSystems;
 
-namespace CommandLine;
+namespace SWGen.Generators;
 
 public class StaticFileGenerator : Generator
 {

@@ -4,11 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using RazorLight;
 using SWGen.FileSystems;
+using SWGen.Generators;
 
 namespace SWGen.Razor.Atom;
 
 public class AtomGenerator<TIndex, TPost> : StringGenerator
-    where TIndex : class, ICreatable<TIndex>, IAtomIndexBuilder<TIndex, TPost>
+    where TIndex : class, ICreatable<TIndex>, IIndexBuilder<TIndex, TPost>
     where TPost : class, IDated, ICreatable<TPost>
 {
     private readonly IRazorLightEngine _engine;

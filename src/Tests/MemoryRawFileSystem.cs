@@ -164,7 +164,7 @@ public class MemoryRawFileSystem : IRawFileSystem
             Parent.Children.Add(name, this);
 
         }
-        public FileEntry(string name, FolderEntry parent) : this (name, Array.Empty<byte>(), parent)
+        public FileEntry(string name, FolderEntry parent) : this (name, [], parent)
         {
         }
 

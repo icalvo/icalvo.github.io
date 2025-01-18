@@ -3,12 +3,10 @@ using SWGen.FileSystems;
 
 namespace CommandLine;
 
-public class GlobalLoader : ILoader
+public static class GlobalSiteInfo
 {
-    public Task<LoaderResult> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
-        CancellationToken ct = default)
-    {
-        siteContents.Replace(new SiteInfo
+    public static SiteInfo SiteInfo(AbsolutePathEx projectRoot) =>
+        new()
         {
             Title = "Ignacio Calvo Blog",
             Owner = new Author
@@ -32,9 +30,6 @@ public class GlobalLoader : ILoader
             BaseUrl = "",
             Url = new Uri("https://ignaciocalvo.com"),
             ProjectRoot = projectRoot,
-            DisqusShortName = "ignaciocalvo",
-        });
-        
-        return Task.FromResult(new LoaderResult(siteContents, Completed: true));
-    }
+            DisqusShortName = "ignaciocalvo"
+        };
 }

@@ -1,4 +1,4 @@
-﻿namespace SWGen;
+﻿namespace SWGen.Generators;
 
 public enum GenerationPhase
 {

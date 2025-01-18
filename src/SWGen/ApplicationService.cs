@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.WebSockets;
 using SWGen.FileSystems;
+using SWGen.Generators;
 
 namespace SWGen;
 
@@ -230,7 +231,7 @@ public class ApplicationService
         inputFile ??= RelativePathEx.Self();
         var sw = Stopwatch.StartNew();
         var results = generator.Generate(siteContents, projectRoot, inputFile, logger, ct);
-        List<AbsolutePathEx> outputPaths = new();
+        List<AbsolutePathEx> outputPaths = [];
         foreach (var result in results)
         {
             var resultLogger = logger.BeginScope(result.File.Normalized(_fs));

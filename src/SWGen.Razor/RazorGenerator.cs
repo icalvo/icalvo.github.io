@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using RazorLight;
 using SWGen.FileSystems;
+using SWGen.Generators;
 
 namespace SWGen.Razor;
 

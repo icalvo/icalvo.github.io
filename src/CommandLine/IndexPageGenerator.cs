@@ -1,6 +1,7 @@
 ﻿using RazorLight;
 using SWGen;
 using SWGen.FileSystems;
+using SWGen.Generators;
 
 namespace CommandLine;
 

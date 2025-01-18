@@ -30,7 +30,7 @@ public class Document : IDocument
     public string? Title => (This.Metadata as ITitled)?.Title;
     public string Author => (This.Metadata as IAuthored)?.Author ?? SiteInfo?.Owner.Name ?? "Anonymous";
     public bool HasPendingLinks => PendingLinks.Count > 0;
-    public List<string> PendingLinks { get; } = new();
+    public List<string> PendingLinks { get; } = [];
     public Uri CanonicalLink => new (SiteInfo.Url, RootRelativeLink);
     
     public string Content

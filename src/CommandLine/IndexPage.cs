@@ -5,7 +5,7 @@ using SWGen.Razor.Atom;
 namespace CommandLine;
 
 public record IndexPage(Document<Post>[] PostPage, PageInfo? NextPage, PageInfo? PrevPage, PageInfo CurrentPage)
-    : ICreatable<IndexPage>, IAtomIndexBuilder<IndexPage, Post>
+    : ICreatable<IndexPage>, IIndexBuilder<IndexPage, Post>
 {
     public static IndexPage Create()
     {

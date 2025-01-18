@@ -4,6 +4,7 @@ using RazorLight;
 using RazorLight.Razor;
 using SWGen;
 using SWGen.FileSystems;
+using SWGen.Generators;
 using SWGen.Razor;
 using SWGen.Razor.Atom;
 
@@ -24,7 +25,7 @@ static string TransformMarkdownTag(string content) =>
 // Order is important. Each loader will be able to access metadata from the previous loaders.
 static ILoader[] GetLoaders(IRazorLightEngine engine, RazorLightProject project, IFileSystem fs) =>
 [
-    new GlobalLoader(),
+    new ObjectLoader<SiteInfo>((_, projectRoot) => GlobalSiteInfo.SiteInfo(projectRoot)),
     new RazorWithMetadataLoader<Page>("pages", recursive:true, engine, fs, project, TransformMarkdownTag),
     new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, engine, fs, project, TransformMarkdownTag),
     new RazorWithMetadataLoader<Page>("music", recursive:false, engine, fs, project, TransformMarkdownTag),
@@ -40,7 +41,7 @@ static GeneratorConfig[] GetGeneratorsConfig(IRazorLightEngine engine, IFileSyst
     new (new RazorGenerator<Post>(engine, fs), IsPost),
     new (new IndexPageGenerator(engine, fs), IsFile("index.cshtml")),
     new (new AtomGenerator<IndexPage, Post>(engine, fs), IsFile("atom.cshtml")),
-    new (new SiteMapGenerator(engine, fs), IsFile("sitemap.cshtml")),
+    new (new SiteMapGenerator<IndexPage, Post>(engine, fs), IsFile("sitemap.cshtml")),
     new (new StaticFileGenerator(fs), IsStatic),
 ];
 

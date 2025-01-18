@@ -1,6 +1,6 @@
 ﻿using SWGen.FileSystems;
 
-namespace SWGen;
+namespace SWGen.Generators;
 
 public abstract class Generator
 {
