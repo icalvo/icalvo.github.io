@@ -35,21 +35,20 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
         _postRenderTransforms = postRenderTransforms;
     }
 
-    public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", {_recursive})";
+    public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", rec:{_recursive})";
 
-    public async Task<SiteContents> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
+    public async Task<LoaderResult> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default)
     {
         var sw = Stopwatch.StartNew();
         var contentPath = projectRoot / _contentDir;
-
         var files = _fs.Directory.GetFiles(contentPath, $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
             .Where(f => !f.FileName.StartsWith('_'));
-        
+
+        bool completed = true;
         await Parallel.ForEachAsync(files, ct, LoadDocument);
 
-        // siteContents.Add(new PostConfig(DisableLiveRefresh:false));
-        return siteContents;
+        return new (siteContents, completed);
 
         async ValueTask LoadDocument(AbsolutePathEx inputFile, CancellationToken ct2)
         {
@@ -105,14 +104,19 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
                 doc.OutputFile = dirPart.Combine(Path.ChangeExtension(fileName, ".html"));
             }
 
-            if (reprocessing && doc.HasPendingLinks)
+            if (doc.HasPendingLinks)
             {
-                foreach (var pendingLink in doc.PendingLinks)
+                if (reprocessing)
                 {
-                    fileLogger.Error($"Pending link: {pendingLink}");
+                    foreach (var pendingLink in doc.PendingLinks)
+                    {
+                        fileLogger.Error($"Pending link: {pendingLink}");
+                    }
+
+                    throw new Exception("Reprocessing did not resolve all links");
                 }
 
-                throw new Exception("Reprocessing did not resolve all links");
+                completed = false;
             }
 
             fileLogger.Info($"Loaded in {sw.ElapsedMilliseconds}ms");

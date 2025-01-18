@@ -6,12 +6,11 @@ using SWGen.Razor;
 
 namespace SWGen;
 
-public class StaticMainTool
+public static class StaticMainTool
 {
-    public async Task<int> Process(
-        string[] args,
-        Func<IRazorLightEngine, IFileSystem, GeneratorConfig[]> config,
-        Func<IRazorLightEngine, RazorLightProject, IFileSystem, ILoader[]> loaders,
+    public static async Task<int> Process(string[] args,
+        Func<IRazorLightEngine, RazorLightProject, IFileSystem, ILoader[]> getLoaders,
+        Func<IRazorLightEngine, IFileSystem, GeneratorConfig[]> getGeneratorConfigs,
         ISwgLogger logger)
     {
         var localFileSystem = new LocalFileSystem();
@@ -28,7 +27,9 @@ public class StaticMainTool
                     .UseMemoryCachingProvider().Build();
 
                 var applicationService = new ApplicationService(fs);
-                await applicationService.Build(projectRoot, outputRoot, config(engine, fs), loaders(engine, project, fs), logger);
+                var generatorConfigs = getGeneratorConfigs(engine, fs);
+                var loaders = getLoaders(engine, project, fs);
+                await applicationService.Build(projectRoot, outputRoot, generatorConfigs, loaders, logger);
                 break;
             }
             case ["watch"]:
@@ -43,7 +44,9 @@ public class StaticMainTool
                     .UseMemoryCachingProvider().Build();
 
                 var applicationService = new ApplicationService(fs);
-                await applicationService.Watch(projectRoot, outputRoot, config(engine, fs), loaders(engine, project, fs), logger);
+                var generatorConfigs = getGeneratorConfigs(engine, fs);
+                var loaders = getLoaders(engine, project, fs);
+                await applicationService.Watch(projectRoot, outputRoot, generatorConfigs, loaders, logger);
                 break;
             }
             default:

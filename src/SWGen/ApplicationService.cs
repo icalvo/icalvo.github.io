@@ -158,18 +158,37 @@ public class ApplicationService
         var sw = Stopwatch.StartNew();
         var sc = new SiteContents();
 
-        var loadLogger1 = logger.BeginScope("Load (1st pass)");
-        foreach (var loader in loaders)
-        {
-            var loaderLogger = loadLogger1.BeginScope(loader.ToString() ?? "");
-            sc = await loader.Load(sc, projectRoot, loaderLogger, ct);
-        }
+        var pass = 0;
+        const int maxPasses = 3;
 
-        var loadLogger2 = logger.BeginScope("Load (2nd pass)");
-        foreach (var loader in loaders)
+        ILoader[] pendingLoaders = [];
+        do
         {
-            var loaderLogger = loadLogger2.BeginScope(loader.ToString() ?? "");
-            sc = await loader.Load(sc, projectRoot, loaderLogger, ct);
+            pass++;
+            var loadLogger = logger.BeginScope($"Load (pass {pass})");
+            (sc, pendingLoaders) = await loaders.ToAsyncEnumerable()
+                .AggregateAwaitAsync(
+                    (sc, PendingLoaders: Array.Empty<ILoader>()),
+                    async (x, loader) =>
+                    {
+                        var loaderLogger = logger.BeginScope(loader.ToString() ?? "");
+                        var (newsc, done) = await loader.Load(sc, projectRoot, loaderLogger, ct);
+
+                        if (!done)
+                        {
+                            loaderLogger.Info("PENDING WORK");
+                            return (newsc, [..x.PendingLoaders, loader]);
+                        }
+
+                        return (newsc, x.PendingLoaders);
+                    }, ct);
+            if (pass == maxPasses) break;
+        } while (pendingLoaders.Any());
+
+        if (pendingLoaders.Any())
+        {
+            var pendingLoadersList = pendingLoaders.StringJoin(", ");
+            throw new Exception($"After {maxPasses} passes there are still pending loaders: {pendingLoadersList}");
         }
 
         var generateLogger = logger.BeginScope("Generation");

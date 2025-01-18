@@ -18,8 +18,12 @@ public abstract class MultipleStringGenerator : Generator
         _encoding = encoding;
     }
 
-    protected abstract IEnumerable<(RelativePathEx File, Func<Task<string>> Content)> GenerateString(SiteContents ctx, AbsolutePathEx projectRoot,
-        RelativePathEx inputFile, ISwgLogger logger, CancellationToken _);
+    protected abstract IEnumerable<(RelativePathEx File, Func<Task<string>> Content)> GenerateString(
+        SiteContents ctx,
+        AbsolutePathEx projectRoot,
+        RelativePathEx inputFile,
+        ISwgLogger logger,
+        CancellationToken _);
     public override IEnumerable<GeneratorItem> Generate(
         SiteContents ctx,
         AbsolutePathEx projectRoot,

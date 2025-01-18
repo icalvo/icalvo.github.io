@@ -5,14 +5,14 @@ using RazorLight.Razor;
 using SWGen;
 using SWGen.FileSystems;
 using SWGen.Razor;
+using SWGen.Razor.Atom;
 
 var rootLogger = new ConsoleSwgLogger(enableDebug: false);
 
-var smt = new StaticMainTool();
-var result = await smt.Process(
+var result = await StaticMainTool.Process(
     args,
-    GetConfig,
     GetLoaders,
+    GetGeneratorsConfig,
     rootLogger);
 
 return result;
@@ -31,7 +31,7 @@ static ILoader[] GetLoaders(IRazorLightEngine engine, RazorLightProject project,
     new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project, TransformMarkdownTag)
 ];
 
-static GeneratorConfig[] GetConfig(IRazorLightEngine engine, IFileSystem fs) =>
+static GeneratorConfig[] GetGeneratorsConfig(IRazorLightEngine engine, IFileSystem fs) =>
 [
     // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
     new (new RazorGenerator<Page>(engine, fs), IsPage),
@@ -39,7 +39,7 @@ static GeneratorConfig[] GetConfig(IRazorLightEngine engine, IFileSystem fs) =>
     new (new RazorGenerator<MusicWork>(engine, fs), IsMusicWork),
     new (new RazorGenerator<Post>(engine, fs), IsPost),
     new (new IndexPageGenerator(engine, fs), IsFile("index.cshtml")),
-    new (new AtomGenerator(engine, fs), IsFile("atom.cshtml")),
+    new (new AtomGenerator<IndexPage, Post>(engine, fs), IsFile("atom.cshtml")),
     new (new SiteMapGenerator(engine, fs), IsFile("sitemap.cshtml")),
     new (new StaticFileGenerator(fs), IsStatic),
 ];

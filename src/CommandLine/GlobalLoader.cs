@@ -5,7 +5,7 @@ namespace CommandLine;
 
 public class GlobalLoader : ILoader
 {
-    public Task<SiteContents> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
+    public Task<LoaderResult> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default)
     {
         siteContents.Replace(new SiteInfo
@@ -35,6 +35,6 @@ public class GlobalLoader : ILoader
             DisqusShortName = "ignaciocalvo",
         });
         
-        return Task.FromResult(siteContents);
+        return Task.FromResult(new LoaderResult(siteContents, Completed: true));
     }
 }

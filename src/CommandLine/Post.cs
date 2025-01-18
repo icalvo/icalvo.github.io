@@ -2,6 +2,7 @@
 using SWGen;
 using SWGen.FileSystems;
 using SWGen.Razor;
+using SWGen.Razor.Atom;
 
 namespace CommandLine;
 
@@ -9,7 +10,7 @@ public interface IIdentifyable<TIdentifier> where TIdentifier : struct
 {
     TIdentifier? Id { get; }
 }
-public class Post : ITitled, IAuthored, ICreatable<Post>, ILink, IIdentifyable<PostIdentifier>
+public class Post : ITitled, IAuthored, ICreatable<Post>, ILink, IIdentifyable<PostIdentifier>, IDated
 {
     public PostIdentifier? Id { get; init; }
     public required string Title { get; init; }
