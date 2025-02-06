@@ -12,11 +12,13 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
 {
     private readonly IRazorLightEngine _engine;
     private readonly IFileSystem _fs;
+    private readonly Func<string, string> _postRenderTransforms;
 
-    public RazorGenerator(IRazorLightEngine engine, IFileSystem fs)
+    public RazorGenerator(IRazorLightEngine engine, IFileSystem fs, Func<string, string> postRenderTransforms)
     {
         _engine = engine;
         _fs = fs;
+        _postRenderTransforms = postRenderTransforms;
     }
 
     protected override (RelativePathEx Link, Func<Task<string>> Content) GenerateString(SiteContents ctx,
@@ -42,7 +44,9 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
                 layout = template.Layout;
             }
 
-            return (await _engine.CompileRenderWithLayout(pageAbsolutePath.Normalized(_fs), doc, layout)).Tidy();            
+            var renderedContent = await _engine.CompileRenderWithLayout(pageAbsolutePath.Normalized(_fs), doc, layout);
+            renderedContent = _postRenderTransforms(renderedContent);
+            return renderedContent.Tidy();            
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using CommandLine;
-using RazorLight;
+﻿using RazorLight;
 using RazorLight.Razor;
+using SWGen;
 using SWGen.FileSystems;
 using SWGen.Generators;
 using SWGen.Razor;
 
-namespace SWGen;
+namespace CommandLine;
 
 public static class StaticMainTool
 {
@@ -15,9 +15,9 @@ public static class StaticMainTool
         ISwgLogger logger)
     {
         var localFileSystem = new LocalFileSystem();
-        switch (args)
+        switch (args.FirstOrDefault())
         {
-            case ["build"]:
+            case "build":
             {
                 var fs = new FileSystem(localFileSystem);
                 var cwd = AbsolutePathEx.Create(fs.Directory.GetCurrentDirectory());
@@ -28,12 +28,12 @@ public static class StaticMainTool
                     .UseMemoryCachingProvider().Build();
 
                 var applicationService = new ApplicationService(fs);
-                var generatorConfigs = getGeneratorConfigs(engine, fs);
                 var loaders = getLoaders(engine, project, fs);
+                var generatorConfigs = getGeneratorConfigs(engine, fs);
                 await applicationService.Build(projectRoot, outputRoot, generatorConfigs, loaders, logger);
                 break;
             }
-            case ["watch"]:
+            case "watch":
             {
                 var fs = new FileSystem(localFileSystem);
                 var cwd = AbsolutePathEx.Create(fs.Directory.GetCurrentDirectory());
@@ -45,8 +45,8 @@ public static class StaticMainTool
                     .UseMemoryCachingProvider().Build();
 
                 var applicationService = new ApplicationService(fs);
-                var generatorConfigs = getGeneratorConfigs(engine, fs);
                 var loaders = getLoaders(engine, project, fs);
+                var generatorConfigs = getGeneratorConfigs(engine, fs);
                 await applicationService.Watch(projectRoot, outputRoot, generatorConfigs, loaders, logger);
                 break;
             }

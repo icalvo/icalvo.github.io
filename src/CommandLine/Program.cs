@@ -26,19 +26,19 @@ static string TransformMarkdownTag(string content) =>
 static ILoader[] GetLoaders(IRazorLightEngine engine, RazorLightProject project, IFileSystem fs) =>
 [
     new ObjectLoader<SiteInfo>((_, projectRoot) => GlobalSiteInfo.SiteInfo(projectRoot)),
-    new RazorWithMetadataLoader<Page>("pages", recursive:true, engine, fs, project, TransformMarkdownTag),
-    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, engine, fs, project, TransformMarkdownTag),
-    new RazorWithMetadataLoader<Page>("music", recursive:false, engine, fs, project, TransformMarkdownTag),
-    new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project, TransformMarkdownTag)
+    new RazorWithMetadataLoader<Page>("pages", recursive:true, engine, fs, project),
+    new RazorWithMetadataLoader<MusicWork>("music/works", recursive:true, engine, fs, project),
+    new RazorWithMetadataLoader<Page>("music", recursive:false, engine, fs, project),
+    new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project)
 ];
 
 static GeneratorConfig[] GetGeneratorsConfig(IRazorLightEngine engine, IFileSystem fs) =>
 [
     // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
-    new (new RazorGenerator<Page>(engine, fs), IsPage),
-    new (new RazorGenerator<Page>(engine, fs), IsMusicPage),
-    new (new RazorGenerator<MusicWork>(engine, fs), IsMusicWork),
-    new (new RazorGenerator<Post>(engine, fs), IsPost),
+    new (new RazorGenerator<Page>(engine, fs, TransformMarkdownTag), IsPage),
+    new (new RazorGenerator<Page>(engine, fs, TransformMarkdownTag), IsMusicPage),
+    new (new RazorGenerator<MusicWork>(engine, fs, TransformMarkdownTag), IsMusicWork),
+    new (new RazorGenerator<Post>(engine, fs, TransformMarkdownTag), IsPost),
     new (new IndexPageGenerator(engine, fs), IsFile("index.cshtml")),
     new (new AtomGenerator<IndexPage, Post>(engine, fs), IsFile("atom.cshtml")),
     new (new SiteMapGenerator<IndexPage, Post>(engine, fs), IsFile("sitemap.cshtml")),

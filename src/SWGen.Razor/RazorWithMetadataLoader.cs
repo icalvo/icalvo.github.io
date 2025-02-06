@@ -17,22 +17,20 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
     private readonly IRazorLightEngine _engine;
     private readonly RazorLightProject _project;
     private readonly IFileSystem _fs;
-    private readonly Func<string, string> _postRenderTransforms;
     private const string RazorExtension = ".cshtml";
+
     public RazorWithMetadataLoader(
         RelativePathEx contentDir,
         bool recursive,
         IRazorLightEngine engine,
         IFileSystem fs,
-        RazorLightProject project,
-        Func<string, string> postRenderTransforms)
+        RazorLightProject project)
     {
         _contentDir = contentDir;
         _recursive = recursive;
         _engine = engine;
         _fs = fs;
         _project = project;
-        _postRenderTransforms = postRenderTransforms;
     }
 
     public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", rec:{_recursive})";
@@ -83,7 +81,6 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
 
             var templateKey = inputFile.Normalized(_fs);
             var content = await _engine.CompileRenderWithoutLayout(templateKey, doc);
-            content = _postRenderTransforms(content);
             var imports = await _project.GetImportsAsync(templateKey);
             fileLogger.Debug($"Imports: {imports.Select(i => i.Key).StringJoin(", ")}");
 
