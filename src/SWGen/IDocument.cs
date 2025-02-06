@@ -12,6 +12,6 @@ public interface IDocument
     object Metadata { get; set; }
     string? Title { get; }
     string Author { get; }
-    public bool HasPendingLinks { get; }
+    bool HasPendingLinks { get; }
     List<string> PendingLinks { get; }
 }
