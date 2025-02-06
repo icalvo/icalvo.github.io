@@ -1,8 +1,9 @@
-# Development
+# SWGen Tools
 
-There is a Development Container configuration for Visual Studio Code. If you open that container you can just run the site with Ctrl+P -> `task serve`.
++ `build.ps1`: Builds the site at `src\CommandLine\_public`. Alternatively, open the solution with Rider/VS and run the `CommandLine` project using its Launch Profile.
++ `serve.ps1`: Runs the site with watch so that if you rebuild it will be refreshed in the browser.
 
-# Tools
+# Music Tools
 
 + `generateBackground.ps1 -work <WORK_NAME>`: Generates background image for a work
 + `commitWork.ps1 -work <WORK_NAME>`: Commits a work to the GitHub Pages repo. It DOESN'T push.
