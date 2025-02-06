@@ -8,13 +8,10 @@ using SWGen.Generators;
 using SWGen.Razor;
 using SWGen.Razor.Atom;
 
-var rootLogger = new ConsoleSwgLogger(enableDebug: false);
-
 var result = await StaticMainTool.Process(
     args,
     GetLoaders,
-    GetGeneratorsConfig,
-    rootLogger);
+    GetGeneratorsConfig);
 
 return result;
 

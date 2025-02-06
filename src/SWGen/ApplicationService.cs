@@ -15,8 +15,9 @@ public class ApplicationService
         _fs = fs;
     }
 
-    public Task Build(AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, GeneratorConfig[] config, ILoader[] loaders, ISwgLogger logger)
-        => GuardedGenerate(config, loaders, projectRoot, outputRoot, logger, CancellationToken.None);
+    public Task Build(AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, GeneratorConfig[] config,
+        ILoader[] loaders, ISwgLogger logger, bool debugMode)
+        => GuardedGenerate(config, loaders, projectRoot, outputRoot, logger, debugMode, CancellationToken.None);
 
     public Task Watch(AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, GeneratorConfig[] config, ILoader[] loaders, ISwgLogger logger) =>
         Watch(
@@ -29,13 +30,14 @@ public class ApplicationService
             CancellationToken.None);
 
     private async Task GuardedGenerate(GeneratorConfig[] config, ILoader[] loaders, AbsolutePathEx projectRoot,
-        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
+        AbsolutePathEx outputRoot, ISwgLogger logger, bool debugMode, CancellationToken ct)
     {
+        if (debugMode) logger.Info($"Debug Mode ON");
         logger.Info($"Input: {projectRoot}");
         logger.Info($"Output: {outputRoot}");
         try
         {
-            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, logger, ct);
+            await GenerateFolder(projectRoot, isWatch: false, config, loaders, outputRoot, logger, debugMode, ct);
         }
         catch (Exception ex)
         {
@@ -153,8 +155,9 @@ public class ApplicationService
         }
     }
 
-    public async Task GenerateFolder(AbsolutePathEx projectRoot, bool isWatch, GeneratorConfig[] config, ILoader[] loaders,
-        AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
+    private async Task GenerateFolder(AbsolutePathEx projectRoot, bool isWatch, GeneratorConfig[] config,
+        ILoader[] loaders,
+        AbsolutePathEx outputRoot, ISwgLogger logger, bool debugMode, CancellationToken ct)
     {
         var sw = Stopwatch.StartNew();
         var sc = new SiteContents();
@@ -162,7 +165,7 @@ public class ApplicationService
         var pass = 0;
         const int maxPasses = 3;
 
-        ILoader[] pendingLoaders = [];
+        ILoader[] pendingLoaders;
         do
         {
             pass++;
@@ -172,16 +175,14 @@ public class ApplicationService
                     (sc, PendingLoaders: Array.Empty<ILoader>()),
                     async (x, loader) =>
                     {
-                        var loaderLogger = logger.BeginScope(loader.ToString() ?? "");
+                        var loaderLogger = loadLogger.BeginScope(loader.ToString() ?? "");
                         var (newsc, done) = await loader.Load(sc, projectRoot, loaderLogger, ct);
 
-                        if (!done)
-                        {
-                            loaderLogger.Info("PENDING WORK");
-                            return (newsc, [..x.PendingLoaders, loader]);
-                        }
+                        if (done) return (newsc, x.PendingLoaders);
 
-                        return (newsc, x.PendingLoaders);
+                        loaderLogger.Info("PENDING WORK");
+                        return (newsc, [..x.PendingLoaders, loader]);
+
                     }, ct);
             if (pass == maxPasses) break;
         } while (pendingLoaders.Any());
@@ -193,7 +194,8 @@ public class ApplicationService
         }
 
         var generateLogger = logger.BeginScope("Generation");
-        await Parallel.ForEachAsync(
+        await ForEachP(
+            parallelize: debugMode,
             _fs.Directory.GetFiles(projectRoot, "*", new System.IO.EnumerationOptions { RecurseSubdirectories = true }),
             ct,
             async (filePath, token) =>
@@ -208,6 +210,24 @@ public class ApplicationService
         logger.Info($"Overall time: {sw.Elapsed}");
     }
 
+    async Task ForEachP<TSource>(
+        bool parallelize,
+        IEnumerable<TSource> source,
+        CancellationToken cancellationToken,
+        Func<TSource, CancellationToken, ValueTask> body)
+    {
+        if (parallelize)
+        {
+            await Parallel.ForEachAsync(source, cancellationToken, body);
+        }
+        else
+        {
+            foreach (var item in source)
+            {
+                await body(item, cancellationToken);
+            }
+        }
+    }
     private async Task Generate(GeneratorConfig[] cfg, SiteContents siteContents, AbsolutePathEx projectRoot,
         RelativePathEx inputFile, AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {

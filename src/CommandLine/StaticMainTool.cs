@@ -11,9 +11,12 @@ public static class StaticMainTool
 {
     public static async Task<int> Process(string[] args,
         Func<IRazorLightEngine, RazorLightProject, IFileSystem, ILoader[]> getLoaders,
-        Func<IRazorLightEngine, IFileSystem, GeneratorConfig[]> getGeneratorConfigs,
-        ISwgLogger logger)
+        Func<IRazorLightEngine, IFileSystem, GeneratorConfig[]> getGeneratorConfigs)
     {
+        var debugMode = args.Contains("--debug");
+        var logger = new ConsoleSwgLogger(enableDebug: debugMode);
+
+
         var localFileSystem = new LocalFileSystem();
         switch (args.FirstOrDefault())
         {
@@ -30,7 +33,7 @@ public static class StaticMainTool
                 var applicationService = new ApplicationService(fs);
                 var loaders = getLoaders(engine, project, fs);
                 var generatorConfigs = getGeneratorConfigs(engine, fs);
-                await applicationService.Build(projectRoot, outputRoot, generatorConfigs, loaders, logger);
+                await applicationService.Build(projectRoot, outputRoot, generatorConfigs, loaders, logger, debugMode);
                 break;
             }
             case "watch":
