@@ -18,7 +18,7 @@ public abstract class MultipleStringGenerator : Generator
         _encoding = encoding;
     }
 
-    protected abstract IEnumerable<(RelativePathEx File, Func<Task<string>> Content)> GenerateString(
+    protected abstract IEnumerable<(RelativePathEx File, Func<Task<string>> Content)> GenerateStrings(
         SiteContents ctx,
         AbsolutePathEx projectRoot,
         RelativePathEx inputFile,
@@ -30,6 +30,6 @@ public abstract class MultipleStringGenerator : Generator
         RelativePathEx inputFile,
         ISwgLogger logger,
         CancellationToken ct) =>
-        GenerateString(ctx, projectRoot, inputFile, logger, ct)
+        GenerateStrings(ctx, projectRoot, inputFile, logger, ct)
             .Select(x => new GeneratorItem(x.File, async () => new MemoryStream(_encoding.GetBytes(await x.Content()))));
 }

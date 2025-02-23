@@ -356,9 +356,9 @@ blockquote i, blockquote em {
 pre, code {
     font-family: "Menlo", "Inconsolata", "Consolas", "Roboto Mono", "Ubuntu Mono", "Liberation Mono", "Courier New", monospace;
     font-size: 0.9375em;
-    border: 1px solid #fecccd;
+    border: 1px solid #faa;
     border-radius: 3px;
-    background-color: #eef
+    background-color: #eee
 }
 
 code {
@@ -367,7 +367,7 @@ code {
 
 pre {
     padding: 8px 12px;
-    overflow-x: auto
+    overflow-x: auto;
 }
 
 pre > code {
@@ -420,7 +420,6 @@ pre > code {
     height: 16px;
     display: inline-block;
     fill: currentColor;
-    padding: 5px 3px 2px 5px;
     vertical-align: text-bottom
 }
 
@@ -754,7 +753,6 @@ table td {
 .social-media-list li a, .pagination li a {
     display: block;
     padding: 5px;
-    border: 1px solid #fecccd
 }
 
 .social-media-list li a:hover, .pagination li a:hover {

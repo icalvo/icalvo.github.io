@@ -260,14 +260,15 @@ public class ApplicationService
             var dir = outputPath.Parent ?? throw new Exception("Should not happen");
             await _fs.Directory.CreateIfNotExistAsync(dir);
 
-            if (await _fs.File.ExistsAsync(outputPath))
+            if (result.SkipIfExists)
             {
-                if (generator.SkipWriteIfFileExists())
+                if (await _fs.File.ExistsAsync(outputPath))
                 {
                     resultLogger.Debug("Skipped writing file because it already exists");
                     continue;
                 }
             }
+            
 
             var tempFile = tempDir / Guid.NewGuid().ToString("N") + ".tmp";
 

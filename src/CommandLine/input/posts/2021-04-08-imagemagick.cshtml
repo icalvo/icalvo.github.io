@@ -7,7 +7,7 @@
             Tags = "thumbnail,music,score,pdf".Split(',')
         };
 }
-<markdown>
+$markdown$
 At the beginning of this year I started to prepare my [new showcase of musical works](/music/). After some iterations I thought it would be a great idea to create backgrounds for each work, based on its score sheet. But, being a developer (that's synonym for lazy), I didn't want to prepare those thumbnails manually. So I wondered if there was some way to take a PDF file, cut an specific part of the first page, and apply a number of transformations to get a beautiful background that didn't contrast a lot with the text and elements that I would place on top of that.
 <!--more-->
 
@@ -35,4 +35,4 @@ magick `
   -attenuate 0.3 +noise Gaussian ` # add a bit of noise to add texture
   "$output"
 ```
-</markdown>
+$/markdown$

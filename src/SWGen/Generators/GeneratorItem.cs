@@ -3,4 +3,4 @@ using SWGen.FileSystems;
 
 namespace SWGen.Generators;
 
-public record GeneratorItem(RelativePathEx File, Func<Task<Stream>> Content);
+public record GeneratorItem(RelativePathEx File, Func<Task<Stream>> Content, bool SkipIfExists = false);

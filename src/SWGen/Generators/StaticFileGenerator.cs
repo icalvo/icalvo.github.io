@@ -15,8 +15,9 @@ public class StaticFileGenerator : Generator
     public override IEnumerable<GeneratorItem> Generate(SiteContents ctx, AbsolutePathEx projectRoot,
         RelativePathEx inputFile, ISwgLogger logger, CancellationToken ct)
     {
-        yield return new(inputFile, () => Task.FromResult((Stream)File.OpenRead((projectRoot / inputFile).Normalized(_fs))));
+        yield return new(
+            inputFile,
+            () => Task.FromResult((Stream)File.OpenRead((projectRoot / inputFile).Normalized(_fs))),
+            SkipIfExists: inputFile.Extension != ".css");
     }
-
-    public override bool SkipWriteIfFileExists() => true;
 }

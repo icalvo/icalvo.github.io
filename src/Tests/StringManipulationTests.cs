@@ -32,7 +32,7 @@ public class StringManipulationTests
     public void Test2()
     {
         Assert.Equal("\r\n",
-            StringManipulation.TransformTags("<markdown>\r\n</markdown>", "markdown", s => s.ToUpperInvariant())
+            StringManipulation.TransformTags("<abc>\r\n</abc>", "abc", s => s.ToUpperInvariant())
         );
     }
 }

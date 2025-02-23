@@ -7,7 +7,7 @@
             Categories = ["music"]
         };
 }
-<markdown>
+$markdown$
 If you are like me, you have your MIDI tracks separated from your Kontakt instruments. This way you don't waste Konkakt instances.
 
 This script searches recursively for all instruments reachable through the sends of the current selected track and opens all of them.
@@ -88,4 +88,4 @@ for _, instrument in pairs(instruments) do
     open_instrument(instrument.Track, instrument.InstrumentIndex)
 end
 ```
-</markdown>
+$/markdown$

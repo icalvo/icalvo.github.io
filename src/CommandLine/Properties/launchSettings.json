@@ -5,6 +5,11 @@
       "commandName": "Project",
       "commandLineArgs": "build",
       "workingDirectory": "$(ProjectDir)"
+    },
+    "CommandLine dbg": {
+      "commandName": "Project",
+      "commandLineArgs": "build --debug",
+      "workingDirectory": "$(ProjectDir)"
     }
   }
 }

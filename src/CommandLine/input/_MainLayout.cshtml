@@ -14,7 +14,7 @@
   {
     <title>@Model.Title | @Model.SiteInfo.Title</title>
   }
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="@Raw(InputFileSystem.Input.Favicon_ico.RelUrl())">
   <meta name="generator" content="SWG" />
   <meta property="og:title" content="@Model.SiteInfo.Title" />
   <meta name="author" content="@Model.SiteInfo.Owner" />
@@ -52,8 +52,9 @@
       "url":"@Model.SiteInfo.Url"
     }
   </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-css-reset@1.4.0/dist/reset.min.css">
+  <link rel="stylesheet" href="@Raw(InputFileSystem.Input.Assets.Css.Style_css.RelUrl())">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <link type="application/atom+xml" rel="alternate" href="@Model.SiteInfo.Url/feed.xml" title="@Model.SiteInfo.Title" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=@Model.SiteInfo.GoogleAnalytics"></script>
   <script>
@@ -64,7 +65,7 @@
 
       gtag('config', '@Model.SiteInfo.GoogleAnalytics');
     </script>
-    <script src="/assets/js/green-audio-player.js"></script>
+    <script src="@Raw(InputFileSystem.Input.Assets.Js.Green_audio_player_js.RelUrl())"></script>
 </head>
 <body>
 

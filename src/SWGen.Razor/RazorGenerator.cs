@@ -46,7 +46,7 @@ public class RazorGenerator<T> : StringGenerator where T : class, ICreatable<T>
 
             var renderedContent = await _engine.CompileRenderWithLayout(pageAbsolutePath.Normalized(_fs), doc, layout);
             renderedContent = _postRenderTransforms(renderedContent);
-            return renderedContent.Tidy();            
+            return renderedContent;            
         }
     }
 }

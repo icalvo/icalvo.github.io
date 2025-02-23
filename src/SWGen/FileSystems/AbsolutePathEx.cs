@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace SWGen.FileSystems;
+﻿namespace SWGen.FileSystems;
 
 public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
 {

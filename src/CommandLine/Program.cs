@@ -8,6 +8,12 @@ using SWGen.Generators;
 using SWGen.Razor;
 using SWGen.Razor.Atom;
 
+var markdownPipeline =
+    new MarkdownPipelineBuilder()
+    .EnableTrackTrivia()
+    .UseMathematics()
+    .Build();
+
 var result = await StaticMainTool.Process(
     args,
     GetLoaders,
@@ -15,8 +21,8 @@ var result = await StaticMainTool.Process(
 
 return result;
 
-static string TransformMarkdownTag(string content) =>
-    StringManipulation.TransformTags(content, "markdown", s => Markdown.Parse(s, trackTrivia: true).ToHtml());
+string TransformMarkdownTag(string content) =>
+    StringManipulation.TransformBetween(content, "$markdown$", "$/markdown$", s => Markdown.ToHtml(s, markdownPipeline));
 
 // Here we define the loaders that will be used to load the content of the site.
 // Order is important. Each loader will be able to access metadata from the previous loaders.
@@ -29,14 +35,14 @@ static ILoader[] GetLoaders(IRazorLightEngine engine, RazorLightProject project,
     new RazorWithMetadataLoader<Post>("posts", recursive:true, engine, fs, project)
 ];
 
-static GeneratorConfig[] GetGeneratorsConfig(IRazorLightEngine engine, IFileSystem fs) =>
+GeneratorConfig[] GetGeneratorsConfig(IRazorLightEngine engine, IFileSystem fs) =>
 [
     // new ("sass.fsx", GeneratorTrigger.new OnFileExt(".scss"), f => f.Extension == "css"),
     new (new RazorGenerator<Page>(engine, fs, TransformMarkdownTag), IsPage),
     new (new RazorGenerator<Page>(engine, fs, TransformMarkdownTag), IsMusicPage),
     new (new RazorGenerator<MusicWork>(engine, fs, TransformMarkdownTag), IsMusicWork),
     new (new RazorGenerator<Post>(engine, fs, TransformMarkdownTag), IsPost),
-    new (new IndexPageGenerator(engine, fs), IsFile("index.cshtml")),
+    new (new IndexPageRazorGenerator(engine, fs, TransformMarkdownTag), IsFile("index.cshtml")),
     new (new AtomGenerator<IndexPage, Post>(engine, fs), IsFile("atom.cshtml")),
     new (new SiteMapGenerator<IndexPage, Post>(engine, fs), IsFile("sitemap.cshtml")),
     new (new StaticFileGenerator(fs), IsStatic),
