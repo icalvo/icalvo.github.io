@@ -12,7 +12,6 @@ public class Document : IDocument
         Fs = fs;
         OutputFile = RelativePathEx.Create("NOOUTPUT!!");
         SiteContents = siteContents;
-        ((IDocument)this).Metadata = new object();
     }
 
     public RelativePathEx File { get; }
@@ -25,7 +24,7 @@ public class Document : IDocument
     public Uri RootRelativeLink => OutputFile.Url();
     public SiteContents SiteContents { get; init; }
     public SiteInfo SiteInfo => SiteContents.TryGetValue<SiteInfo>() ?? throw new Exception("SiteInfo not found!");
-    object IDocument.Metadata { get; set; }
+    object IDocument.Metadata { get; set; } = new();
     protected IDocument This => this;
     public string? Title => (This.Metadata as ITitled)?.Title;
     public string Author => (This.Metadata as IAuthored)?.Author ?? SiteInfo?.Owner.Name ?? "Anonymous";
