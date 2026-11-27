@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "_MainLayout.cshtml";
+    Model.Metadata =
+        new Page
+        {
+            Title = "Annex 1 | Mandelbrot Set Atlas",
+            Link = "mandelbrot/annex1.html",
+        };
+}
+
+$markdown$
+
+# Annex 1
+
+$$
+\begin{equation}
+f(z) = z^2 + c
+\end{equation}
+$$
+
+This is the iterative function that generates the Mandelbrot Set, but how exactly?
+
+Well, $M$ is a set of points on the complex plane. As you may know, the complex numbers have the form $a + bi$ where $i = \sqrt{-1}$, and we represent them in a plane by using $(a, b)$ as their coordinates. The modulus of a complex number is the distance to the origin ($\sqrt{a^2 + b^2}$).
+
+In order to know if some point $c$ belongs to $M$ we calculate a sequence of complex numbers:
+
+$$
+\begin{equation}
+z_0 = 0 + 0i
+z_{n+1} = z_n^2 + c
+\end{equation}
+$$
+
+That sequence of numbers can diverge (meaning that the modulus of the numbers gets bigger and bigger without bound), or converge (meaning that the modulus of the numbers stay within some bounded region). Then $M$ is defined as all the points where that sequence converge.
+
+This definition begs the question of how do we know that the sequence is divergent. Fortunately, it's rather simple to demonstrate that if some number has modulus bigger than 2, then the sequence will diverge. So we can iterate until we find a number with modulus greater that two and then we know that the starting point is not in the Mandelbrot Set.
+
+This is still not totally satisfying because if the point _does_ belong to $M$ then this process will never finish. So what we do is we calculate an approximation, namely we stop after a given count of iterations and, if the sequence is still within the radius 2 disk, then we declare it to be part of $M$. Obviously this is not perfect in a mathematical sense, but we know several additional facts that lets us adjust the number of iterations until the error is eliminated or very small. For example, all interior points not in the bound of $M$ belong to a hyperbolic component (a cardioid or a bulb). Therefore if our render has a point marked as "inside" and surrounded by a certain radius of "inside" points, we should be looking at one of these hyperbolic components, which have very specific shapes. If that is not the case, it's certain that we need to increase the iteration count.
+
+If we want to render a specific rectangle of the complex plane, we will need define some things. First, computer images are composed of a grid of pixels, each one with a specific color. This grid forms a rectangle and has a number of pixels per side. Let the size of the horizontal side be denoted by $w$ and the size of the vertical side by $h$. The unit of this numbers will be pixels.
+
+On the other hand, the corresponding rectangle of the complex plane has to be described as well. Typically it is described by its **center** and the **magnification**. The center is just a complex number. The magnification is a real number that lets us know how deep we are zooming in the set. There are several ways of defining the magnification.
+
+A magnification of 1 centered at the origin lets you see exactly the radius 2 disk. In other words, the radius 2 disk will be tangent to the horizontal and/or vertical sides of the rectangle (depending on its aspect ratio).
+
+Similarly, a magnification of 2 centered at the origin lets you see exactly the radius 1 disk, and in general a magnification of $m$ centered at point c inscribes a radius $2/m$ disk centered at point c in your rectangle.
+
+The tangent positions in a landscape image will be $c + 2/m$ and $c - 2/m$. The top-left coordinate is $c - \frac{2w}{hm} + \frac{2}{m}i$. The pixel size is $\frac{4}{mh}$. The function that gives you the complex number to calculate for each position in the pixel grid is:
+
+$$
+\begin{equation}
+c(x, y) = c - \frac{2w}{hm} + \frac{2}{m}i + (x+1/2)s - (y+1/2)si
+\end{equation}
+$$
+
+
+$/markdown$

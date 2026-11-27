@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "_MainLayout.cshtml";
+    Model.Metadata =
+        new Page
+        {
+            Title = "Introduction | Mandelbrot Set Atlas",
+            Link = "mandelbrot/introduction.html",
+        };
+}
+
+$markdown$
+
+# Introduction
+
+This is the Mandelbrot Set, also known as $M$:
+
+![Mandelbrot set](@Raw(InputFileSystem.Input.Pages.Mandelbrot.MSet_png.RelUrl()))
+
+It doesn't look very impressive, but let me tell you we will find places of breathtaking beauty when we set ourselves to explore its limits. For example, if we zoom the Set around the small red circle, we can find this:  
+
+![BOF zoom](@Raw(InputFileSystem.Input.Pages.Mandelbrot.C1_png.RelUrl()))
+
+## What is the Mandelbrot Set
+
+$M$ is a mathematical object. However, this is not a book about maths. The purpose of this book is to give you clues about how can you find your way around the corners of $M$. You won't find maths in its chapters, although I have added some annexes for those who want to know more about the theory behind the Set.
+
+However, I just want to show you the equation that generates all the beauty we have peeked at. You may think it must be a very complex equation, since it produces all that intricate patterns. However, it is a surprisingly simple recursive formula:
+
+$$
+\begin{equation}
+z_{n+1} \leftarrow z_n^2 + c
+\end{equation}
+$$
+
+$/markdown$
