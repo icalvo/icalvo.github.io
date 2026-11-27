@@ -9,4 +9,5 @@ public class AudioInfo
     public required string MovementKey { get; init; }
     public required AbsolutePathEx ProjectRoot { get; init; }
     public required IFileSystem Fs { get; init; }
+    public int? HeaderLevel { get; init; }
 }

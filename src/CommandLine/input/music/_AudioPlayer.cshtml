@@ -2,18 +2,15 @@
 @inherits TemplatePage<AudioInfo>
 
 @{
-    RelativePathEx workDir = Model.WorkDir;
-    var workKey = Model.MovementKey;
-    var absPath = Model.ProjectRoot / workDir / (workKey + ".mp3");
-    var audioUrl = (workDir / (workKey + ".mp3")).Url();
+    var fileName = WorkFiles.Mp3FileName(Model.MovementKey);
+    var audioUrl = WorkFiles.Url(Model.Fs, Model.ProjectRoot, Model.WorkDir, fileName);
 }
 
-
-@if (await Model.Fs.File.ExistsAsync(absPath))
+@if (audioUrl is not null)
 {
 <div class="player">
     <audio>
         <source src="@audioUrl" type="audio/mpeg">
     </audio>
 </div>
-}            
+}

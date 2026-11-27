@@ -7,7 +7,7 @@
 # SWGen Tools
 
 + `build.ps1`: Builds the site at `src\CommandLine\_public`. Alternatively, open the solution with Rider/VS and run the `CommandLine` project using its Launch Profile.
-+ `serve.ps1`: Runs the site with watch so that if you rebuild it will be refreshed in the browser.
++ `serve.ps1`: Serves `_public` with BrowserSync and reloads on html/css/js changes (media/PDF are not watched, so a concurrent rebuild will not crash the watcher).
 
 # Music Tools
 

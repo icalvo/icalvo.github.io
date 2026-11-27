@@ -1,5 +1,7 @@
 ﻿$projectPath = Resolve-Path $PSScriptRoot\..\src\CommandLine\CommandLine.csproj
-$previewPath = Resolve-Path $PSScriptRoot\..\src\CommandLine\_public
-
-del -r -fo $previewPath
+$previewPath = Join-Path (Resolve-Path $PSScriptRoot\..\src\CommandLine) '_public'
+if (Test-Path $previewPath)
+{
+  Remove-Item -Recurse -Force $previewPath
+}
 dotnet run build --project $projectPath

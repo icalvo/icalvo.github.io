@@ -1,11 +1,8 @@
-Param(
-    [Parameter(Mandatory=$true)][string]$work,
+Param( [Parameter(Mandatory=$true)][string]$work,
     [Parameter(Mandatory=$false)][Switch]$skipPendingCommitsCheck
 )
 
 Push-Location $PSScriptRoot
-
-$target = Resolve-Path (Join-Path $PSScriptRoot "..\src\CommandLine\input\music\works\$work")
 
 if (-not $skipPendingCommitsCheck)
 {

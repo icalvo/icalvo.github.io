@@ -1,4 +1,4 @@
-﻿@using SWGen.FileSystems
+@using SWGen.FileSystems
 @{
     Layout = "_MainLayout.cshtml";
     Model.Metadata = 
@@ -15,6 +15,7 @@
     <header class="post-header">
         <h1 class="post-title">Music works</h1>
         <p>This is the complete list of my original complete compositions. You can <strong>click on each of the work titles to get more details</strong> about that work, as well as several downloadable files that can include a PDF with the full score & parts, audio files, and MIDI files.</p>
+        <p>Numbers marked <strong>Cat.</strong> are entries in my personal catalogue of works (not publisher opus numbers).</p>
         <p>All the pieces are licensed under a <strong>Creative Commons Attribution License</strong>. This means that you are free to use the audio files and the scores, as long as you credit me as the composer. However, I would be very grateful if you let me know about any use you make of my music. Please contact me (check the footer of this page) in that case, or if you want to commission an original work.</p>
         <p>You can <strong>check my musical biography <a href="/music/biography.html">here</a></strong>.</p>
     </header>
@@ -24,13 +25,13 @@
             @{
                 var workDocs = Model.SiteContents.TryGetValues<Document<MusicWork>>()
                     .OrderByDescending(x => x.Metadata.CompositionDate)
-                    .ThenByDescending(x => x.Metadata.Opus);
+                    .ThenByDescending(x => x.Metadata.CatalogueNumber);
             }
       
             @foreach (var workDoc in workDocs)
             {
                 var work = workDoc.Metadata;
-                var completeTitle = $"{workDoc.Title}, Op.&nbsp;{work.Opus}{work.OpusLetter}";
+                var completeTitle = work.CompleteTitle;
                 var movementKeys = work.Movements.Any() ? work.Movements.Select(x => x.Key) : [workDoc.File.Directory.FileName];
                 RelativePathEx workDir = workDoc.OutputFile.Parent!;
 
@@ -42,14 +43,12 @@
                     (x, $"{x}", ".mid", "MIDI"),
                 ];
 
-                var workDirPath = (Model.SiteInfo.ProjectRoot / workDir);
                 var availableResources = (
                     from movementKey in movementKeys
                     from r in PossibleResources(movementKey)
-                    let filePath = r.name + r.ext
-                    let absPath = Model.Fs.Directory.GetFiles(workDirPath, filePath, new EnumerationOptions { RecurseSubdirectories = true }).FirstOrDefault()
-                    where absPath != null                        
-                    let url = absPath.RelativeTo(Model.SiteInfo.ProjectRoot)!.Url()
+                    let fileName = r.name + r.ext
+                    let url = WorkFiles.Url(Model.Fs, Model.SiteInfo.ProjectRoot, workDir, fileName)
+                    where url is not null
                     select new { r.key, r.name, r.ext, r.desc, url }).ToArray();
 
                 var availableResourceTypes =
@@ -66,11 +65,16 @@
                     }
                     select new { icon, g.Key.desc };
 
-                var audioUrl =
-                    work.DefaultAudioMovementKey != null
-                    ? availableResources.FirstOrDefault(x => x.ext == ".mp3" && x.key == work.DefaultAudioMovementKey)?.url
-                      ?? throw new Exception($"No MP3 file for default audio movement {work.DefaultAudioMovementKey}")
-                    : availableResources.Where(x => x.ext == ".mp3").Select(x => x.url).FirstOrDefault();
+                var audioMovementKey =
+                    work.DefaultAudioMovementKey
+                    ?? movementKeys.FirstOrDefault(k =>
+                        WorkFiles.Find(Model.Fs, Model.SiteInfo.ProjectRoot, workDir, WorkFiles.Mp3FileName(k)) is not null);
+
+                if (work.DefaultAudioMovementKey is not null
+                    && WorkFiles.Find(Model.Fs, Model.SiteInfo.ProjectRoot, workDir, WorkFiles.Mp3FileName(work.DefaultAudioMovementKey)) is null)
+                {
+                    throw new InvalidOperationException($"No MP3 file for default audio movement {work.DefaultAudioMovementKey}");
+                }
 
                 <li style="background-image:url(@(workDoc.OutputFile.Parent?.Url())/background.png)">
                     <div class="work-title">
@@ -83,13 +87,17 @@
                         }
                     </div>
 
-                    @if (audioUrl != null)
+                    @if (audioMovementKey is not null)
                     {
-                        <div class="player">
-                            <audio>
-                                <source src="@audioUrl" type="audio/mpeg">
-                            </audio>
-                        </div>
+                        await IncludeAsync(
+                            "music/_AudioPlayer.cshtml",
+                            new AudioInfo
+                            {
+                                WorkDir = workDir,
+                                MovementKey = audioMovementKey,
+                                ProjectRoot = Model.SiteInfo.ProjectRoot,
+                                Fs = Model.Fs,
+                            });
                     }
                 </li>
             }
@@ -103,4 +111,3 @@
         showDownloadButton: false
     });
 </script>
-

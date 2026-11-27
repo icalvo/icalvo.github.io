@@ -50,19 +50,17 @@
 
                 <p>@movement.Description</p>
 
-                <h4>Downloads</h4>
                 await IncludeAsync(
                     "music/works/_Downloads.cshtml",
-                    new AudioInfo { WorkDir = workDir, MovementKey = movement.Key, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs });
+                    new AudioInfo { WorkDir = workDir, MovementKey = movement.Key, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs, HeaderLevel = 4 });
                 <div style="clear: both"></div>
             }
         }
         else
         {
-            <h2>Downloads</h2>
             await IncludeAsync(
                 "music/works/_Downloads.cshtml",
-                new AudioInfo { WorkDir = workDir, MovementKey = workKey, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs });
+                new AudioInfo { WorkDir = workDir, MovementKey = workKey, ProjectRoot = Model.SiteInfo.ProjectRoot, Fs = Model.Fs, HeaderLevel = 2 });
         }
     </div>
     

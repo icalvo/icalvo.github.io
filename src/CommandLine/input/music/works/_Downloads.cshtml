@@ -20,20 +20,25 @@
 
     var availableResources = (
         from r in PossibleResources(Model.MovementKey)
-        let absPath = Model.ProjectRoot / Model.WorkDir / (r.name + r.ext)
-        where Model.Fs.File.ExistsAsync(absPath).Result
-        let url = (Model.WorkDir / (r.name + r.ext)).Url()
+        let fileName = r.name + r.ext
+        let url = WorkFiles.Url(Model.Fs, Model.ProjectRoot, Model.WorkDir, fileName)
+        where url is not null
         let icon = Icon(r.ext)
         select (r.key, r.name, r.ext, r.desc, url, icon)).ToArray();
 
-    <div class="download-list">
-    @foreach ((string key, string name, string ext, string desc, Uri url, string icon) r in availableResources)
-    {
-        <div class="download">
-            <a href="@r.url">
-                <img title="@r.desc available" alt="@r.desc available" src="@r.icon"/><br/>@r.desc
-            </a>
+    if (availableResources.Length > 0) {
+        if (Model.HeaderLevel is not null) {
+        <h@Model.HeaderLevel>Downloads</h@Model.HeaderLevel>
+        }
+        <div class="download-list">
+        @foreach ((string key, string name, string ext, string desc, Uri url, string icon) r in availableResources)
+        {
+            <div class="download">
+                <a href="@r.url">
+                    <img title="@r.desc available" alt="@r.desc available" src="@r.icon"/><br/>@r.desc
+                </a>
+            </div>
+        }
         </div>
     }
-    </div>        
 }
