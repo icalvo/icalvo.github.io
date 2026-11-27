@@ -46,7 +46,17 @@ jobs:
         run: dotnet test src/StaticWebGenerator.sln --no-build -c Release --verbosity normal
 
       - name: Generate site
-        run: dotnet run --no-build -c Release --project src/CommandLine/CommandLine.csproj -- build
+        # Working directory = project dir so cwd/input and cwd/_public resolve like local builds.
+        # Site generation must exit non-zero on failure (ApplicationService rethrows); otherwise
+        # a broken/partial _public would still be uploaded and replace the live Pages site.
+        working-directory: src/CommandLine
+        run: dotnet run --no-build -c Release --project CommandLine.csproj -- build
+
+      - name: Verify site output
+        run: |
+          test -f src/CommandLine/_public/index.html
+          test -d src/CommandLine/_public/music
+          test -s src/CommandLine/_public/index.html
 
       - name: Upload site artifact
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/moving'))
