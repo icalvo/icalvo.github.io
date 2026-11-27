@@ -1,21 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="AngleSharp" Version="1.5.0" />
-      <PackageReference Include="Ben.Demystifier" Version="0.4.1" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.1" />
-      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" />
+    <PackageReference Include="Ben.Demystifier" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="System.Linq.Async" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="FileSystems\TaskExtensions.cs" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="FileSystems\TaskExtensions.cs" />
+  </ItemGroup>
 
 </Project>

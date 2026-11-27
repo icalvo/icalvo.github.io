@@ -2,20 +2,11 @@
 
 namespace SWGen;
 
-public class ConsoleSwgLogger : ISwgLogger
+public class ConsoleSwgLogger(bool enableDebug, params string[] scopes) : ISwgLogger
 {
-    private readonly bool _enableDebug;
-    private readonly string[] _scopes;
-
-    public ConsoleSwgLogger(bool enableDebug, params string[] scopes)
-    {
-        _enableDebug = enableDebug;
-        _scopes = scopes;
-    }
-
     public void Log(LogLevel logLevel, string message)
     {
-        if (logLevel == LogLevel.Debug && !_enableDebug) return;
+        if (logLevel == LogLevel.Debug && !enableDebug) return;
         var color = logLevel switch
         {
             LogLevel.Information => ConsoleColor.Green,
@@ -37,8 +28,8 @@ public class ConsoleSwgLogger : ISwgLogger
     private void ColorLog(ConsoleColor color, DateTime eventTime, string level, string message) =>
         ColorWriteLine(
             color,
-            _scopes.Length > 0
-                ? $"[{eventTime:HH:mm:ss} {_scopes.StringJoin("|")}] {message}"
+            scopes.Length > 0
+                ? $"[{eventTime:HH:mm:ss} {scopes.StringJoin("|")}] {message}"
                 : $"[{eventTime:HH:mm:ss}] {message}");
 
     private static void ColorWriteLine(ConsoleColor color, string message)
@@ -49,5 +40,5 @@ public class ConsoleSwgLogger : ISwgLogger
         Console.ForegroundColor = oldColor;
     }
 
-    ISwgLogger ISwgLogger.BeginScope(string scopeName) => new ConsoleSwgLogger(_enableDebug, [.._scopes, scopeName]);
+    ISwgLogger ISwgLogger.BeginScope(string scopeName) => new ConsoleSwgLogger(enableDebug, [..scopes, scopeName]);
 }

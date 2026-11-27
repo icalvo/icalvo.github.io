@@ -31,7 +31,7 @@ public class LocalFileSystem : IRawFileSystem
     public string PathReplaceForbiddenChars(string path, string replacement = "") =>
         Path.GetInvalidPathChars().Union(Path.GetInvalidFileNameChars()).Aggregate(
             path,
-            (p, invalidChar) => p.Replace(invalidChar.ToString(), replacement));
+            (p, invalidChar) => p.Replace(invalidChar.ToString(), replacement, StringComparison.Ordinal));
 
     public string DirectoryGetCurrent()
     {

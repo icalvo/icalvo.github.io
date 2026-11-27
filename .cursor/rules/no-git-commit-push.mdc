@@ -1,0 +1,15 @@
+---
+description: Never commit or push in this repository
+alwaysApply: true
+---
+
+# No git commit / push
+
+Agents must **never** create commits or push to remotes in this repo.
+
+- Do **not** run `git commit`, `git push`, or equivalents (including amend, hooks bypass, force push).
+- Do **not** stage-and-commit workflows even if the user says “commit this” or “ship it”.
+- Prepare diffs, messages, and release steps for the user; they commit/push themselves.
+- Read-only git (`status`, `diff`, `log`, `show`) and local non-publishing commands are fine.
+
+A project `beforeShellExecution` hook also denies `git commit` / `git push` as a hard stop.

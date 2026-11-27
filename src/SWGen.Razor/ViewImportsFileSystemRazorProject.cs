@@ -9,25 +9,6 @@ using RazorLight.Razor;
 using SWGen.FileSystems;
 
 namespace SWGen.Razor;
-public class MyFileSystemRazorProjectItem : RazorLightProjectItem
-{
-    private readonly IFileSystem _fs;
-
-    public MyFileSystemRazorProjectItem(string templateKey, AbsolutePathEx file, IFileSystem fs)
-    {
-        _fs = fs;
-        Key = templateKey;
-        File = file;
-    }
-
-    public AbsolutePathEx File { get; }
-
-    public override string Key { get; }
-
-    public override bool Exists => _fs.File.ExistsAsync(File).Result;
-
-    public override Stream Read() => (Stream) _fs.File.OpenReadAsync(File).Result;
-}
 
 /// <summary>
 /// Specifies RazorProject where templates are located in files
@@ -84,13 +65,12 @@ public class ViewImportsFileSystemRazorProject : RazorLightProject
     /// <returns></returns>
     public override Task<RazorLightProjectItem> GetItemAsync(string templateKey)
     {
-      if (!templateKey.EndsWith(Extension))
+      if (!templateKey.EndsWith(Extension, StringComparison.Ordinal))
         templateKey += Extension;
       var absoluteFilePathFromKey = GetAbsoluteFilePathFromKey(templateKey);
       RazorLightProjectItem result = new MyFileSystemRazorProjectItem(templateKey, absoluteFilePathFromKey, _fs);
       if (result.Exists)
           result.ExpirationToken = new CancellationChangeToken(CancellationToken.None);
-      //_fileProvider.Watch(templateKey);
       return Task.FromResult(result);
     }
 
@@ -110,7 +90,9 @@ public class ViewImportsFileSystemRazorProject : RazorLightProject
 
     public override string NormalizeKey(string templateKey)
     {
-      return GetAbsoluteFilePathFromKey(templateKey).RelativeTo(Root)!.Normalized(_fs);
+      var relative = GetAbsoluteFilePathFromKey(templateKey).RelativeTo(Root)
+          ?? throw new InvalidOperationException($"Template key '{templateKey}' is not under project root '{Root}'");
+      return relative.Normalized(_fs);
     }
 
 
@@ -131,29 +113,4 @@ public class ViewImportsFileSystemRazorProject : RazorLightProject
             }
         }
     }
-}
-
-public static class EnumerableHelpers
-{
-    public static IEnumerable<T> Unfold<T>(this T seed, Func<T, bool> isLast, Func<T, T> generator)
-    {
-        var current = seed;
-        while (true)
-        {
-            yield return current;
-            if (isLast(current)) yield break;
-            current = generator(current);
-        }
-    }
-}
-public static class AbsoluteFilePathExExtensions
-{
-    public static ValueTask<AbsolutePathEx?> GetFirstExistingFileInParentDirs(this AbsolutePathEx startDirPath, IFileSystem fs, string fileName)
-    {
-        return startDirPath.Unfold(x => x.IsRoot, x => x.Parent)
-            .Select(dirPath => dirPath / fileName)
-            .ToAsyncEnumerable()
-            .FirstOrDefaultAwaitAsync(async x => await fs.File.ExistsAsync(x));
-    }
-
 }

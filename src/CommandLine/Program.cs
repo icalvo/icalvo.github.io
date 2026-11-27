@@ -55,7 +55,7 @@ static Func<AbsolutePathEx, RelativePathEx, bool> IsFile(string fileName)
 static bool IsPost(AbsolutePathEx inputRoot, RelativePathEx inputFile)
 {
     if (!inputFile.Parts.Contains("posts")) return false;
-    if (inputFile.FileName.StartsWith('_')) return false;
+    if (inputFile.FileName.StartsWith('_', StringComparison.Ordinal)) return false;
     var ext = inputFile.Extension;
     if (ext != ".cshtml") return false;
     return true;
@@ -64,7 +64,7 @@ static bool IsPost(AbsolutePathEx inputRoot, RelativePathEx inputFile)
 static bool IsPage(AbsolutePathEx inputRoot, RelativePathEx inputFile)
 {
     if (inputFile.Parts.ElementAtOrDefault(0) != "pages") return false;
-    if (inputFile.FileName.StartsWith('_')) return false;
+    if (inputFile.FileName.StartsWith('_', StringComparison.Ordinal)) return false;
     var ext = inputFile.Extension;
     if (ext != ".cshtml") return false;
     return true;
@@ -73,7 +73,7 @@ static bool IsPage(AbsolutePathEx inputRoot, RelativePathEx inputFile)
 static bool IsMusicPage(AbsolutePathEx inputRoot, RelativePathEx inputFile)
 {
     if (inputFile.Parts.ElementAtOrDefault(^2) != "music") return false;
-    if (inputFile.FileName.StartsWith('_')) return false;
+    if (inputFile.FileName.StartsWith('_', StringComparison.Ordinal)) return false;
     if (inputFile.Extension != ".cshtml") return false;
     return true;
 }
@@ -82,7 +82,7 @@ static bool IsMusicWork(AbsolutePathEx inputRoot, RelativePathEx inputFile)
 {
     if (inputFile.Parts.ElementAtOrDefault(^3) != "works") return false;
     if (inputFile.Parts.ElementAtOrDefault(^4) != "music") return false;
-    if (inputFile.FileName.StartsWith('_')) return false;
+    if (inputFile.FileName.StartsWith('_', StringComparison.Ordinal)) return false;
     if (inputFile.Extension != ".cshtml") return false;
     return true;
 }
@@ -102,8 +102,8 @@ static bool IsStatic(AbsolutePathEx inputRoot, RelativePathEx inputFile)
         ext == ".musicxml" ||
         ext == ".mscz" ||
         ext == ".mxl" ||
-        inputFile.FileName.Contains(".cwp") ||
+        inputFile.FileName.Contains(".cwp", StringComparison.Ordinal) ||
         inputFile.Parts.Contains(".git");
-        
+
     return !fileShouldBeExcluded;
 }

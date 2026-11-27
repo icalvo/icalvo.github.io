@@ -4,7 +4,7 @@ namespace CommandLine;
 
 public static class StringManipulation
 {
-    private static readonly Dictionary<string, Regex> TagRegexDictionary = new();
+    private static readonly Dictionary<string, Regex> TagRegexDictionary = [];
     public static string TransformChunk(string content, string beginPattern, string endPattern, Func<string, string> transform)
     {
         Regex regex =
@@ -29,8 +29,8 @@ public static class StringManipulation
         var tagEsc = Regex.Escape(tag);
         return TransformChunk(content, $"<{tagEsc}>", $@"</\w*{tagEsc}>", transform);
     }
-    
+
     public static string CDataEscape(this string content) => content;
-    
+
     public static string ExpandUrls(this string content, string root) => content;
 }

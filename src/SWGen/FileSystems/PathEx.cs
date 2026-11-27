@@ -3,13 +3,8 @@ using System.IO;
 
 namespace SWGen.FileSystems;
 
-public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
+public abstract class PathEx(string[] parts) : IEnumerable<string>, IEquatable<PathEx>
 {
-    protected PathEx(string[] parts)
-    {
-        Parts = parts;
-    }
-
     public static PathEx Create(string rawPath)
     {
         if (string.IsNullOrWhiteSpace(rawPath))
@@ -25,7 +20,7 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
 
     private static bool IsRoot(string d)
     {
-        return (d is [var l, ':'] && char.IsLetter(l)) || d == "";
+        return (d is [var l, ':'] && char.IsLetter(l)) || d.Length == 0;
     }
 
     public abstract PathEx? Parent { get; }
@@ -50,9 +45,11 @@ public abstract class PathEx : IEnumerable<string>, IEquatable<PathEx>
 
     public string FileName => Parts[^1];
     public string FileNameWithoutExtension => Path.GetFileNameWithoutExtension(Parts[^1]);
-    public PathEx Directory => Parent!;
+    public PathEx Directory => Parent is { } parent
+        ? parent
+        : throw new InvalidOperationException("Path has no parent directory.");
     public string Extension => Path.GetExtension(Parts[^1]);
-    public string[] Parts { get; init; }
+    public string[] Parts { get; init; } = parts;
 
     public static implicit operator PathEx(string rawPath) => Create(rawPath);
     public static PathEx operator /(PathEx left, RelativePathEx right) => left.Combine(right);

@@ -1,4 +1,6 @@
-﻿namespace CommandLine;
+﻿using System.Globalization;
+
+namespace CommandLine;
 
 public record PartialDate(int Year, int? Month = null, int? Day = null) : IComparable<PartialDate>
 {
@@ -22,7 +24,11 @@ public record PartialDate(int Year, int? Month = null, int? Day = null) : ICompa
 
     public override string ToString()
     {
-        return Day is not null ? $"{Year}-{Month:D2}-{Day:D2}" : Month is not null ? $"{Year}-{Month:D2}" : Year.ToString();
+        return Day is not null
+            ? string.Create(CultureInfo.InvariantCulture, $"{Year}-{Month:D2}-{Day:D2}")
+            : Month is not null
+                ? string.Create(CultureInfo.InvariantCulture, $"{Year}-{Month:D2}")
+                : Year.ToString(CultureInfo.InvariantCulture);
     }
 
     public int CompareTo(PartialDate? other)
@@ -35,4 +41,16 @@ public record PartialDate(int Year, int? Month = null, int? Day = null) : ICompa
         if (monthComparison != 0) return monthComparison;
         return Nullable.Compare(Day, other.Day);
     }
+
+    public static bool operator <(PartialDate? left, PartialDate? right) =>
+        Comparer<PartialDate>.Default.Compare(left, right) < 0;
+
+    public static bool operator >(PartialDate? left, PartialDate? right) =>
+        Comparer<PartialDate>.Default.Compare(left, right) > 0;
+
+    public static bool operator <=(PartialDate? left, PartialDate? right) =>
+        Comparer<PartialDate>.Default.Compare(left, right) <= 0;
+
+    public static bool operator >=(PartialDate? left, PartialDate? right) =>
+        Comparer<PartialDate>.Default.Compare(left, right) >= 0;
 }

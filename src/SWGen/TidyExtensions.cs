@@ -10,7 +10,7 @@ public static class TidyExtensions
     {
         var parser = new HtmlParser();
         var document = parser.ParseDocument(untidy);
-        var sw = new StringWriter();
+        using var sw = new StringWriter();
         document.ToHtml(sw, new PrettyMarkupFormatter());
         return sw.ToString();
     }

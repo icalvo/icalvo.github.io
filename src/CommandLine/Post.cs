@@ -1,4 +1,5 @@
-﻿using Slugify;
+﻿using System.Globalization;
+using Slugify;
 using SWGen;
 using SWGen.FileSystems;
 using SWGen.Razor;
@@ -6,10 +7,6 @@ using SWGen.Razor.Atom;
 
 namespace CommandLine;
 
-public interface IIdentifyable<TIdentifier> where TIdentifier : struct
-{
-    TIdentifier? Id { get; }
-}
 public class Post : ITitled, IAuthored, ICreatable<Post>, ILink, IIdentifyable<PostIdentifier>, IDated
 {
     public PostIdentifier? Id { get; init; }
@@ -18,7 +15,7 @@ public class Post : ITitled, IAuthored, ICreatable<Post>, ILink, IIdentifyable<P
     public string Author { get; init; } = "Anonymous";
     public string[] Tags { get; init; } = [];
     public string[] Categories { get; init; } = [];
-    
+
 
     public static Post Create()
     {
@@ -32,9 +29,9 @@ public class Post : ITitled, IAuthored, ICreatable<Post>, ILink, IIdentifyable<P
         [
             "posts",
             ..Categories,
-            Published.Year.ToString(),
-            Published.Month.ToString(),
-            Published.Day.ToString(),
+            Published.Year.ToString(CultureInfo.InvariantCulture),
+            Published.Month.ToString(CultureInfo.InvariantCulture),
+            Published.Day.ToString(CultureInfo.InvariantCulture),
             $"{_slugHelper.GenerateSlug(Title)}.html"
         ]);
 }

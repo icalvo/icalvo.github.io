@@ -2,14 +2,9 @@
 
 namespace SWGen.FileSystems;
 
-public class MappedFileSystem : IRawFileSystem
+public class MappedFileSystem(IRawFileSystem rawFileSystemImplementation) : IRawFileSystem
 {
-    private readonly IRawFileSystem _rawFileSystemImplementation;
     private readonly List<Mapping> _mappings = [];
-    public MappedFileSystem(IRawFileSystem rawFileSystemImplementation)
-    {
-        _rawFileSystemImplementation = rawFileSystemImplementation;
-    }
 
     public void AddMapping(AbsolutePathEx origin, AbsolutePathEx destination)
     {
@@ -18,37 +13,37 @@ public class MappedFileSystem : IRawFileSystem
 
     public Task DirectoryCreateAsync(AbsolutePathEx path)
     {
-        return _rawFileSystemImplementation.DirectoryCreateAsync(path);
+        return rawFileSystemImplementation.DirectoryCreateAsync(path);
     }
 
     public Task<bool> FileExistsAsync(AbsolutePathEx path)
     {
-        return _rawFileSystemImplementation.FileExistsAsync(path);
+        return rawFileSystemImplementation.FileExistsAsync(path);
     }
 
     public Task FileWriteAsync(AbsolutePathEx destinationPath, Stream stream)
     {
-        return _rawFileSystemImplementation.FileWriteAsync(destinationPath, stream);
+        return rawFileSystemImplementation.FileWriteAsync(destinationPath, stream);
     }
 
     public Task FileWriteAllTextAsync(AbsolutePathEx filePath, string content)
     {
-        return _rawFileSystemImplementation.FileWriteAllTextAsync(filePath, content);
+        return rawFileSystemImplementation.FileWriteAllTextAsync(filePath, content);
     }
 
     public Task<Stream> FileOpenReadAsync(AbsolutePathEx filePath)
     {
-        return _rawFileSystemImplementation.FileOpenReadAsync(filePath);
+        return rawFileSystemImplementation.FileOpenReadAsync(filePath);
     }
 
     public Task<string> FileReadAllTextAsync(AbsolutePathEx filePath)
     {
-        return _rawFileSystemImplementation.FileReadAllTextAsync(filePath);
+        return rawFileSystemImplementation.FileReadAllTextAsync(filePath);
     }
 
     public string PathNormalizeFolderSeparator(AbsolutePathEx path)
     {
-        return _rawFileSystemImplementation.PathNormalizeFolderSeparator(MappedPath(path));
+        return rawFileSystemImplementation.PathNormalizeFolderSeparator(MappedPath(path));
     }
 
     private AbsolutePathEx MappedPath(AbsolutePathEx path) => GetMapping(path) is { } m ? m.Destination / m.RelativePath : path;
@@ -69,37 +64,42 @@ public class MappedFileSystem : IRawFileSystem
 
     public string PathNormalizeFolderSeparator(RelativePathEx path)
     {
-        return _rawFileSystemImplementation.PathNormalizeFolderSeparator(path);
+        return rawFileSystemImplementation.PathNormalizeFolderSeparator(path);
     }
 
-    public bool IsReadOnly => _rawFileSystemImplementation.IsReadOnly;
+    public bool IsReadOnly => rawFileSystemImplementation.IsReadOnly;
 
     public Task<bool> DirectoryExistsAsync(AbsolutePathEx path)
     {
-        return _rawFileSystemImplementation.DirectoryExistsAsync(path);
+        return rawFileSystemImplementation.DirectoryExistsAsync(path);
     }
 
     public string PathReplaceForbiddenChars(string path, string replacement = "")
     {
-        return _rawFileSystemImplementation.PathReplaceForbiddenChars(path, replacement);
+        return rawFileSystemImplementation.PathReplaceForbiddenChars(path, replacement);
     }
 
     public string DirectoryGetCurrent()
     {
-        return _rawFileSystemImplementation.DirectoryGetCurrent();
+        return rawFileSystemImplementation.DirectoryGetCurrent();
     }
 
     public IEnumerable<AbsolutePathEx> DirectoryGetFiles(AbsolutePathEx path, string pattern, EnumerationOptions options)
     {
         var destinationFiles =
             MappingDescendants(path)
-                .SelectMany(mapping => _rawFileSystemImplementation.DirectoryGetFiles(mapping.Destination, pattern, options)
-                    .Select(destPath => mapping.Origin / destPath.RelativeTo(mapping.Destination)!));
+                .SelectMany(mapping => rawFileSystemImplementation.DirectoryGetFiles(mapping.Destination, pattern, options)
+                    .Select(destPath =>
+                    {
+                        var rel = destPath.RelativeTo(mapping.Destination)
+                            ?? throw new InvalidOperationException("Mapped file is not under mapping destination");
+                        return mapping.Origin / rel;
+                    }));
 
         var originFiles =
             _mappings.Any(m => path.IsChildOrSame(m.Origin))
             ? []
-            : _rawFileSystemImplementation.DirectoryGetFiles(path, pattern, options);
+            : rawFileSystemImplementation.DirectoryGetFiles(path, pattern, options);
 
         return originFiles.Where(f => !IsMappedPath(f))
             .Concat(destinationFiles);
@@ -107,16 +107,16 @@ public class MappedFileSystem : IRawFileSystem
 
     public Task FileMoveAsync(AbsolutePathEx sourceFile, AbsolutePathEx destinationFile, bool overwrite)
     {
-        return _rawFileSystemImplementation.FileMoveAsync(sourceFile, destinationFile, overwrite);
+        return rawFileSystemImplementation.FileMoveAsync(sourceFile, destinationFile, overwrite);
     }
 
     public Task<Stream> FileCreateAsync(AbsolutePathEx file)
     {
-        return _rawFileSystemImplementation.FileCreateAsync(file);
+        return rawFileSystemImplementation.FileCreateAsync(file);
     }
 
     public Task<AbsolutePathEx> PathGetTempPath()
     {
-        return _rawFileSystemImplementation.PathGetTempPath();
+        return rawFileSystemImplementation.PathGetTempPath();
     }
 }

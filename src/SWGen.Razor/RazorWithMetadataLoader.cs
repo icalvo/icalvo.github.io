@@ -10,38 +10,24 @@ using SWGen.FileSystems;
 
 namespace SWGen.Razor;
 
-public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : class, ICreatable<TMetadata>
+public class RazorWithMetadataLoader<TMetadata>(
+    RelativePathEx contentDir,
+    bool recursive,
+    IRazorLightEngine engine,
+    IFileSystem fs,
+    RazorLightProject project) : ILoader where TMetadata : class, ICreatable<TMetadata>
 {
-    private readonly RelativePathEx _contentDir;
-    private readonly bool _recursive;
-    private readonly IRazorLightEngine _engine;
-    private readonly RazorLightProject _project;
-    private readonly IFileSystem _fs;
     private const string RazorExtension = ".cshtml";
 
-    public RazorWithMetadataLoader(
-        RelativePathEx contentDir,
-        bool recursive,
-        IRazorLightEngine engine,
-        IFileSystem fs,
-        RazorLightProject project)
-    {
-        _contentDir = contentDir;
-        _recursive = recursive;
-        _engine = engine;
-        _fs = fs;
-        _project = project;
-    }
-
-    public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{_contentDir}\", rec:{_recursive})";
+    public override string ToString() => $"RazorWithMetadataLoader<{typeof(TMetadata).Name}>(\"{contentDir}\", rec:{recursive})";
 
     public async Task<LoaderResult> Load(SiteContents siteContents, AbsolutePathEx projectRoot, ISwgLogger loaderLogger,
         CancellationToken ct = default)
     {
         var sw = Stopwatch.StartNew();
-        var contentPath = projectRoot / _contentDir;
-        var files = _fs.Directory.GetFiles(contentPath, $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = _recursive })
-            .Where(f => !f.FileName.StartsWith('_'));
+        var contentPath = projectRoot / contentDir;
+        var files = fs.Directory.GetFiles(contentPath, $"*{RazorExtension}", new EnumerationOptions { RecurseSubdirectories = recursive })
+            .Where(f => !f.FileName.StartsWith('_', StringComparison.Ordinal));
 
         bool completed = true;
         await Parallel.ForEachAsync(files, ct, LoadDocument);
@@ -50,9 +36,10 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
 
         async ValueTask LoadDocument(AbsolutePathEx inputFile, CancellationToken ct2)
         {
-            var inputRelativeFile = inputFile.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+            var inputRelativeFile = inputFile.RelativeTo(projectRoot)
+                ?? throw new InvalidOperationException("Should not happen");
 
-            var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized(_fs));
+            var fileLogger = loaderLogger.BeginScope(inputRelativeFile.Normalized(fs));
             var existing = siteContents.TryGetValues<Document<TMetadata>>().FirstOrDefault(doc => doc.File == inputRelativeFile);
 
             bool reprocessing;
@@ -72,22 +59,22 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
             }
             else
             {
-                doc = new Document<TMetadata>(siteContents, inputRelativeFile, _fs);
+                doc = new Document<TMetadata>(siteContents, inputRelativeFile, fs);
                 siteContents.Add(doc);
                 reprocessing = false;
             }
 
             var fakeMetadata = doc.Metadata;
 
-            var templateKey = inputFile.Normalized(_fs);
-            var content = await _engine.CompileRenderWithoutLayout(templateKey, doc);
-            var imports = await _project.GetImportsAsync(templateKey);
+            var templateKey = inputFile.Normalized(fs);
+            var content = await engine.CompileRenderWithoutLayout(templateKey, doc);
+            var imports = await project.GetImportsAsync(templateKey);
             fileLogger.Debug($"Imports: {imports.Select(i => i.Key).StringJoin(", ")}");
 
             doc.Content = content;
             if (ReferenceEquals(fakeMetadata, doc.Metadata))
             {
-                throw new Exception($$"""You must set the metadata in your template, e.g. @{ Model.Metadata = new {{typeof(TMetadata).Name}} { Title = "My Title" }; }""");
+                throw new InvalidOperationException($$"""You must set the metadata in your template, e.g. @{ Model.Metadata = new {{typeof(TMetadata).Name}} { Title = "My Title" }; }""");
             }
 
             if (doc.Metadata is ILink link)
@@ -96,7 +83,8 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
             }
             else
             {
-                var dirPart = inputFile.Parent.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+                var dirPart = inputFile.Parent.RelativeTo(projectRoot)
+                    ?? throw new InvalidOperationException("Should not happen");
                 var fileName = inputFile.Parts[^1];
                 doc.OutputFile = dirPart.Combine(Path.ChangeExtension(fileName, ".html"));
             }
@@ -110,7 +98,7 @@ public class RazorWithMetadataLoader<TMetadata> : ILoader where TMetadata : clas
                         fileLogger.Error($"Pending link: {pendingLink}");
                     }
 
-                    throw new Exception("Reprocessing did not resolve all links");
+                    throw new InvalidOperationException("Reprocessing did not resolve all links");
                 }
 
                 completed = false;

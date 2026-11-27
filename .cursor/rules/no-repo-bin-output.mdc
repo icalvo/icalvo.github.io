@@ -1,0 +1,19 @@
+---
+description: Do not dump agent build/test output into the repo bin folder
+alwaysApply: true
+---
+
+# No repo-root build dumps
+
+When an alternate output directory is needed (e.g. to avoid locking `src/*/bin` while the app is running), **do not** write under the repository’s `bin/`, `obj/`, or other project paths.
+
+Use a temp directory instead, for example:
+
+```powershell
+$out = Join-Path $env:TEMP "icalvo-github-io\$([guid]::NewGuid().ToString('n'))"
+dotnet build src/StaticWebGenerator.sln -o $out
+```
+
+- Prefer `%TEMP%\icalvo-github-io\…` (or `System.IO.Path.GetTempPath()`), not repo `bin/…`.
+- Same for analyzer dumps, format reports, publish output, and ad-hoc test binaries.
+- Default `dotnet build` / `dotnet test` into the normal `src/*/bin` locations is fine; this rule is only about redirected/extra output.

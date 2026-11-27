@@ -6,28 +6,26 @@ using SWGen.Generators;
 
 namespace SWGen;
 
-public class ApplicationService
+public class ApplicationService(IFileSystem fs)
 {
-    private readonly IFileSystem _fs;
-
-    public ApplicationService(IFileSystem fs)
-    {
-        _fs = fs;
-    }
+    private readonly IFileSystem _fs = fs;
 
     public Task Build(AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, GeneratorConfig[] config,
         ILoader[] loaders, ISwgLogger logger, bool debugMode)
         => GuardedGenerate(config, loaders, projectRoot, outputRoot, logger, debugMode, CancellationToken.None);
 
-    public Task Watch(AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, GeneratorConfig[] config, ILoader[] loaders, ISwgLogger logger) =>
-        Watch(
+    public static async Task Watch(AbsolutePathEx projectRoot, AbsolutePathEx outputRoot, GeneratorConfig[] config, ILoader[] loaders, ISwgLogger logger)
+    {
+        using var webSocket = new ClientWebSocket();
+        await Watch(
             config,
             loaders,
             projectRoot,
-            new ClientWebSocket(),
+            webSocket,
             outputRoot,
             logger,
             CancellationToken.None);
+    }
 
     private async Task GuardedGenerate(GeneratorConfig[] config, ILoader[] loaders, AbsolutePathEx projectRoot,
         AbsolutePathEx outputRoot, ISwgLogger logger, bool debugMode, CancellationToken ct)
@@ -45,7 +43,7 @@ public class ApplicationService
         }
     }
 
-    public async Task Watch(GeneratorConfig[] cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket,
+    public static async Task Watch(GeneratorConfig[] cfg, ILoader[] loaders, AbsolutePathEx projectRoot, WebSocket webSocket,
         AbsolutePathEx outputRoot, ISwgLogger logger, CancellationToken ct)
     {
         // var lastAccessed = new Dictionary<string, DateTime>();
@@ -68,7 +66,7 @@ public class ApplicationService
         //
         // SimpleWebServer(outputRoot, logger);
 
-        return;
+        await Task.CompletedTask;
 
         // void Handler(object sender, FileSystemEventArgs args)
         // {
@@ -114,7 +112,7 @@ public class ApplicationService
         }
 
         // Create a listener.
-        HttpListener listener = new HttpListener();
+        using HttpListener listener = new HttpListener();
         // Add the prefixes.
         foreach (string s in prefixes)
         {
@@ -132,12 +130,14 @@ public class ApplicationService
             // Obtain a response object.
             HttpListenerResponse response = context.Response;
             // Construct a response.
-            if (request.Url!.LocalPath == "/websocket")
+            var requestUrl = request.Url
+                ?? throw new InvalidOperationException("HttpListenerRequest.Url was null");
+            if (requestUrl.LocalPath == "/websocket")
             {
                 return;
             }
 
-            var file = localPath / request.Url!.LocalPath;
+            var file = localPath / requestUrl.LocalPath;
             if (await _fs.File.ExistsAsync(file))
             {
                 await using var input = await _fs.File.OpenReadAsync(file);
@@ -170,27 +170,26 @@ public class ApplicationService
         {
             pass++;
             var loadLogger = logger.BeginScope($"Load (pass {pass})");
-            (sc, pendingLoaders) = await loaders.ToAsyncEnumerable()
-                .AggregateAwaitAsync(
-                    (sc, PendingLoaders: Array.Empty<ILoader>()),
-                    async (x, loader) =>
-                    {
-                        var loaderLogger = loadLogger.BeginScope(loader.ToString() ?? "");
-                        var (newsc, done) = await loader.Load(sc, projectRoot, loaderLogger, ct);
+            ILoader[] nextPending = [];
+            await foreach (var loader in loaders.ToAsyncEnumerable().WithCancellation(ct))
+            {
+                var loaderLogger = loadLogger.BeginScope(loader.ToString() ?? "");
+                var (newsc, done) = await loader.Load(sc, projectRoot, loaderLogger, ct);
+                sc = newsc;
+                if (done) continue;
 
-                        if (done) return (newsc, x.PendingLoaders);
+                loaderLogger.Info("PENDING WORK");
+                nextPending = [..nextPending, loader];
+            }
 
-                        loaderLogger.Info("PENDING WORK");
-                        return (newsc, [..x.PendingLoaders, loader]);
-
-                    }, ct);
+            pendingLoaders = nextPending;
             if (pass == maxPasses) break;
-        } while (pendingLoaders.Any());
+        } while (pendingLoaders.Length > 0);
 
-        if (pendingLoaders.Any())
+        if (pendingLoaders.Length > 0)
         {
             var pendingLoadersList = pendingLoaders.StringJoin(", ");
-            throw new Exception($"After {maxPasses} passes there are still pending loaders: {pendingLoadersList}");
+            throw new InvalidOperationException($"After {maxPasses} passes there are still pending loaders: {pendingLoadersList}");
         }
 
         var generateLogger = logger.BeginScope("Generation");
@@ -200,7 +199,7 @@ public class ApplicationService
             ct,
             async (filePath, token) =>
             {
-                var relative = filePath.RelativeTo(projectRoot) ?? throw new Exception("Should not happen");
+                var relative = filePath.RelativeTo(projectRoot) ?? throw new InvalidOperationException("Should not happen");
                 var fileGeneratorLogger = generateLogger.BeginScope(relative.Normalized(_fs));
                 if (relative.Parts[0] is "bin" or "obj") return;
 
@@ -210,7 +209,7 @@ public class ApplicationService
         logger.Info($"Overall time: {sw.Elapsed}");
     }
 
-    async Task ForEachP<TSource>(
+    private static async Task ForEachP<TSource>(
         bool parallelize,
         IEnumerable<TSource> source,
         CancellationToken cancellationToken,
@@ -257,7 +256,7 @@ public class ApplicationService
             var resultLogger = logger.BeginScope(result.File.Normalized(_fs));
             var outputPath = outputRoot / result.File;
             outputPaths.Add(outputPath);
-            var dir = outputPath.Parent ?? throw new Exception("Should not happen");
+            var dir = outputPath.Parent ?? throw new InvalidOperationException("Should not happen");
             await _fs.Directory.CreateIfNotExistAsync(dir);
 
             if (result.SkipIfExists)
@@ -268,7 +267,7 @@ public class ApplicationService
                     continue;
                 }
             }
-            
+
 
             var tempFile = tempDir / Guid.NewGuid().ToString("N") + ".tmp";
 

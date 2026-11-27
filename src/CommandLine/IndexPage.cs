@@ -14,6 +14,6 @@ public record IndexPage(Document<Post>[] PostPage, PageInfo? NextPage, PageInfo?
 
     public static IndexPage CreateIndex(IEnumerable<Document<Post>> posts)
     {
-        return new IndexPage(posts.ToArray(), null, null, new PageInfo(0, "---"));
+        return new IndexPage([..posts], null, null, new PageInfo(0, "---"));
     }
 }

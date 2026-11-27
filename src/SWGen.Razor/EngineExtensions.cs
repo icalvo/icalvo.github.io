@@ -15,7 +15,7 @@ public static class EngineExtensions
         string templateKey, Document<TMetadata> doc, string? layout)
         where TMetadata : class, ICreatable<TMetadata> =>
         engine.CompileRenderLayoutToggle(templateKey, doc, true, layout);
-    
+
     public static async Task<string> CompileRenderLayoutToggle<TMetadata>(
         this IRazorLightEngine engine,
         string templateKey,
@@ -36,7 +36,7 @@ public static class EngineExtensions
             }
             else
             {
-                throw new Exception("Cannot disable layout unless your template page class implements ILayoutToggle");
+                throw new InvalidOperationException("Cannot disable layout unless your template page class implements ILayoutToggle");
             }
         }
 

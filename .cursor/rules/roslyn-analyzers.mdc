@@ -1,0 +1,11 @@
+---
+description: Repo-specific C# conventions beyond what Roslyn errors already enforce
+globs: "**/*.{cs,csproj,props,editorconfig}"
+alwaysApply: false
+---
+
+# C# conventions (analyzers are errors)
+
+Build already fails on CA/IDE issues (`TreatWarningsAsErrors`, `AnalysisMode=All`). Do not silence analyzers or widen suppressions to get green.
+
+Prefer real fixes: null-flow narrowing, primary constructors, collection expressions, exhaustive switches, one type per file (SA1402). Suppressions only when a third-party API forces a false positive, kept minimal and justified next to the suppression.

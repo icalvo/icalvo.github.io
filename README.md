@@ -1,3 +1,9 @@
+# Requirements
+
++ .NET SDK **11.0.100** or newer feature band (see `global.json`).
++ `dotnet test src/StaticWebGenerator.sln` for the unit tests.
++ Cursor agents never `git commit` / `git push` in this repo (rule + hook); publish yourself.
+
 # SWGen Tools
 
 + `build.ps1`: Builds the site at `src\CommandLine\_public`. Alternatively, open the solution with Rider/VS and run the `CommandLine` project using its Launch Profile.

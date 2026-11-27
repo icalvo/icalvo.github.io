@@ -1,0 +1,94 @@
+# Analyzer / code-style config.
+# CA* from Directory.Build.props AnalysisMode=All; treated as errors via TreatWarningsAsErrors.
+root = true
+
+[*.{cs,vb}]
+# Opt into specific IDE rules as errors (do not elevate the whole Style category).
+dotnet_diagnostic.IDE0010.severity = error
+dotnet_diagnostic.IDE0028.severity = error
+dotnet_diagnostic.IDE0031.severity = error
+dotnet_diagnostic.IDE0074.severity = error
+dotnet_diagnostic.IDE0250.severity = error
+dotnet_diagnostic.IDE0251.severity = error
+dotnet_diagnostic.IDE0290.severity = error
+dotnet_diagnostic.IDE0301.severity = error
+dotnet_diagnostic.IDE0305.severity = error
+dotnet_diagnostic.IDE0370.severity = error
+
+csharp_style_prefer_primary_constructors = true:error
+dotnet_style_prefer_collection_expression = true:error
+dotnet_style_prefer_compound_assignment = true:error
+dotnet_style_null_propagation = true:error
+
+# StyleCop.Analyzers: silence the full rule set, then enforce one type per file only.
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.LayoutRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.MaintainabilityRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.ReadabilityRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpacingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpecialRules.severity = none
+dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1649.severity = none
+
+# SA1402: each listed top-level kind must live in its own file (partials of one type OK).
+dotnet_diagnostic.SA1402.severity = error
+stylecop.maintainability.topLevelTypes = class, interface, enum
+
+# --- Silences for this small internal CLI / SSG (nullable + style already enforced) ---
+
+# Nullable reference types already enforce non-null at compile time; ArgumentNullException
+# boilerplate on every public method adds noise without value for an internal tool.
+dotnet_diagnostic.CA1062.severity = none
+
+# Console app / no SynchronizationContext — ConfigureAwait is pure noise here.
+dotnet_diagnostic.CA2007.severity = none
+
+# Intentional PathEx / AbsolutePathEx / RelativePathEx / TaskEx naming (DSL helpers).
+dotnet_diagnostic.CA1711.severity = none
+
+# Intentional path `/` and implicit operators DSL; alternate methods would not be used.
+dotnet_diagnostic.CA2225.severity = none
+
+# PendingLinks uses List for mutability by design (generators append links).
+dotnet_diagnostic.CA1002.severity = none
+
+# PathEx.Parts returns string[] by design for the path DSL.
+dotnet_diagnostic.CA1819.severity = none
+
+# Keep logging API name Error / parameter names like readOnly — this is not a multi-language public library.
+dotnet_diagnostic.CA1716.severity = none
+
+# Nested types (e.g. GeneratorTrigger.Once) are fine for this small codebase.
+dotnet_diagnostic.CA1034.severity = none
+
+# URI as string in site model (BaseUrl etc.) is OK for static site generation.
+dotnet_diagnostic.CA1056.severity = none
+
+# Explicit interface implementations (e.g. logger scopes) without sealing everything.
+dotnet_diagnostic.CA1033.severity = none
+
+# Intentional catch-all around generator runs so one failure does not kill the whole build.
+dotnet_diagnostic.CA1031.severity = none
+
+# Path/document helpers intentionally throw from properties when state is invalid.
+dotnet_diagnostic.CA1065.severity = none
+
+# CancellationToken parameter order varies for readability in helpers; not a public API surface.
+dotnet_diagnostic.CA1068.severity = none
+
+# Sync-over-async in the simple local HTTP preview server is acceptable for this CLI.
+dotnet_diagnostic.CA1849.severity = none
+
+# EXE/CLI assembly: types must stay public for Razor templates and generators — not a shipped library API.
+dotnet_diagnostic.CA1515.severity = none
+
+# URL helpers intentionally return strings for HTML/templating (same rationale as CA1056).
+dotnet_diagnostic.CA1055.severity = none
+
+# xUnit ClassData / TheoryData types are constructed via reflection; CA1812 is a false positive.
+dotnet_diagnostic.CA1812.severity = none
+
+# Underscores in test method names are conventional; renaming would churn without benefit.
+dotnet_diagnostic.CA1707.severity = none

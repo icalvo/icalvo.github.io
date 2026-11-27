@@ -24,9 +24,8 @@ public class MappedFileSystemTests {
             .ToArray();
         Assert.Equal([@"C:\dir1\dir2\file3.txt", @"C:\dir1\file2.txt"], files.OrderBy(x => x));
         
-        files = mfs.DirectoryGetFiles(@"C:\dir1", "*.txt", new EnumerationOptions { RecurseSubdirectories = true })
-            .Select(x => x.Normalized(fs))
-            .ToArray();
+        files = [..mfs.DirectoryGetFiles(@"C:\dir1", "*.txt", new EnumerationOptions { RecurseSubdirectories = true })
+            .Select(x => x.Normalized(fs))];
         Assert.Equal([@"C:\dir1\dir2\file1.txt", @"C:\dir1\file2.txt"], files.OrderBy(x => x));
     }
 }

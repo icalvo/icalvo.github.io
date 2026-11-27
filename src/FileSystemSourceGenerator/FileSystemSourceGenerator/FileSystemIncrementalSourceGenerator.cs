@@ -87,7 +87,8 @@ public class FileSystemIncrementalSourceGenerator : IIncrementalGenerator
                 {
                     var argument = argumentSyntax.Expression;
                     var val = context.SemanticModel.GetConstantValue(argument).Value?.ToString();
-                    return val == null ? Array.Empty<string>() : new [] {val};
+                    string[] paths = val == null ? [] : [val];
+                    return paths;
                 }).ToArray();
                     
             string attributeName = attributeSymbol.ContainingType.ToDisplayString();
@@ -179,18 +180,11 @@ public class FileSystemIncrementalSourceGenerator : IIncrementalGenerator
               }
           """;
 
-    private class DirGeneration
+    private sealed class DirGeneration(string dirClass, string dirField, string subDirClasses)
     {
-        public string DirClass { get; }
-        public string DirField { get; }
-        public string SubDirClasses { get; }
-
-        public DirGeneration(string dirClass, string dirField, string subDirClasses)
-        {
-            DirClass = dirClass;
-            DirField = dirField;
-            SubDirClasses = subDirClasses;
-        }
+        public string DirClass { get; } = dirClass;
+        public string DirField { get; } = dirField;
+        public string SubDirClasses { get; } = subDirClasses;
 
         public string AllClasses => DirClass + "\n" + SubDirClasses;
     }
@@ -241,12 +235,4 @@ public class FileSystemIncrementalSourceGenerator : IIncrementalGenerator
                     $"public readonly PathData {GetPathDataFieldName(f)} = new (\"{f.FullName.Substring(root.Length).Replace(@"\", @"\\")}\", \"{f.FullName.Replace(@"\", @"\\")}\");";
             })
             .StrJoin("\n");
-}
-
-public static class CharExtensions
-{
-    public static string StrJoin<T>(this IEnumerable<T> source, string separator) =>
-        string.Join(separator, source);
-
-    public static bool IsDigit(this char c) => c is >= '0' and <= '9';
 }

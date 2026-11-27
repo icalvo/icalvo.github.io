@@ -1,14 +1,9 @@
 ﻿namespace SWGen.FileSystems;
 
-public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
+public class AbsolutePathEx(string drive, string[] parts) : PathEx(LoadParts(parts)), IEquatable<AbsolutePathEx>
 {
-    public string Drive { get; }
+    public string Drive { get; } = drive;
     public bool IsRoot => Parts.Length == 0;
-
-    public AbsolutePathEx(string drive, string[] parts) : base(LoadParts(parts))
-    {
-        Drive = drive;
-    }
 
     public new static AbsolutePathEx Create(string rawPath) =>
         PathEx.Create(rawPath) as AbsolutePathEx
@@ -45,7 +40,7 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
         return $"{Drive}{dirSeparator}{string.Join(dirSeparator, Parts)}";
     }
 
-    public override AbsolutePathEx Combine(RelativePathEx right) => new (Drive, Parts.Concat(right.Parts).ToArray());
+    public override AbsolutePathEx Combine(RelativePathEx right) => new (Drive, [..Parts, ..right.Parts]);
 
     public bool IsChildOrSame(AbsolutePathEx parent) => RelativeTo(parent) != null;
     public bool IsParentOrSame(AbsolutePathEx child) => child.RelativeTo(this) != null;
@@ -59,7 +54,7 @@ public class AbsolutePathEx : PathEx, IEquatable<AbsolutePathEx>
 
         if (Parts.Length < root.Parts.Length) return null;
         if (root.Zip(this).Count(x => x.First == x.Second) != root.Count()) return null;
-        return new RelativePathEx(this.SkipWhile((p, i) => i < root.Count() && root.Parts[i] == p).ToArray());
+        return new RelativePathEx([..this.SkipWhile((p, i) => i < root.Count() && root.Parts[i] == p)]);
     }
 
     public AbsolutePathEx ReplaceExtension(string extension)

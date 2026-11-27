@@ -4,7 +4,7 @@ namespace SWGen;
 
 public record SiteContents
 {
-    private readonly Dictionary<Type, IList> _container = new();
+    private readonly Dictionary<Type, IList> _container = [];
     public bool ContentAvailable { get; set; }
 
     private readonly object _lock = new();

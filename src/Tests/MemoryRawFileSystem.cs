@@ -6,8 +6,8 @@ namespace Tests;
 public class MemoryRawFileSystem : IRawFileSystem
 {
     private readonly Dictionary<string, FolderEntry> _roots;
-    private readonly Dictionary<AbsolutePathEx, FolderEntry> _folders = new();
-    private readonly Dictionary<AbsolutePathEx, FileEntry> _files = new();
+    private readonly Dictionary<AbsolutePathEx, FolderEntry> _folders = [];
+    private readonly Dictionary<AbsolutePathEx, FileEntry> _files = [];
 
     public MemoryRawFileSystem(params string[] roots)
     {
@@ -17,22 +17,22 @@ public class MemoryRawFileSystem : IRawFileSystem
             _roots.Add("", new FolderEntry("", null));
         }
     }
-    
+
     public Task DirectoryCreateAsync(AbsolutePathEx path)
     {
         if (_folders.ContainsKey(path)) return Task.CompletedTask;
 
-        if (!_roots.TryGetValue(path.Drive, out var current)) throw new Exception("Drive not found");
+        if (!_roots.TryGetValue(path.Drive, out var current)) throw new InvalidOperationException("Drive not found");
 
         var currentPath = AbsolutePathEx.Create(path.Drive);
-        
+
         foreach (var part in path.Parts)
         {
-            currentPath = currentPath / part;
+            currentPath /= part;
 
             if (current.Children.TryGetValue(part, out var child))
             {
-                current = child as FolderEntry ?? throw new Exception("Path already exists as a file");
+                current = child as FolderEntry ?? throw new InvalidOperationException("Path already exists as a file");
             }
             else
             {
@@ -41,7 +41,7 @@ public class MemoryRawFileSystem : IRawFileSystem
                 current = newFolder;
                 _folders.Add(currentPath, newFolder);
             }
-        }        
+        }
 
         return Task.CompletedTask;
     }
@@ -100,9 +100,11 @@ public class MemoryRawFileSystem : IRawFileSystem
 
     public IEnumerable<AbsolutePathEx> DirectoryGetFiles(AbsolutePathEx path, string pattern, EnumerationOptions options)
     {
-        var regex = new Regex("^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".") + "$", RegexOptions.Compiled);
-        if (!_folders.TryGetValue(path, out var root)) throw new Exception("Path not found");
-        
+        var regex = new Regex(
+            "^" + Regex.Escape(pattern).Replace("\\*", ".*", StringComparison.Ordinal).Replace("\\?", ".", StringComparison.Ordinal) + "$",
+            RegexOptions.Compiled);
+        if (!_folders.TryGetValue(path, out var root)) throw new InvalidOperationException("Path not found");
+
         return root.Children.Values.SelectMany(
             fse => fse switch
             {
@@ -118,8 +120,8 @@ public class MemoryRawFileSystem : IRawFileSystem
 
     public Task FileMoveAsync(AbsolutePathEx sourceFile, AbsolutePathEx destinationFile, bool overwrite)
     {
-        if (!_files.Remove(sourceFile, out var file)) throw new Exception("Source file not found");
-        if (!_folders.TryGetValue(destinationFile.Parent, out var destinationFolder)) throw new Exception("Destination folder not found");
+        if (!_files.Remove(sourceFile, out var file)) throw new InvalidOperationException("Source file not found");
+        if (!_folders.TryGetValue(destinationFile.Parent, out var destinationFolder)) throw new InvalidOperationException("Destination folder not found");
 
         var newFile = new FileEntry(destinationFile.FileName, file.Content, destinationFolder);
         _files.Add(destinationFile, newFile);
@@ -128,7 +130,7 @@ public class MemoryRawFileSystem : IRawFileSystem
 
     public Task<Stream> FileCreateAsync(AbsolutePathEx file)
     {
-        if (!_folders.TryGetValue(file.Parent, out var destinationFolder)) throw new Exception("Destination folder not found");
+        if (!_folders.TryGetValue(file.Parent, out var destinationFolder)) throw new InvalidOperationException("Destination folder not found");
         _files[file] = new FileEntry(file.FileName, destinationFolder);
         return Task.FromResult<Stream>(new MemoryStream());
     }
@@ -137,11 +139,11 @@ public class MemoryRawFileSystem : IRawFileSystem
     {
         throw new NotImplementedException();
     }
-    
+
 
     private abstract record FileSystemEntry {}
 
-    private record FolderEntry : FileSystemEntry
+    private sealed record FolderEntry : FileSystemEntry
     {
         public FolderEntry(string name, FolderEntry? parent)
         {
@@ -151,10 +153,10 @@ public class MemoryRawFileSystem : IRawFileSystem
 
         public string Name { get; }
         public FolderEntry? Parent { get; }
-        public Dictionary<string, FileSystemEntry> Children { get; } = new();
+        public Dictionary<string, FileSystemEntry> Children { get; } = [];
     }
 
-    private record FileEntry : FileSystemEntry
+    private sealed record FileEntry : FileSystemEntry
     {
         public FileEntry(string name, byte[] content, FolderEntry parent)
         {

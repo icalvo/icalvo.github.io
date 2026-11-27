@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .cursor/hooks/block-git-write.ps1",
+        "matcher": "(?i)\\bgit(\\s|$|\\.exe)",
+        "failClosed": true
+      }
+    ]
+  }
+}

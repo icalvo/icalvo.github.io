@@ -1,16 +1,9 @@
 ﻿namespace SWGen.FileSystems;
 
-public class FileSystem : IFileSystem
+public class FileSystem(IRawFileSystem fileSystem) : IFileSystem
 {
-    private readonly IRawFileSystem _fileSystem;
-
-    public FileSystem(IRawFileSystem fileSystem)
-    {
-        _fileSystem = fileSystem;
-    }
-
-    public PathTools Path => new(_fileSystem);
-    public FileTools File => new(_fileSystem);
-    public DirectoryTools Directory => new(_fileSystem);
-    public bool IsReadOnly => _fileSystem.IsReadOnly;
+    public PathTools Path => new(fileSystem);
+    public FileTools File => new(fileSystem);
+    public DirectoryTools Directory => new(fileSystem);
+    public bool IsReadOnly => fileSystem.IsReadOnly;
 }

@@ -1,10 +1,7 @@
 ﻿namespace SWGen.FileSystems;
 
-public class RelativePathEx : PathEx
+public class RelativePathEx(string[] parts) : PathEx(LoadParts(parts))
 {
-    public RelativePathEx(string[] parts) : base(LoadParts(parts))
-    {
-    }
     public static RelativePathEx Self() => Create("");
     public new static RelativePathEx Create(string rawPath) =>
         PathEx.Create(rawPath) as RelativePathEx
@@ -33,7 +30,7 @@ public class RelativePathEx : PathEx
         return $"{string.Join(dirSeparator, Parts)}";
     }
 
-    public override RelativePathEx Combine(RelativePathEx right) => new(Parts.Concat(right.Parts).ToArray());
+    public override RelativePathEx Combine(RelativePathEx right) => new([..Parts, ..right.Parts]);
     public virtual string Normalized(IFileSystem fs)
     {
         return fs.Path.NormalizeFolderSeparator(this);

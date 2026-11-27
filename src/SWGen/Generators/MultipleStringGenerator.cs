@@ -23,7 +23,7 @@ public abstract class MultipleStringGenerator : Generator
         AbsolutePathEx projectRoot,
         RelativePathEx inputFile,
         ISwgLogger logger,
-        CancellationToken _);
+        CancellationToken ct);
     public override IEnumerable<GeneratorItem> Generate(
         SiteContents ctx,
         AbsolutePathEx projectRoot,

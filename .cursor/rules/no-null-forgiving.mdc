@@ -1,0 +1,22 @@
+---
+description: Avoid C# null-forgiving (!) — prefer flow analysis and nullable outs
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# No null-forgiving operator
+
+Do not use the null-forgiving operator (`!` after an expression, or `null!` / `default!`). Prefer designs the compiler can prove.
+
+## Preferred patterns
+
+- Narrow with `is { } x`, `is not null`, or `??` / early return
+- Try-methods: `out T?` + `[NotNullWhen(true)]` instead of `out T` + `null!` on failure
+- Factory/ensure helpers that **return** the non-null value instead of void + field `!`
+- After a collection null-check, use `foreach` + re-check so flow analysis narrows (Select lambdas often do not)
+- Pattern-match nested nullables (`join is { Mode: Crossfade } j`) instead of `join!`
+- `Path.GetDirectoryName` → assign, null-check, then use
+
+## Compromise (rare)
+
+Only if avoiding `!` needs awkward duplication or hurts clarity, ask before adding it and keep the scope minimal. Boolean `!` is fine.

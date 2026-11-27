@@ -5,21 +5,12 @@ using SWGen.Generators;
 
 namespace CommandLine;
 
-public class IndexPageRazorGenerator : MultipleStringGenerator
+public class IndexPageRazorGenerator(IRazorLightEngine engine, IFileSystem fs, Func<string, string> postRenderTransforms)
+    : MultipleStringGenerator
 {
     private const string FirstPageLink = "index.html";
-    private readonly IRazorLightEngine _engine;
-    private readonly IFileSystem _fs;
-    private readonly Func<string, string> _postRenderTransforms;
 
-    private string OtherPageLink(int number) => $"page{number}.html";
-
-    public IndexPageRazorGenerator(IRazorLightEngine engine, IFileSystem fs, Func<string, string> postRenderTransforms)
-    {
-        _engine = engine;
-        _fs = fs;
-        _postRenderTransforms = postRenderTransforms;
-    }
+    private static string OtherPageLink(int number) => $"page{number}.html";
 
     protected override IEnumerable<(RelativePathEx, Func<Task<string>>)> GenerateStrings(SiteContents ctx, AbsolutePathEx projectRoot,
         RelativePathEx inputFile, ISwgLogger logger, CancellationToken ct)
@@ -39,10 +30,10 @@ public class IndexPageRazorGenerator : MultipleStringGenerator
                         var batchArray = batch.ToArray();
                         foreach (var item in batchArray)
                         {
-                            item.Content = _postRenderTransforms(item.Content);
+                            item.Content = postRenderTransforms(item.Content);
                         }
 
-                        var doc = new Document<IndexPage>(ctx, inputFile, _fs)
+                        var doc = new Document<IndexPage>(ctx, inputFile, fs)
                         {
                             OutputFile = UnsafeLinkFor(pageNumber),
                             Metadata = new IndexPage(
@@ -51,7 +42,7 @@ public class IndexPageRazorGenerator : MultipleStringGenerator
                                 IsValid(pageNumber - 1) ? new PageInfo(pageNumber - 1, UnsafeLinkFor(pageNumber - 1)) : null,
                                 new PageInfo(pageNumber, UnsafeLinkFor(pageNumber)))
                         };
-                        return (await _engine.CompileRenderAsync(doc.File.Normalized(_fs), doc));
+                        return await engine.CompileRenderAsync(doc.File.Normalized(fs), doc);
                     }
 
                     bool IsValid(int number) => number > 0 && number <= batches.Length;

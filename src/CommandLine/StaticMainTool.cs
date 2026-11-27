@@ -50,11 +50,11 @@ public static class StaticMainTool
                 var applicationService = new ApplicationService(fs);
                 var loaders = getLoaders(engine, project, fs);
                 var generatorConfigs = getGeneratorConfigs(engine, fs);
-                await applicationService.Watch(projectRoot, outputRoot, generatorConfigs, loaders, logger);
+                await ApplicationService.Watch(projectRoot, outputRoot, generatorConfigs, loaders, logger);
                 break;
             }
             default:
-                throw new Exception("Unknown command");
+                throw new ArgumentException("Unknown command");
         }
 
         return 0;

@@ -22,7 +22,7 @@ public static class EnumerableExtensions
             if (batch.Count == batchSize)
             {
                 yield return batch;
-                batch = new List<T>(batchSize);
+                batch = [];
             }
         }
         if (batch.Count > 0)
