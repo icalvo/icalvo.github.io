@@ -38,7 +38,10 @@
   }
   <meta name="twitter:card" content="summary" />
   <meta property="twitter:title" content="@Model.SiteInfo.Title" />
-  <meta name="twitter:site" content="@("@")@Model.SiteInfo.SocialLinks["twitter"]" />
+  @if (Model.SiteInfo.SocialLinks.TryGetValue("twitter", out var twitterHandle))
+  {
+    <meta name="twitter:site" content="@("@")@twitterHandle" />
+  }
   <meta name="twitter:creator" content="@Model.Author" />
   <meta name="google-site-verification" content="@Model.SiteInfo.GoogleSiteVerification" />
   <script type="application/ld+json">

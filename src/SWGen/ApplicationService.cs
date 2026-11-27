@@ -40,6 +40,7 @@ public class ApplicationService(IFileSystem fs)
         catch (Exception ex)
         {
             logger.Error(ex.ToStringDemystified());
+            throw;
         }
     }
 
