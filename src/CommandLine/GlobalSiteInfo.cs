@@ -20,7 +20,6 @@ public static class GlobalSiteInfo
             GoogleAnalytics = "UA-1520724-2",
             SocialLinks = new()
             {
-                { "twitter", "https://twitter.com/ignaciocalvo" },
                 { "github", "https://github.com/icalvo" },
                 { "linkedin", "https://www.linkedin.com/in/ignaciocalvomartinez" },
                 { "youtube", "https://www.youtube.com/icalvo" },
